@@ -7,14 +7,18 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DigiProc.Models
+namespace DigiProc
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class RequisitionStatu
+    public partial class UserModule
     {
-        public int RequisitionStatusID { get; set; }
-        public string RequisitionStatusDesc { get; set; }
+        public int UserModuleID { get; set; }
+        public string UserName { get; set; }
+        public Nullable<int> ModuleID { get; set; }
+        public Nullable<System.DateTime> DateAssigned { get; set; }
+    
+        public virtual Module Module { get; set; }
     }
 }

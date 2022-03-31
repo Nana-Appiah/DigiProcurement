@@ -1,0 +1,230 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="EProcurementDbModelStoreContainer" CdmEntityContainer="ProcurementDbEntities">
+    <EntitySetMapping Name="Committees">
+      <EntityTypeMapping TypeName="EProcurementDbModel.Committee">
+        <MappingFragment StoreEntitySet="Committee">
+          <ScalarProperty Name="CommitteeID" ColumnName="CommitteeID" />
+          <ScalarProperty Name="CommitteeName" ColumnName="CommitteeName" />
+          <ScalarProperty Name="CommitteeDescription" ColumnName="CommitteeDescription" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CommitteeMembers">
+      <EntityTypeMapping TypeName="EProcurementDbModel.CommitteeMember">
+        <MappingFragment StoreEntitySet="CommitteeMember">
+          <ScalarProperty Name="CommitteeMemberID" ColumnName="CommitteeMemberID" />
+          <ScalarProperty Name="CommitteeID" ColumnName="CommitteeID" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="OtherNames" ColumnName="OtherNames" />
+          <ScalarProperty Name="PositionID" ColumnName="PositionID" />
+          <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+          <ScalarProperty Name="active" ColumnName="active" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Currencies">
+      <EntityTypeMapping TypeName="EProcurementDbModel.Currency">
+        <MappingFragment StoreEntitySet="Currency">
+          <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
+          <ScalarProperty Name="CurrencyName" ColumnName="CurrencyName" />
+          <ScalarProperty Name="CurrencySymbol" ColumnName="CurrencySymbol" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FinancialYears">
+      <EntityTypeMapping TypeName="EProcurementDbModel.FinancialYear">
+        <MappingFragment StoreEntitySet="FinancialYear">
+          <ScalarProperty Name="FinancialYrID" ColumnName="FinancialYrID" />
+          <ScalarProperty Name="FinancialYr" ColumnName="FinancialYr" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Items">
+      <EntityTypeMapping TypeName="EProcurementDbModel.Item">
+        <MappingFragment StoreEntitySet="Item">
+          <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+          <ScalarProperty Name="ItemName" ColumnName="ItemName" />
+          <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
+          <ScalarProperty Name="MinStockLevel" ColumnName="MinStockLevel" />
+          <ScalarProperty Name="MaxStockLevel" ColumnName="MaxStockLevel" />
+          <ScalarProperty Name="ItemDescription" ColumnName="ItemDescription" />
+          <ScalarProperty Name="SIUnitID" ColumnName="SIUnitID" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="LastUpdatedBy" ColumnName="LastUpdatedBy" />
+          <ScalarProperty Name="LastUpdatedDate" ColumnName="LastUpdatedDate" />
+          <ScalarProperty Name="ItemCategoryID" ColumnName="ItemCategoryID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ItemCategories">
+      <EntityTypeMapping TypeName="EProcurementDbModel.ItemCategory">
+        <MappingFragment StoreEntitySet="ItemCategory">
+          <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+          <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+          <ScalarProperty Name="CategoryDescription" ColumnName="CategoryDescription" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Loggers">
+      <EntityTypeMapping TypeName="EProcurementDbModel.Logger">
+        <MappingFragment StoreEntitySet="Logger">
+          <ScalarProperty Name="LogID" ColumnName="LogID" />
+          <ScalarProperty Name="LogEntity" ColumnName="LogEntity" />
+          <ScalarProperty Name="LogEvent" ColumnName="LogEvent" />
+          <ScalarProperty Name="LogDescription" ColumnName="LogDescription" />
+          <ScalarProperty Name="LogActor" ColumnName="LogActor" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LPOes">
+      <EntityTypeMapping TypeName="EProcurementDbModel.LPO">
+        <MappingFragment StoreEntitySet="LPO">
+          <ScalarProperty Name="LPOID" ColumnName="LPOID" />
+          <ScalarProperty Name="RequisitionNo" ColumnName="RequisitionNo" />
+          <ScalarProperty Name="VAT" ColumnName="VAT" />
+          <ScalarProperty Name="PurchaseOrderDate" ColumnName="PurchaseOrderDate" />
+          <ScalarProperty Name="ExpectedDeliveryDate" ColumnName="ExpectedDeliveryDate" />
+          <ScalarProperty Name="ShippingAddress" ColumnName="ShippingAddress" />
+          <ScalarProperty Name="PaymentTerm" ColumnName="PaymentTerm" />
+          <ScalarProperty Name="OtherTermsAndConditions" ColumnName="OtherTermsAndConditions" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Modules">
+      <EntityTypeMapping TypeName="EProcurementDbModel.Module">
+        <MappingFragment StoreEntitySet="Module">
+          <ScalarProperty Name="ModuleID" ColumnName="ModuleID" />
+          <ScalarProperty Name="SystemName" ColumnName="SystemName" />
+          <ScalarProperty Name="PublicName" ColumnName="PublicName" />
+          <ScalarProperty Name="DateAssigned" ColumnName="DateAssigned" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PriorityTypes">
+      <EntityTypeMapping TypeName="EProcurementDbModel.PriorityType">
+        <MappingFragment StoreEntitySet="PriorityType">
+          <ScalarProperty Name="PriorityID" ColumnName="PriorityID" />
+          <ScalarProperty Name="PriorityDescription" ColumnName="PriorityDescription" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Requisitions">
+      <EntityTypeMapping TypeName="EProcurementDbModel.Requisition">
+        <MappingFragment StoreEntitySet="Requisition">
+          <ScalarProperty Name="RequisitionID" ColumnName="RequisitionID" />
+          <ScalarProperty Name="RequisitionNo" ColumnName="RequisitionNo" />
+          <ScalarProperty Name="RequestedBy" ColumnName="RequestedBy" />
+          <ScalarProperty Name="FinancialYrID" ColumnName="FinancialYrID" />
+          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+          <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+          <ScalarProperty Name="RequisitionTypeID" ColumnName="RequisitionTypeID" />
+          <ScalarProperty Name="Location" ColumnName="Location" />
+          <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
+          <ScalarProperty Name="PriorityID" ColumnName="PriorityID" />
+          <ScalarProperty Name="RequisitionTotal" ColumnName="RequisitionTotal" />
+          <ScalarProperty Name="RequisitionDescription" ColumnName="RequisitionDescription" />
+          <ScalarProperty Name="RequisitionStatusID" ColumnName="RequisitionStatusID" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="AuthorizedBy" ColumnName="AuthorizedBy" />
+          <ScalarProperty Name="AuthorizedDate" ColumnName="AuthorizedDate" />
+          <ScalarProperty Name="LastUpdatedBy" ColumnName="LastUpdatedBy" />
+          <ScalarProperty Name="LastUpdatedDate" ColumnName="LastUpdatedDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RequisitionItems">
+      <EntityTypeMapping TypeName="EProcurementDbModel.RequisitionItem">
+        <MappingFragment StoreEntitySet="RequisitionItem">
+          <ScalarProperty Name="RequisitionItemID" ColumnName="RequisitionItemID" />
+          <ScalarProperty Name="RequisitionID" ColumnName="RequisitionID" />
+          <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="ItemRate" ColumnName="ItemRate" />
+          <ScalarProperty Name="ItemAmount" ColumnName="ItemAmount" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RequisitionStatus">
+      <EntityTypeMapping TypeName="EProcurementDbModel.RequisitionStatu">
+        <MappingFragment StoreEntitySet="RequisitionStatus">
+          <ScalarProperty Name="RequisitionStatusID" ColumnName="RequisitionStatusID" />
+          <ScalarProperty Name="RequisitionStatusDesc" ColumnName="RequisitionStatusDesc" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RequisitionTypes">
+      <EntityTypeMapping TypeName="EProcurementDbModel.RequisitionType">
+        <MappingFragment StoreEntitySet="RequisitionType">
+          <ScalarProperty Name="RequisitionTypeID" ColumnName="RequisitionTypeID" />
+          <ScalarProperty Name="RequisitionType1" ColumnName="RequisitionType" />
+          <ScalarProperty Name="RequisitionDescription" ColumnName="RequisitionDescription" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SIUnits">
+      <EntityTypeMapping TypeName="EProcurementDbModel.SIUnit">
+        <MappingFragment StoreEntitySet="SIUnit">
+          <ScalarProperty Name="SIUnitID" ColumnName="SIUnitID" />
+          <ScalarProperty Name="Metric" ColumnName="Metric" />
+          <ScalarProperty Name="Measurement" ColumnName="Measurement" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="sysdiagrams">
+      <EntityTypeMapping TypeName="EProcurementDbModel.sysdiagram">
+        <MappingFragment StoreEntitySet="sysdiagrams">
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+          <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+          <ScalarProperty Name="version" ColumnName="version" />
+          <ScalarProperty Name="definition" ColumnName="definition" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserModules">
+      <EntityTypeMapping TypeName="EProcurementDbModel.UserModule">
+        <MappingFragment StoreEntitySet="UserModule">
+          <ScalarProperty Name="UserModuleID" ColumnName="UserModuleID" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="ModuleID" ColumnName="ModuleID" />
+          <ScalarProperty Name="DateAssigned" ColumnName="DateAssigned" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Vendors">
+      <EntityTypeMapping TypeName="EProcurementDbModel.Vendor">
+        <MappingFragment StoreEntitySet="Vendor">
+          <ScalarProperty Name="VendorID" ColumnName="VendorID" />
+          <ScalarProperty Name="VendorName" ColumnName="VendorName" />
+          <ScalarProperty Name="ContactPerson" ColumnName="ContactPerson" />
+          <ScalarProperty Name="VendorTypeID" ColumnName="VendorTypeID" />
+          <ScalarProperty Name="CompanyRegistrationNo" ColumnName="CompanyRegistrationNo" />
+          <ScalarProperty Name="IncorporationDate" ColumnName="IncorporationDate" />
+          <ScalarProperty Name="TIN" ColumnName="TIN" />
+          <ScalarProperty Name="NameOfOwner" ColumnName="NameOfOwner" />
+          <ScalarProperty Name="CompanyContact" ColumnName="CompanyContact" />
+          <ScalarProperty Name="CompanyWebsite" ColumnName="CompanyWebsite" />
+          <ScalarProperty Name="CompanyEmailAddress" ColumnName="CompanyEmailAddress" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="LastUpdatedBy" ColumnName="LastUpdatedBy" />
+          <ScalarProperty Name="LastUpdatedDate" ColumnName="LastUpdatedDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VendorTypes">
+      <EntityTypeMapping TypeName="EProcurementDbModel.VendorType">
+        <MappingFragment StoreEntitySet="VendorType">
+          <ScalarProperty Name="VendorTypeID" ColumnName="VendorTypeID" />
+          <ScalarProperty Name="VendorDescription" ColumnName="VendorDescription" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

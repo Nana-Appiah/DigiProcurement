@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DigiProc.Models
+namespace DigiProc
 {
     using System;
     using System.Collections.Generic;
@@ -16,7 +16,7 @@ namespace DigiProc.Models
     {
         public int RequisitionID { get; set; }
         public string RequisitionNo { get; set; }
-        public Nullable<int> RequestedByID { get; set; }
+        public string RequestedBy { get; set; }
         public Nullable<int> FinancialYrID { get; set; }
         public Nullable<int> CompanyID { get; set; }
         public Nullable<int> DepartmentID { get; set; }
@@ -33,5 +33,12 @@ namespace DigiProc.Models
         public Nullable<System.DateTime> AuthorizedDate { get; set; }
         public string LastUpdatedBy { get; set; }
         public Nullable<System.DateTime> LastUpdatedDate { get; set; }
+    
+        public virtual Currency Currency { get; set; }
+        public virtual FinancialYear FinancialYear { get; set; }
+        public virtual PriorityType PriorityType { get; set; }
+        public virtual RequisitionStatu RequisitionStatu { get; set; }
+        public virtual RequisitionType RequisitionType { get; set; }
+        public virtual Vendor Vendor { get; set; }
     }
 }

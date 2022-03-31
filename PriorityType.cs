@@ -7,14 +7,23 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DigiProc.Models
+namespace DigiProc
 {
     using System;
     using System.Collections.Generic;
     
     public partial class PriorityType
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public PriorityType()
+        {
+            this.Requisitions = new HashSet<Requisition>();
+        }
+    
         public int PriorityID { get; set; }
         public string PriorityDescription { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Requisition> Requisitions { get; set; }
     }
 }

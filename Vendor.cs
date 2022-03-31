@@ -7,19 +7,26 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DigiProc.Models
+namespace DigiProc
 {
     using System;
     using System.Collections.Generic;
     
     public partial class Vendor
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Vendor()
+        {
+            this.Requisitions = new HashSet<Requisition>();
+        }
+    
         public int VendorID { get; set; }
         public string VendorName { get; set; }
         public string ContactPerson { get; set; }
         public Nullable<int> VendorTypeID { get; set; }
         public string CompanyRegistrationNo { get; set; }
         public Nullable<System.DateTime> IncorporationDate { get; set; }
+        public string TIN { get; set; }
         public string NameOfOwner { get; set; }
         public string CompanyContact { get; set; }
         public string CompanyWebsite { get; set; }
@@ -28,5 +35,9 @@ namespace DigiProc.Models
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public string LastUpdatedBy { get; set; }
         public Nullable<System.DateTime> LastUpdatedDate { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Requisition> Requisitions { get; set; }
+        public virtual VendorType VendorType { get; set; }
     }
 }

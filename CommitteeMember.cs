@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DigiProc.Models
+namespace DigiProc
 {
     using System;
     using System.Collections.Generic;
@@ -21,5 +21,8 @@ namespace DigiProc.Models
         public string OtherNames { get; set; }
         public Nullable<int> PositionID { get; set; }
         public string EmailAddress { get; set; }
+        public Nullable<int> active { get; set; }
+    
+        public virtual Committee Committee { get; set; }
     }
 }

@@ -7,15 +7,20 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DigiProc.Models
+namespace DigiProc
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class ItemCategory
+    public partial class LPO
     {
-        public int CategoryID { get; set; }
-        public string CategoryName { get; set; }
-        public string CategoryDescription { get; set; }
+        public int LPOID { get; set; }
+        public string RequisitionNo { get; set; }
+        public Nullable<decimal> VAT { get; set; }
+        public Nullable<System.DateTime> PurchaseOrderDate { get; set; }
+        public Nullable<System.DateTime> ExpectedDeliveryDate { get; set; }
+        public string ShippingAddress { get; set; }
+        public string PaymentTerm { get; set; }
+        public string OtherTermsAndConditions { get; set; }
     }
 }

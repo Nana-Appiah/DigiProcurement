@@ -7,15 +7,24 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DigiProc.Models
+namespace DigiProc
 {
     using System;
     using System.Collections.Generic;
     
     public partial class RequisitionType
     {
-        public int RequisitionID { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public RequisitionType()
+        {
+            this.Requisitions = new HashSet<Requisition>();
+        }
+    
+        public int RequisitionTypeID { get; set; }
         public string RequisitionType1 { get; set; }
         public string RequisitionDescription { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Requisition> Requisitions { get; set; }
     }
 }

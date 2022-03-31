@@ -7,15 +7,18 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DigiProc.Models
+namespace DigiProc
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Currency
+    public partial class RequisitionItem
     {
-        public int CurrencyID { get; set; }
-        public string CurrencyName { get; set; }
-        public string CurrencySymbol { get; set; }
+        public int RequisitionItemID { get; set; }
+        public Nullable<int> RequisitionID { get; set; }
+        public Nullable<int> ItemID { get; set; }
+        public Nullable<int> Quantity { get; set; }
+        public Nullable<decimal> ItemRate { get; set; }
+        public Nullable<decimal> ItemAmount { get; set; }
     }
 }

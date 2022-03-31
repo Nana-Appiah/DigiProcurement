@@ -7,14 +7,25 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DigiProc.Models
+namespace DigiProc
 {
     using System;
     using System.Collections.Generic;
     
     public partial class FinancialYear
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public FinancialYear()
+        {
+            this.Requisitions = new HashSet<Requisition>();
+        }
+    
         public int FinancialYrID { get; set; }
         public string FinancialYr { get; set; }
+        public string Description { get; set; }
+        public Nullable<int> IsActive { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Requisition> Requisitions { get; set; }
     }
 }

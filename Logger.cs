@@ -7,17 +7,17 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DigiProc.Models
+namespace DigiProc
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class UserModule
+    public partial class Logger
     {
-        public int UserModuleID { get; set; }
-        public Nullable<int> UserID { get; set; }
-        public string SystemName { get; set; }
-        public string PublicName { get; set; }
-        public Nullable<System.DateTime> DateAssigned { get; set; }
+        public int LogID { get; set; }
+        public string LogEntity { get; set; }
+        public string LogEvent { get; set; }
+        public string LogDescription { get; set; }
+        public string LogActor { get; set; }
     }
 }

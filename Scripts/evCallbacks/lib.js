@@ -4,3 +4,10 @@ lib.getBusinessRegistrationTypes = function () {
     var business_list = new Array('Limited By Shares', 'Limited by Guarantee', 'Unlimited by Shares', 'Sole Proprietorship', 'External Company', 'Incorporated Partnership');
     return business_list;
 }
+
+lib.getItemCategories = function () {
+    //gets the item categories
+    $.getJSON('/Utility/', {}, function (res) {
+
+    });
+}

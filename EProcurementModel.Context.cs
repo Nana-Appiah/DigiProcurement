@@ -7,17 +7,18 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DigiProc.Models
+namespace DigiProc
 {
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class EProcurementDbEntities : DbContext
+    public partial class ProcurementDbEntities : DbContext
     {
-        public EProcurementDbEntities()
-            : base("name=EProcurementDbEntities")
+        public ProcurementDbEntities()
+            : base("name=ProcurementDbEntities")
         {
+            //this.Configuration.LazyLoadingEnabled = false;
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -31,13 +32,18 @@ namespace DigiProc.Models
         public virtual DbSet<FinancialYear> FinancialYears { get; set; }
         public virtual DbSet<Item> Items { get; set; }
         public virtual DbSet<ItemCategory> ItemCategories { get; set; }
+        public virtual DbSet<Logger> Loggers { get; set; }
         public virtual DbSet<LPO> LPOes { get; set; }
+        public virtual DbSet<Module> Modules { get; set; }
         public virtual DbSet<PriorityType> PriorityTypes { get; set; }
         public virtual DbSet<Requisition> Requisitions { get; set; }
         public virtual DbSet<RequisitionItem> RequisitionItems { get; set; }
         public virtual DbSet<RequisitionStatu> RequisitionStatus { get; set; }
         public virtual DbSet<RequisitionType> RequisitionTypes { get; set; }
+        public virtual DbSet<SIUnit> SIUnits { get; set; }
+        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<UserModule> UserModules { get; set; }
         public virtual DbSet<Vendor> Vendors { get; set; }
+        public virtual DbSet<VendorType> VendorTypes { get; set; }
     }
 }

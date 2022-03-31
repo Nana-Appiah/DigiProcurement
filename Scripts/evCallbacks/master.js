@@ -334,7 +334,7 @@
                                         columnWidth: .5, defaults: { xtype: 'form', frame: true, border: true },
                                         items: [
                                             {
-                                                title: 'Section 1', defaults: { xtype: 'textfield', anchor: '95%', allowBlank: false },
+                                                title: 'Section I', defaults: { xtype: 'textfield', anchor: '95%', allowBlank: false },
                                                 items: [
                                                     { id: '', fieldLabel: 'Item Name', emptyText: 'Item Name' },
                                                     { id: '', fieldLabel: 'Item Code', emptyText: 'Item Code' },
@@ -343,7 +343,7 @@
                                                 ]
                                             },
                                             {
-                                                title: 'Section 2', defaults: { xtype: 'combo', forceSelection: true, typeAhead: true, mode: 'local', allowBlank: false, anchor: '95%' },
+                                                title: 'Section II', defaults: { xtype: 'combo', forceSelection: true, typeAhead: true, mode: 'local', allowBlank: false, anchor: '95%' },
                                                 items: [
                                                     {
                                                         fieldLabel: 'Measurement', emptyText: 'Unit of measurement'

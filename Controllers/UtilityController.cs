@@ -26,5 +26,12 @@ namespace DigiProc.Controllers
             }
             catch (Exception errmsg) { Debug.Print(errmsg.Message); return Json(new { error = errmsg }); }
         }
+
+        [HttpGet]
+        public JsonResult GetItemCategories()
+        {
+            return Json(true);
+        }
+
     }
 }
