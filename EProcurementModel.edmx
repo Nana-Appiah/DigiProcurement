@@ -5,6 +5,13 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="EProcurementDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="BusinessType">
+          <Key>
+            <PropertyRef Name="BusinessTypeID" />
+          </Key>
+          <Property Name="BusinessTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BusinessDescription" Type="varchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="Committee">
           <Key>
             <PropertyRef Name="CommitteeID" />
@@ -189,7 +196,9 @@
             <PropertyRef Name="VendorID" />
           </Key>
           <Property Name="VendorID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VendorNo" Type="varchar" MaxLength="50" />
           <Property Name="VendorName" Type="varchar" MaxLength="100" />
+          <Property Name="VendorLocation" Type="varchar" MaxLength="50" />
           <Property Name="ContactPerson" Type="varchar" MaxLength="100" />
           <Property Name="VendorTypeID" Type="int" />
           <Property Name="CompanyRegistrationNo" Type="varchar" MaxLength="50" />
@@ -197,8 +206,13 @@
           <Property Name="TIN" Type="varchar" MaxLength="50" />
           <Property Name="NameOfOwner" Type="varchar" MaxLength="100" />
           <Property Name="CompanyContact" Type="varchar" MaxLength="50" />
+          <Property Name="CompanyHomeContact" Type="varchar" MaxLength="50" />
           <Property Name="CompanyWebsite" Type="varchar" MaxLength="50" />
+          <Property Name="CompanyFb" Type="varchar" MaxLength="50" />
+          <Property Name="CompanyLinkedIn" Type="varchar" MaxLength="50" />
           <Property Name="CompanyEmailAddress" Type="varchar" MaxLength="50" />
+          <Property Name="CompanyGHPostAddress" Type="varchar" MaxLength="50" />
+          <Property Name="CompanyBusinessTypeID" Type="int" />
           <Property Name="CreatedBy" Type="varchar" MaxLength="50" />
           <Property Name="CreatedDate" Type="date" />
           <Property Name="LastUpdatedBy" Type="varchar" MaxLength="50" />
@@ -331,6 +345,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Vendor_BusinessType">
+          <End Role="BusinessType" Type="Self.BusinessType" Multiplicity="0..1" />
+          <End Role="Vendor" Type="Self.Vendor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BusinessType">
+              <PropertyRef Name="BusinessTypeID" />
+            </Principal>
+            <Dependent Role="Vendor">
+              <PropertyRef Name="CompanyBusinessTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Vendor_VendorType">
           <End Role="VendorType" Type="Self.VendorType" Multiplicity="0..1" />
           <End Role="Vendor" Type="Self.Vendor" Multiplicity="*" />
@@ -344,6 +370,7 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="EProcurementDbModelStoreContainer">
+          <EntitySet Name="BusinessType" EntityType="Self.BusinessType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Committee" EntityType="Self.Committee" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CommitteeMember" EntityType="Self.CommitteeMember" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Currency" EntityType="Self.Currency" Schema="dbo" store:Type="Tables" />
@@ -402,6 +429,10 @@
           <AssociationSet Name="FK_UserModule_Module" Association="Self.FK_UserModule_Module">
             <End Role="Module" EntitySet="Module" />
             <End Role="UserModule" EntitySet="UserModule" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Vendor_BusinessType" Association="Self.FK_Vendor_BusinessType">
+            <End Role="BusinessType" EntitySet="BusinessType" />
+            <End Role="Vendor" EntitySet="Vendor" />
           </AssociationSet>
           <AssociationSet Name="FK_Vendor_VendorType" Association="Self.FK_Vendor_VendorType">
             <End Role="VendorType" EntitySet="VendorType" />
@@ -631,6 +662,14 @@
           <Property Name="LastUpdatedDate" Type="DateTime" Precision="0" />
           <NavigationProperty Name="Requisitions" Relationship="Self.FK_Requisition_Vendor" FromRole="Vendor" ToRole="Requisition" />
           <NavigationProperty Name="VendorType" Relationship="Self.FK_Vendor_VendorType" FromRole="Vendor" ToRole="VendorType" />
+          <Property Name="VendorNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="VendorLocation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CompanyFb" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CompanyLinkedIn" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CompanyGHPostAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CompanyHomeContact" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CompanyBusinessTypeID" Type="Int32" />
+          <NavigationProperty Name="BusinessType" Relationship="EProcurementDbModel.FK_Vendor_BusinessType" FromRole="Vendor" ToRole="BusinessType" />
         </EntityType>
         <EntityType Name="VendorType">
           <Key>
@@ -824,6 +863,11 @@
             <End Role="Module" EntitySet="Modules" />
             <End Role="UserModule" EntitySet="UserModules" />
           </AssociationSet>
+          <EntitySet Name="BusinessTypes" EntityType="EProcurementDbModel.BusinessType" />
+          <AssociationSet Name="FK_Vendor_BusinessType" Association="EProcurementDbModel.FK_Vendor_BusinessType">
+            <End Role="BusinessType" EntitySet="BusinessTypes" />
+            <End Role="Vendor" EntitySet="Vendors" />
+          </AssociationSet>
         </EntityContainer>
         <Association Name="FK_UserModule_Module">
           <End Type="EProcurementDbModel.Module" Role="Module" Multiplicity="0..1" />
@@ -834,6 +878,26 @@
             </Principal>
             <Dependent Role="UserModule">
               <PropertyRef Name="ModuleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="BusinessType">
+          <Key>
+            <PropertyRef Name="BusinessTypeID" />
+          </Key>
+          <Property Name="BusinessTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BusinessDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Vendors" Relationship="EProcurementDbModel.FK_Vendor_BusinessType" FromRole="BusinessType" ToRole="Vendor" />
+        </EntityType>
+        <Association Name="FK_Vendor_BusinessType">
+          <End Type="EProcurementDbModel.BusinessType" Role="BusinessType" Multiplicity="0..1" />
+          <End Type="EProcurementDbModel.Vendor" Role="Vendor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BusinessType">
+              <PropertyRef Name="BusinessTypeID" />
+            </Principal>
+            <Dependent Role="Vendor">
+              <PropertyRef Name="CompanyBusinessTypeID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1042,6 +1106,13 @@
           <EntitySetMapping Name="Vendors">
             <EntityTypeMapping TypeName="EProcurementDbModel.Vendor">
               <MappingFragment StoreEntitySet="Vendor">
+                <ScalarProperty Name="CompanyBusinessTypeID" ColumnName="CompanyBusinessTypeID" />
+                <ScalarProperty Name="CompanyHomeContact" ColumnName="CompanyHomeContact" />
+                <ScalarProperty Name="CompanyGHPostAddress" ColumnName="CompanyGHPostAddress" />
+                <ScalarProperty Name="CompanyLinkedIn" ColumnName="CompanyLinkedIn" />
+                <ScalarProperty Name="CompanyFb" ColumnName="CompanyFb" />
+                <ScalarProperty Name="VendorLocation" ColumnName="VendorLocation" />
+                <ScalarProperty Name="VendorNo" ColumnName="VendorNo" />
                 <ScalarProperty Name="VendorID" ColumnName="VendorID" />
                 <ScalarProperty Name="VendorName" ColumnName="VendorName" />
                 <ScalarProperty Name="ContactPerson" ColumnName="ContactPerson" />
@@ -1065,6 +1136,14 @@
               <MappingFragment StoreEntitySet="VendorType">
                 <ScalarProperty Name="VendorTypeID" ColumnName="VendorTypeID" />
                 <ScalarProperty Name="VendorDescription" ColumnName="VendorDescription" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BusinessTypes">
+            <EntityTypeMapping TypeName="EProcurementDbModel.BusinessType">
+              <MappingFragment StoreEntitySet="BusinessType">
+                <ScalarProperty Name="BusinessDescription" ColumnName="BusinessDescription" />
+                <ScalarProperty Name="BusinessTypeID" ColumnName="BusinessTypeID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

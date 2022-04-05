@@ -15,14 +15,14 @@
         <EntityTypeShape EntityType="EProcurementDbModel.LPO" Width="1.5" PointX="10.75" PointY="8.75" IsExpanded="true" />
         <EntityTypeShape EntityType="EProcurementDbModel.Module" Width="1.5" PointX="11.75" PointY="5.75" IsExpanded="true" />
         <EntityTypeShape EntityType="EProcurementDbModel.PriorityType" Width="1.5" PointX="3" PointY="12.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="EProcurementDbModel.Requisition" Width="1.5" PointX="5.25" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="EProcurementDbModel.Requisition" Width="1.5" PointX="5.875" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="EProcurementDbModel.RequisitionItem" Width="1.5" PointX="12.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="EProcurementDbModel.RequisitionStatu" Width="1.5" PointX="3" PointY="15.125" IsExpanded="true" />
         <EntityTypeShape EntityType="EProcurementDbModel.RequisitionType" Width="1.5" PointX="3" PointY="17.5" IsExpanded="true" />
         <EntityTypeShape EntityType="EProcurementDbModel.SIUnit" Width="1.5" PointX="7.75" PointY="6" IsExpanded="true" />
         <EntityTypeShape EntityType="EProcurementDbModel.sysdiagram" Width="1.5" PointX="5.75" PointY="12.75" IsExpanded="true" />
         <EntityTypeShape EntityType="EProcurementDbModel.UserModule" Width="1.5" PointX="7.75" PointY="12.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="EProcurementDbModel.Vendor" Width="1.5" PointX="3" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="EProcurementDbModel.Vendor" Width="2" PointX="3" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="EProcurementDbModel.VendorType" Width="1.5" PointX="0.75" PointY="3.25" IsExpanded="true" />
         <AssociationConnector Association="EProcurementDbModel.FK_CommitteeMember_Committee" ManuallyRouted="false" />
         <AssociationConnector Association="EProcurementDbModel.FK_Requisition_Currency" ManuallyRouted="false" />
@@ -35,6 +35,8 @@
         <AssociationConnector Association="EProcurementDbModel.FK_Requisition_Vendor" ManuallyRouted="false" />
         <AssociationConnector Association="EProcurementDbModel.FK_Vendor_VendorType" ManuallyRouted="false" />
         <AssociationConnector Association="EProcurementDbModel.FK_UserModule_Module" />
+        <EntityTypeShape EntityType="EProcurementDbModel.BusinessType" Width="1.5" PointX="10.375" PointY="12.75" />
+        <AssociationConnector Association="EProcurementDbModel.FK_Vendor_BusinessType" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

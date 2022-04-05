@@ -1,5 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="EProcurementDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="BusinessType">
+    <Key>
+      <PropertyRef Name="BusinessTypeID" />
+    </Key>
+    <Property Name="BusinessTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="BusinessDescription" Type="varchar" MaxLength="50" />
+  </EntityType>
   <EntityType Name="Committee">
     <Key>
       <PropertyRef Name="CommitteeID" />
@@ -184,7 +191,9 @@
       <PropertyRef Name="VendorID" />
     </Key>
     <Property Name="VendorID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="VendorNo" Type="varchar" MaxLength="50" />
     <Property Name="VendorName" Type="varchar" MaxLength="100" />
+    <Property Name="VendorLocation" Type="varchar" MaxLength="50" />
     <Property Name="ContactPerson" Type="varchar" MaxLength="100" />
     <Property Name="VendorTypeID" Type="int" />
     <Property Name="CompanyRegistrationNo" Type="varchar" MaxLength="50" />
@@ -192,8 +201,13 @@
     <Property Name="TIN" Type="varchar" MaxLength="50" />
     <Property Name="NameOfOwner" Type="varchar" MaxLength="100" />
     <Property Name="CompanyContact" Type="varchar" MaxLength="50" />
+    <Property Name="CompanyHomeContact" Type="varchar" MaxLength="50" />
     <Property Name="CompanyWebsite" Type="varchar" MaxLength="50" />
+    <Property Name="CompanyFb" Type="varchar" MaxLength="50" />
+    <Property Name="CompanyLinkedIn" Type="varchar" MaxLength="50" />
     <Property Name="CompanyEmailAddress" Type="varchar" MaxLength="50" />
+    <Property Name="CompanyGHPostAddress" Type="varchar" MaxLength="50" />
+    <Property Name="CompanyBusinessTypeID" Type="int" />
     <Property Name="CreatedBy" Type="varchar" MaxLength="50" />
     <Property Name="CreatedDate" Type="date" />
     <Property Name="LastUpdatedBy" Type="varchar" MaxLength="50" />
@@ -326,6 +340,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_Vendor_BusinessType">
+    <End Role="BusinessType" Type="Self.BusinessType" Multiplicity="0..1" />
+    <End Role="Vendor" Type="Self.Vendor" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BusinessType">
+        <PropertyRef Name="BusinessTypeID" />
+      </Principal>
+      <Dependent Role="Vendor">
+        <PropertyRef Name="CompanyBusinessTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Vendor_VendorType">
     <End Role="VendorType" Type="Self.VendorType" Multiplicity="0..1" />
     <End Role="Vendor" Type="Self.Vendor" Multiplicity="*" />
@@ -339,6 +365,7 @@
     </ReferentialConstraint>
   </Association>
   <EntityContainer Name="EProcurementDbModelStoreContainer">
+    <EntitySet Name="BusinessType" EntityType="Self.BusinessType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Committee" EntityType="Self.Committee" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CommitteeMember" EntityType="Self.CommitteeMember" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Currency" EntityType="Self.Currency" Schema="dbo" store:Type="Tables" />
@@ -397,6 +424,10 @@
     <AssociationSet Name="FK_UserModule_Module" Association="Self.FK_UserModule_Module">
       <End Role="Module" EntitySet="Module" />
       <End Role="UserModule" EntitySet="UserModule" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Vendor_BusinessType" Association="Self.FK_Vendor_BusinessType">
+      <End Role="BusinessType" EntitySet="BusinessType" />
+      <End Role="Vendor" EntitySet="Vendor" />
     </AssociationSet>
     <AssociationSet Name="FK_Vendor_VendorType" Association="Self.FK_Vendor_VendorType">
       <End Role="VendorType" EntitySet="VendorType" />

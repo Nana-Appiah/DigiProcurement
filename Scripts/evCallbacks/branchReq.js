@@ -34,11 +34,24 @@
                                                     {
                                                         title: 'Branch Requisition', defaults: { xtype: 'combo', forceSelection: true, typeAhead: true, mode: 'local', allowBlank: false, anchor: '95%' },
                                                         items: [
-                                                            { id: '', xtype: 'textfield', fieldLabel: 'RequistionNo', disabled: true },
-                                                            { id: '', xtype: 'textfield', fieldLabel: 'Requested By', disabled: true },
-                                                            { id: '', xtype: 'textfield', fieldLabel: 'Accounting Yr', disabled: true },
-                                                            { id: '', xtype: 'textfield', fieldLabel: 'Department', disabled: true }
-                                                        ]
+                                                            { id: 'bRNo', xtype: 'textfield', fieldLabel: 'RequistionNo', disabled: true },
+                                                            { id: 'bReq', xtype: 'textfield', fieldLabel: 'Requested By', disabled: true },
+                                                            { id: 'bAccYr', xtype: 'textfield', fieldLabel: 'Accounting Yr', disabled: true },
+                                                            { id: 'bDept', xtype: 'textfield', fieldLabel: 'Department', disabled: true }
+                                                        ],
+                                                        listeners: {
+                                                            'render': function () {
+                                                                $.getJSON('/Requisition/GetRequisitionNumber', {}, function (r) {
+                                                                    if (r.status.toString() == "true") {
+                                                                        $('#bRNo').val(r.data.toString()).attr('readonly',true);
+                                                                    }
+                                                                });
+                                                                
+                                                                $('#bReq').attr('readonly', true);
+                                                                $('#bAccYr').attr('readonly', true);
+                                                                $('#bDept').attr('readonly', true);
+                                                            }
+                                                        }
                                                     },
                                                     {
                                                         title: 'Add Requisition Items', defaults: { xtype: 'combo', forceSelection: true, typeAhead: true, mode: 'local', allowBlank: false, anchor:'95%' },

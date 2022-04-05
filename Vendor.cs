@@ -35,9 +35,17 @@ namespace DigiProc
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public string LastUpdatedBy { get; set; }
         public Nullable<System.DateTime> LastUpdatedDate { get; set; }
+        public string VendorNo { get; set; }
+        public string VendorLocation { get; set; }
+        public string CompanyFb { get; set; }
+        public string CompanyLinkedIn { get; set; }
+        public string CompanyGHPostAddress { get; set; }
+        public string CompanyHomeContact { get; set; }
+        public Nullable<int> CompanyBusinessTypeID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Requisition> Requisitions { get; set; }
         public virtual VendorType VendorType { get; set; }
+        public virtual BusinessType BusinessType { get; set; }
     }
 }

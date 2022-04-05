@@ -128,6 +128,9 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="BusinessType.cs">
+      <DependentUpon>EProcurementModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Committee.cs">
       <DependentUpon>EProcurementModel.tt</DependentUpon>
     </Compile>
@@ -135,6 +138,8 @@
       <DependentUpon>EProcurementModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MasterController.cs" />
+    <Compile Include="Controllers\RequisitionController.cs" />
     <Compile Include="Controllers\UtilityController.cs" />
     <Compile Include="Currency.cs">
       <DependentUpon>EProcurementModel.tt</DependentUpon>
@@ -160,7 +165,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\RequisitionHelper.cs" />
     <Compile Include="Helpers\Utility.cs" />
+    <Compile Include="Helpers\VendorHelper.cs" />
     <Compile Include="Item.cs">
       <DependentUpon>EProcurementModel.tt</DependentUpon>
     </Compile>
@@ -1220,11 +1227,13 @@
     </Content>
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\Desktop.js" />
+    <Content Include="Scripts\evCallbacks\config.js" />
     <Content Include="Scripts\evCallbacks\lib.js" />
     <Content Include="Scripts\evCallbacks\branchReq.js" />
     <Content Include="Scripts\evCallbacks\ext.js" />
     <Content Include="Scripts\evCallbacks\master.js" />
     <Content Include="Scripts\evCallbacks\management.js" />
+    <Content Include="Scripts\jquery-1.8.3.min.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.js" />
@@ -1266,6 +1275,8 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+    <Folder Include="Views\Master\" />
+    <Folder Include="Views\Requisition\" />
     <Folder Include="Views\Utility\" />
   </ItemGroup>
   <ItemGroup>

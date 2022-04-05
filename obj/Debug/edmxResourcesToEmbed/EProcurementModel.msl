@@ -200,6 +200,13 @@
     <EntitySetMapping Name="Vendors">
       <EntityTypeMapping TypeName="EProcurementDbModel.Vendor">
         <MappingFragment StoreEntitySet="Vendor">
+          <ScalarProperty Name="CompanyBusinessTypeID" ColumnName="CompanyBusinessTypeID" />
+          <ScalarProperty Name="CompanyHomeContact" ColumnName="CompanyHomeContact" />
+          <ScalarProperty Name="CompanyGHPostAddress" ColumnName="CompanyGHPostAddress" />
+          <ScalarProperty Name="CompanyLinkedIn" ColumnName="CompanyLinkedIn" />
+          <ScalarProperty Name="CompanyFb" ColumnName="CompanyFb" />
+          <ScalarProperty Name="VendorLocation" ColumnName="VendorLocation" />
+          <ScalarProperty Name="VendorNo" ColumnName="VendorNo" />
           <ScalarProperty Name="VendorID" ColumnName="VendorID" />
           <ScalarProperty Name="VendorName" ColumnName="VendorName" />
           <ScalarProperty Name="ContactPerson" ColumnName="ContactPerson" />
@@ -223,6 +230,14 @@
         <MappingFragment StoreEntitySet="VendorType">
           <ScalarProperty Name="VendorTypeID" ColumnName="VendorTypeID" />
           <ScalarProperty Name="VendorDescription" ColumnName="VendorDescription" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BusinessTypes">
+      <EntityTypeMapping TypeName="EProcurementDbModel.BusinessType">
+        <MappingFragment StoreEntitySet="BusinessType">
+          <ScalarProperty Name="BusinessDescription" ColumnName="BusinessDescription" />
+          <ScalarProperty Name="BusinessTypeID" ColumnName="BusinessTypeID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

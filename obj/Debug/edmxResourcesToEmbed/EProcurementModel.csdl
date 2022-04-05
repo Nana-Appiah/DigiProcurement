@@ -219,6 +219,14 @@
     <Property Name="LastUpdatedDate" Type="DateTime" Precision="0" />
     <NavigationProperty Name="Requisitions" Relationship="Self.FK_Requisition_Vendor" FromRole="Vendor" ToRole="Requisition" />
     <NavigationProperty Name="VendorType" Relationship="Self.FK_Vendor_VendorType" FromRole="Vendor" ToRole="VendorType" />
+    <Property Name="VendorNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="VendorLocation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CompanyFb" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CompanyLinkedIn" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CompanyGHPostAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CompanyHomeContact" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CompanyBusinessTypeID" Type="Int32" />
+    <NavigationProperty Name="BusinessType" Relationship="EProcurementDbModel.FK_Vendor_BusinessType" FromRole="Vendor" ToRole="BusinessType" />
   </EntityType>
   <EntityType Name="VendorType">
     <Key>
@@ -412,6 +420,11 @@
       <End Role="Module" EntitySet="Modules" />
       <End Role="UserModule" EntitySet="UserModules" />
     </AssociationSet>
+    <EntitySet Name="BusinessTypes" EntityType="EProcurementDbModel.BusinessType" />
+    <AssociationSet Name="FK_Vendor_BusinessType" Association="EProcurementDbModel.FK_Vendor_BusinessType">
+      <End Role="BusinessType" EntitySet="BusinessTypes" />
+      <End Role="Vendor" EntitySet="Vendors" />
+    </AssociationSet>
   </EntityContainer>
   <Association Name="FK_UserModule_Module">
     <End Type="EProcurementDbModel.Module" Role="Module" Multiplicity="0..1" />
@@ -422,6 +435,26 @@
       </Principal>
       <Dependent Role="UserModule">
         <PropertyRef Name="ModuleID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="BusinessType">
+    <Key>
+      <PropertyRef Name="BusinessTypeID" />
+    </Key>
+    <Property Name="BusinessTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="BusinessDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Vendors" Relationship="EProcurementDbModel.FK_Vendor_BusinessType" FromRole="BusinessType" ToRole="Vendor" />
+  </EntityType>
+  <Association Name="FK_Vendor_BusinessType">
+    <End Type="EProcurementDbModel.BusinessType" Role="BusinessType" Multiplicity="0..1" />
+    <End Type="EProcurementDbModel.Vendor" Role="Vendor" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BusinessType">
+        <PropertyRef Name="BusinessTypeID" />
+      </Principal>
+      <Dependent Role="Vendor">
+        <PropertyRef Name="CompanyBusinessTypeID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

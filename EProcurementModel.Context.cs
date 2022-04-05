@@ -18,7 +18,6 @@ namespace DigiProc
         public ProcurementDbEntities()
             : base("name=ProcurementDbEntities")
         {
-            //this.Configuration.LazyLoadingEnabled = false;
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -45,5 +44,6 @@ namespace DigiProc
         public virtual DbSet<UserModule> UserModules { get; set; }
         public virtual DbSet<Vendor> Vendors { get; set; }
         public virtual DbSet<VendorType> VendorTypes { get; set; }
+        public virtual DbSet<BusinessType> BusinessTypes { get; set; }
     }
 }

@@ -1,7 +1,21 @@
 ﻿Ext.onReady(function () {
 
-    var mast = Ext.get('mast');
+    var currencyGrid = function (ktrl) {
+        $.getJSON('/Utility/GetCurrencies', {}, function (rs) {
+            var ar = [];
+            if (rs.status.toString() == "true") {
 
+                $.each(rs.data, function (i, d) {
+                    ar[i] = [d.CurrencyID, d.CurrencyName, d.CurrencySymbol];
+                });
+
+                ktrl.getStore().loadData(ar);
+            }
+        }, "json");
+    }
+
+    var mast = Ext.get('mast');
+    
     mast.on('click', function () {
 
         var req = Ext.getCmp('masterform');
@@ -23,24 +37,101 @@
                             {
                                 id: 'vMaster',
                                 title: 'Vendor Master',
-                                defaults: { xtype: 'panel', frame: true, border: true, height:270 }, layout:'form',
+                                defaults: { xtype: 'panel', frame: true, border: true, height:320 }, layout:'form',
                                 items: [
                                     {
-                                        title: 'Vendor Basic Information', defaults: { xtype: 'form' }, layout: 'column',
+                                        title: 'Vendor Basic Information', defaults: { xtype: 'form', frame: true, border: true }, layout: 'column',
                                         items: [
                                             {
-                                                columnWidth: .5, defaults: { xtype: 'textfield', anchor: '90%' },
+                                                columnWidth: .5, title:'Vendor Details', id:'vndbasicfrm', defaults: { xtype: 'textfield', anchor: '90%' },
                                                 items: [
                                                     {
-                                                        fieldLabel:'Name',emptyText:'Business Name'
+                                                        id: 'vdID', fieldLabel: 'Vendor ID', emptyText: 'Vendor ID',
+                                                        style: { 'font-size': '20px', 'color': 'red', 'text-align': 'center' },
+                                                        listeners: {
+                                                            'render': function () {
+                                                                $.getJSON('/Utility/GenerateVendorNo', {}, function (r) {
+                                                                    $('#vdID').val(r.data.toString());
+                                                                });
+                                                                $('#vdID').attr('readonly', true);
+                                                            }
+                                                        }
                                                     },
                                                     {
-                                                        fieldLabel:'Location',emptyText:'Location of business'
+                                                        id:'vdName',fieldLabel:'Name',emptyText:'Business Name'
                                                     },
-                                                    { id: '', fieldLabel: 'TIN Number', emptyText: 'enter TIN number' },
-                                                    { id: '', fieldLabel: 'Registration No', emptyText: 'enter company registration number' },
-                                                    { id: '', xtype: 'datefield', format: 'd-M-Y', fieldLabel: 'Inc. Date', emptyText: 'Date of Incorporation' },
-                                                    { xtype: 'combo', fieldLabel: 'Business Type', emptyText: 'select business type', forceSelection: true, typeAhead: true, allowBlank: false, local: 'mode', store: lib.getBusinessRegistrationTypes() }
+                                                    {
+                                                        xtype: 'combo', id: 'vdtype', fieldLabel: 'Vendor Type', forceSelection: true, typeAhead: true, allowBlank: false, mode: 'local',
+                                                        store: lib.LoadVendorTypeStore('/Utility/GetVendorTypes'),
+                                                        valueField: 'Id', displayField: 'Description'
+                                                    },
+                                                    {
+                                                        id:'vdloc',fieldLabel:'Location',emptyText:'Location of business'
+                                                    },
+                                                    { id: 'vdTIN', fieldLabel: 'TIN Number', emptyText: 'enter TIN number' },
+                                                    { id: 'vdRNo', fieldLabel: 'Registration No', emptyText: 'enter company registration number' },
+                                                    { id: 'vdInc', xtype: 'datefield', format: 'd-M-Y', fieldLabel: 'Inc. Date', emptyText: 'Date of Incorporation' },
+                                                    {
+                                                        xtype: 'combo',id:'vbtype', fieldLabel: 'Business Type', emptyText: 'select business type',
+                                                        forceSelection: true, typeAhead: true, allowBlank: false, mode:'local',
+                                                        store: lib.getBusinessTypeStore('/Utility/GetCompanyTypes'),
+                                                        valueField: 'BusinessTypeID', displayField: 'BusinessDescription'
+                                                    }
+                                                ],
+                                                buttons: [
+                                                    
+                                                ]
+                                            },
+                                            {
+                                                id:'vndCommfrm',title: 'Communication Details',columnWidth:.5, defaults: { xtype: 'textfield', anchor: '95%', allowBlank: true },
+                                                items: [
+                                                    { id: 'vcon', fieldLabel: 'Contact Person', emptyText: 'enter name of the contact person' },
+                                                    { id: 'votel', fieldLabel: 'Office Tel', emptyText: 'office telephone' },
+                                                    { id: 'vhtel', fieldLabel: 'Home Tel', emptyText: 'home telephone' },
+                                                    { id: 'vemail', fieldLabel: 'Email Address', emptyText: 'enter email address' },
+                                                    { id: 'vghpost', fieldLabel: 'Ghana Post Addr', emptyText: 'enter GH Post Address' },
+                                                    { id: 'vweb', fieldLabel: 'Website', emptyText: 'enter website URL' },
+                                                    { id: 'vlinkedin', fieldLabel: 'LinkedIn', emptyText: 'enter LinkedIn account' },
+                                                    { id: 'vfb', fieldLabel: 'FaceBook', emptyText: 'enter facebook account' }
+                                                ],
+                                                buttons: [
+                                                    {
+                                                        text: 'Save Vendor Info',
+                                                        listeners: {
+                                                            'click': function (btn) {
+                                                                var vf = Ext.getCmp('vndbasicfrm').getForm();
+                                                                var commfrm = Ext.getCmp('vndCommfrm').getForm();
+                                                                if (vf.isValid() && (commfrm.isValid()))
+                                                                {
+                                                                    $.post('/Master/SaveBasicVendorInformation',
+                                                                    {
+                                                                        vID: Ext.fly('vdID').getValue(), vName: Ext.fly('vdName').getValue(), vTypeID: Ext.getCmp('vdtype').getValue(),
+                                                                        location: Ext.fly('vdloc').getValue(), vTIN: Ext.fly('vdTIN').getValue(), regNo: Ext.fly('vdRNo').getValue(),
+                                                                        incDate: Ext.fly('vdInc').getValue(), bTypeID: Ext.getCmp('vbtype').getValue(),
+
+                                                                        vcon: Ext.fly('vcon').getValue(), votel: Ext.fly('votel').getValue(), vhtel: Ext.fly('vhtel').getValue(), vemail: Ext.fly('vemail').getValue(),
+                                                                        vghpost: Ext.fly('vghpost').getValue(), vweb: Ext.fly('vweb').getValue(), vlinkedin: Ext.fly('vlinkedin').getValue(),
+                                                                        fb: Ext.fly('vfb').getValue()
+                                                                    })
+                                                                    .done(function (r) {
+                                                                        if (r.status.toString() == "true") {
+                                                                            $('#btn-vndor-clear').trigger('click');
+                                                                        }
+                                                                    });
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    {
+                                                        id:'btn-vndor-clear',text: 'Clear',
+                                                        listeners: {
+                                                            'click': function (btn) {
+                                                                Ext.getCmp('vndbasicfrm').getForm().reset();
+                                                                Ext.getCmp('vndCommfrm').getForm().reset();
+                                                                $('#vdName').focus();
+                                                            }
+                                                        }
+                                                    }
                                                 ]
                                             }
                                         ]
@@ -51,49 +142,6 @@
                                             {
                                                 activeTab: 0,
                                                 items: [
-                                                    {
-                                                        title: 'Communication', defaults: { xtype: 'form', frame: true, border: false },layout:'column',
-                                                        items: [
-                                                            {
-                                                                columnWidth:.5,id: '',title:'Communication Details', defaults: { xtype: 'textfield', anchor: '95%', allowBlank: true },
-                                                                items: [
-                                                                    { id: '', fieldLabel: 'Contact Person', emptyText: 'enter name of the contact person' },
-                                                                    { id: '', fieldLabel: 'Office Tel', emptyText: 'office telephone' },
-                                                                    { id: '', fieldLabel: 'Home Tel', emptyText: 'home telephone' },
-                                                                    { id: '', fieldLabel: 'Email Address', emptyText: 'enter email address' },
-                                                                    { id: '', fieldLabel: 'Ghana Post Addr', emptyText: 'enter GH Post Address' }
-                                                                ],
-                                                                buttons: [
-                                                                    {
-                                                                        text: 'Save Communication Details',
-                                                                        listeners: {
-                                                                            'click': function (btn) {
-
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                ]
-                                                            },
-                                                            {
-                                                                columnWidth: .5, id: '', title: 'Social Media Presence of Vendor', defaults: { xtype: 'textfield', anchor: '95%', allowBlank: true },
-                                                                items: [
-                                                                    { id: '', fieldLabel: 'Website', emptyText: 'enter website URL' },
-                                                                    { id: '', fieldLabel: 'LinkedIn', emptyText: 'enter LinkedIn account' },
-                                                                    { id: '', fieldLabel: 'FaceBook', emptyText: 'enter facebook account' }
-                                                                ],
-                                                                buttons: [
-                                                                    {
-                                                                        text: 'Save Details',
-                                                                        listeners: {
-                                                                            'click': function (btn) {
-
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                ]
-                                                            }
-                                                        ]
-                                                    },
                                                     {
                                                         title: 'Estimated Turnover', defaults: { xtype: 'form', frame: true, border: true },layout:'column',
                                                         items: [
@@ -192,9 +240,9 @@
                                         columnWidth: .5, defaults: { xtype: 'form', frame: true, border: true },
                                         items: [
                                             {
-                                                id: '', defaults: { xtype: 'textfield', anchor: '95%', allowBlank: false },
+                                                id: 'fVndSave', defaults: { xtype: 'textfield', anchor: '95%', allowBlank: false },
                                                 items: [
-                                                    { id: '', fieldLabel: 'Vendor Type', emptyText: 'enter vendor type' }
+                                                    { id: 'vndtype', fieldLabel: 'Vendor Type', emptyText: 'enter vendor type' }
                                                 ]
                                             }
                                         ],
@@ -203,7 +251,16 @@
                                                 text: 'Save Vendor Type',title:'Vendor Type',
                                                 listeners: {
                                                     'click': function (btn) {
-
+                                                        var f = Ext.getCmp('fVndSave').getForm();
+                                                        if (f.isValid()) {
+                                                            $.post('/Master/SaveVendorType', { vendorDescription: Ext.fly('vndtype').getValue() }, function (response) {
+                                                                if (response.status.toString() == "true") {
+                                                                    lib.LoadVendorTypeGrid('/Utility/GetVendorTypes', Ext.getCmp('xVnd'));
+                                                                    f.reset();
+                                                                    $('#vndtype').focus();
+                                                                }
+                                                            },"json")
+                                                        }
                                                     }
                                                 }
                                             }
@@ -216,27 +273,32 @@
                                                 id: '',title:'Vendor Type List',
                                                 items: [
                                                     new Ext.grid.GridPanel({
-                                                        id: 'xVnd', height: 300, autoScroll: true, autoExpandColumn: 'VendorDescription',
+                                                        id: 'xVnd', height: 300, autoScroll: true, autoExpandColumn: 'Description',
                                                         store: new Ext.data.GroupingStore({
                                                             reader: new Ext.data.ArrayReader({}, [
-                                                                { name: 'VendorTypeID', type: 'int' },
-                                                                { name: 'VendorDescription', type: 'string' }
+                                                                { name: 'Id', type: 'int' },
+                                                                { name: 'Description', type: 'string' }
                                                             ]),
                                                             sortInfo: {
-                                                                field: 'VendorTypeID',
+                                                                field: 'Id',
                                                                 direction: 'ASC'
                                                             },
-                                                            groupField: 'VendorDescription'
+                                                            groupField: 'Description'
                                                         }),
                                                         columns: [
-                                                            { id: 'VendorTypeID', header: 'ID', width: 25, hidden: true, sortable: true, dataIndex: 'VendorTypeID' },
-                                                            { id: 'VendorDescription', header: 'Vendor Type', width: 250, hidden: false, sortable: true, dataIndex: 'VendorDescription' }
+                                                            { id: 'Id', header: 'ID', width: 25, hidden: true, sortable: true, dataIndex: 'Id' },
+                                                            { id: 'Description', header: 'Vendor Type', width: 250, hidden: false, sortable: true, dataIndex: 'Description' }
                                                         ],
                                                         stripeRows: true,
                                                         listeners: {
                                                             'render': function () {
                                                                 //calls function when the grid is rendered to the screen
-
+                                                                lib.LoadVendorTypeGrid('/Utility/GetVendorTypes', Ext.getCmp('xVnd'));
+                                                            },
+                                                            'afterrender': function () {
+                                                                setInterval(function () {
+                                                                    lib.LoadVendorTypeGrid('/Utility/GetVendorTypes', Ext.getCmp('xVnd'));
+                                                                },180000)
                                                             }
                                                         }
                                                     })
@@ -255,13 +317,13 @@
                                         columnWidth: .5, title:'Item Category', defaults: { xtype: 'form', frame: true, border: true },
                                         items: [
                                             {
-                                                id: '', defaults: { xtype: 'textfield', anchor: '95%', allowBlank: false },
+                                                id: 'fItmCat', defaults: { xtype: 'textfield', anchor: '95%', allowBlank: false },
                                                 items: [
                                                     {
-                                                        id:'', fieldLabel:'Category Name', emptyText:'category name'
+                                                        id:'xitmcatname', fieldLabel:'Category Name', emptyText:'category name'
                                                     },
                                                     {
-                                                        xtype:'textarea', fieldLabel:'Description', emptyText:'enter description',allowBlank: true
+                                                        id:'xitmcatdescrib',xtype:'textarea', fieldLabel:'Description', emptyText:'enter description',allowBlank: true
                                                     }
                                                 ],
                                                 buttons: [
@@ -269,15 +331,25 @@
                                                         text: 'Save Category',
                                                         listeners: {
                                                             'click': function (btn) {
-
+                                                                var f = Ext.getCmp('fItmCat').getForm();
+                                                                if (f.isValid()) {
+                                                                    $.post('/Master/SaveItemCategory',
+                                                                        { name: Ext.fly('xitmcatname').getValue(), describ: Ext.fly('xitmcatdescrib').getValue() }, function (r) {
+                                                                            if (r.status.toString() == "true") {
+                                                                                lib.LoadItemCategoryGrid('/Utility/GetItemCategories', Ext.getCmp('xItmCat'));
+                                                                                $('#btnitmclear').trigger('click');
+                                                                            }
+                                                                    },"json");
+                                                                }
                                                             }
                                                         }
                                                     },
                                                     {
-                                                        text: 'Clear Category',
+                                                        id:'btnitmclear',text: 'Clear Category',
                                                         listeners: {
                                                             'click': function (btn) {
-
+                                                                Ext.getCmp('fItmCat').getForm().reset();
+                                                                $('#xitmcatname').focus();
                                                             }
                                                         }
                                                     }
@@ -292,29 +364,34 @@
                                                 id:'',
                                                 items: [
                                                     new Ext.grid.GridPanel({
-                                                        id: 'xItmCat', height: 300, autoScroll: true, autoExpandColumn: 'CategoryName',
+                                                        id: 'xItmCat', height: 300, autoScroll: true, autoExpandColumn: 'nameOfCategory',
                                                         store: new Ext.data.GroupingStore({
                                                             reader: new Ext.data.ArrayReader({}, [
-                                                                { name: 'CategoryID', type: 'int' },
-                                                                { name: 'CategoryName', type: 'string' },
-                                                                { name: 'CategoryDescription', type: 'string' }
+                                                                { name: 'Id', type: 'int' },
+                                                                { name: 'nameOfCategory', type: 'string' },
+                                                                { name: 'descriptionOfCategory', type: 'string' }
                                                             ]),
                                                             sortInfo: {
-                                                                field: 'CategoryName',
+                                                                field: 'nameOfCategory',
                                                                 direction: 'ASC'
                                                             },
-                                                            groupField: 'CategoryName'
+                                                            groupField: 'nameOfCategory'
                                                         }),
                                                         columns: [
-                                                            { id: 'Id', header: 'ID', width: 25, hidden: true, sortable: true, dataIndex: 'CategoryID' },
-                                                            { id: 'CategoryName', header: 'Item Category', width: 250, hidden: false, sortable: true, dataIndex: 'CategoryName' },
-                                                            { id: 'CategoryDescription', header: 'Description', width: 160, hidden: true, sortable: true, dataIndex: 'CategoryDescription' }
+                                                            { id: 'Id', header: 'ID', width: 25, hidden: true, sortable: true, dataIndex: 'Id' },
+                                                            { id: 'nameOfCategory', header: 'Item Category', width: 250, hidden: false, sortable: true, dataIndex: 'nameOfCategory' },
+                                                            { id: 'descriptionOfCategory', header: 'Description', width: 160, hidden: true, sortable: true, dataIndex: 'descriptionOfCategory' }
                                                         ],
                                                         stripeRows: true,
                                                         listeners: {
                                                             'render': function () {
                                                                 //calls function when the grid is rendered to the screen
-
+                                                                lib.LoadItemCategoryGrid('/Utility/GetItemCategories', Ext.getCmp('xItmCat'));
+                                                            },
+                                                            'afterrender': function () {
+                                                                setInterval(function () {
+                                                                    lib.LoadItemCategoryGrid('/Utility/GetItemCategories', Ext.getCmp('xItmCat'));
+                                                                },180000)
                                                             }
                                                         }
                                                     })
@@ -334,25 +411,48 @@
                                         columnWidth: .5, defaults: { xtype: 'form', frame: true, border: true },
                                         items: [
                                             {
-                                                title: 'Section I', defaults: { xtype: 'textfield', anchor: '95%', allowBlank: false },
+                                                id:'fmas_seci',title: 'Section I', defaults: { xtype: 'textfield', anchor: '95%', allowBlank: false },
                                                 items: [
-                                                    { id: '', fieldLabel: 'Item Name', emptyText: 'Item Name' },
-                                                    { id: '', fieldLabel: 'Item Code', emptyText: 'Item Code' },
-                                                    { xtype: 'numberfield', fieldLabel: 'Min. Stock Level' },
-                                                    { xtype: 'numberfield', fieldLabel: 'Max. Stock Level' }
+                                                    { id: 'itmname', fieldLabel: 'Item Name', emptyText: 'Item Name' },
+                                                    {
+                                                        id: 'cboCat', xtype: 'combo', forceSelection: true, typeAhead: true, mode: 'local',
+                                                        fieldLabel: 'Item Category', emptyText: 'category', valueField: 'Id', displayField: 'nameOfCategory',
+                                                        store: lib.categoryStore('/Utility/GetItemCategories'),
+                                                        listeners: {
+                                                            'select': function () {
+                                                                $.getJSON('/Utility/GetItemCode', { category: Ext.fly('cboCat').getValue(), categoryID: Ext.getCmp('cboCat').getValue() },
+                                                                    function (fxn) {
+                                                                    if (fxn.status.toString() == "true") {
+                                                                        $('#itmcode').val(fxn.data.toString());
+                                                                        $('#cboitm_measure').focus();
+                                                                    }
+                                                                });
+                                                                
+                                                            }
+                                                        }
+                                                    },
+                                                    {
+                                                        id: 'itmcode', fieldLabel: 'Item Code', emptyText: 'Item Code',
+                                                        listeners: {
+                                                            'render': function () {
+                                                                $('#itmcode').attr('readonly', true);
+                                                            }
+                                                        }
+                                                    }
                                                 ]
                                             },
                                             {
-                                                title: 'Section II', defaults: { xtype: 'combo', forceSelection: true, typeAhead: true, mode: 'local', allowBlank: false, anchor: '95%' },
+                                                id:'fmas_secii',title: 'Section II', defaults: { xtype: 'combo', forceSelection: true, typeAhead: true, mode: 'local', allowBlank: false, anchor: '95%' },
                                                 items: [
                                                     {
-                                                        fieldLabel: 'Measurement', emptyText: 'Unit of measurement'
+                                                        id:'cboitm_measure',fieldLabel: 'Measured In', emptyText: 'Unit of measurement',
+                                                        store: lib.getItemMetrics('/Utility/GetSIUnits'),
+                                                        valueField: 'Id', displayField: 'Measurement'
                                                     },
+                                                    { id: 'itm_minstk', xtype: 'numberfield', fieldLabel: 'Min. Stock Level' },
+                                                    { id: 'itm_maxstk', xtype: 'numberfield', fieldLabel: 'Max. Stock Level' },
                                                     {
-                                                        fieldLabel: 'Item Category', emptyText: 'category'
-                                                    },
-                                                    {
-                                                        xtype: 'textarea', fieldLabel: 'Description', allowBlank: true
+                                                        id:'itm_mas_describ',xtype: 'textarea', fieldLabel: 'Description', allowBlank: true
                                                     }
                                                 ]
                                             },
@@ -361,18 +461,37 @@
                                                 items: [],
                                                 buttons: [
                                                     {
-                                                        text: 'Save Item',
+                                                        id:'btn-mas-save',text: 'Save Item',
                                                         listeners: {
                                                             'click': function (btn) {
+                                                                var fseci = Ext.getCmp('fmas_seci').getForm();
+                                                                var fsecii = Ext.getCmp('fmas_secii').getForm();
 
+                                                                if (fseci.isValid() && fsecii.isValid())
+                                                                {
+                                                                    $.post('/Master/SaveItem',
+                                                                        {
+                                                                            cname: Ext.fly('itmname').getValue(), catID: Ext.getCmp('cboCat').getValue(),
+                                                                            code: Ext.fly('itmcode').getValue(), measured: Ext.fly('cboitm_measure').getValue(),
+                                                                            minStock: Ext.fly('itm_minstk').getValue(), maxStock: Ext.fly('itm_maxstk').getValue(),
+                                                                            describ: Ext.fly('itm_mas_describ').getValue()
+                                                                        }
+                                                                    ).done(function (r) {
+                                                                        Ext.getCmp('xItmMaster').getStore().removeAll();
+                                                                        lib.getItemGrid('/Utility/GetItemList', Ext.getCmp('xItmMaster'));
+                                                                        $('#btn-mas-clear').trigger('click');
+                                                                    })
+                                                                }
                                                             }
                                                         }
                                                     },
                                                     {
-                                                        text: 'Clear Item',
+                                                        id:'btn-mas-clear',text: 'Clear Item',
                                                         listeners: {
                                                             'click': function (btn) {
-
+                                                                Ext.getCmp('fmas_seci').getForm().reset();
+                                                                Ext.getCmp('fmas_secii').getForm().reset();
+                                                                $('#itmname').focus();
                                                             }
                                                         }
                                                     }
@@ -387,31 +506,36 @@
                                                 title: 'Item Master List',
                                                 items: [
                                                     new Ext.grid.GridPanel({
-                                                        id: 'xItmCat', height: 450, autoScroll: true, autoExpandColumn: 'ItemName',
+                                                        id: 'xItmMaster', height: 450, autoScroll: true, autoExpandColumn: 'ProductName',
                                                         store: new Ext.data.GroupingStore({
                                                             reader: new Ext.data.ArrayReader({}, [
-                                                                { name: 'ItemID', type: 'int' },
-                                                                { name: 'ItemName', type: 'int' },
-                                                                { name: 'ItemCode', type: 'string' },
-                                                                { name: 'ItemCategory', type: 'int' }
+                                                                { name: 'Id', type: 'int' },
+                                                                { name: 'ProductName', type: 'string' },
+                                                                { name: 'ProductCode', type: 'string' },
+                                                                { name: 'Metric', type: 'string' }
                                                             ]),
                                                             sortInfo: {
-                                                                field: 'ItemName',
+                                                                field: 'ProductName',
                                                                 direction: 'ASC'
                                                             },
-                                                            groupField: 'ItemCategory'
+                                                            groupField: 'ProductName'
                                                         }),
                                                         columns: [
-                                                            { id: 'Id', header: 'ID', width: 25, hidden: true, sortable: true, dataIndex: 'ItemID' },
-                                                            { id: 'ItemName', header: 'Item', width: 250, hidden: false, sortable: true, dataIndex: 'ItemName' },
-                                                            { id: 'ItemCode', header: 'Code', width: 160, hidden: false, sortable: true, dataIndex: 'ItemCode' },
-                                                            { id: 'ItemCategory', header: 'Category', width: 20, hidden: false, sortable: true, dataIndex: 'ItemCategory' }
+                                                            { id: 'Id', header: 'ID', width: 25, hidden: true, sortable: true, dataIndex: 'Id' },
+                                                            { id: 'ProductName', header: 'Item', width: 250, hidden: false, sortable: true, dataIndex: 'ProductName' },
+                                                            { id: 'ProductCode', header: 'Code', width: 160, hidden: false, sortable: true, dataIndex: 'ProductCode' },
+                                                            { id: 'Metric', header: 'Category', width: 20, hidden: false, sortable: true, dataIndex: 'Metric' }
                                                         ],
                                                         stripeRows: true,
                                                         listeners: {
                                                             'render': function () {
                                                                 //calls function when the grid is rendered to the screen
-
+                                                                lib.getItemGrid('/Utility/GetItemList', Ext.getCmp('xItmMaster'));
+                                                            },
+                                                            'afterrender': function () {
+                                                                setInterval(function () {
+                                                                    lib.getItemGrid('/Utility/GetItemList', Ext.getCmp('xItmMaster'));
+                                                                },5000)
                                                             }
                                                         }
                                                     })
@@ -431,57 +555,43 @@
                                         columnWidth: .5, defaults: { xtype: 'form', frame: true, border: true },
                                         items: [
                                             {
-                                                title: 'Enter Financial Year', defaults: { xtype: 'combo', forceSelection: true, typeAhead: true, mode: 'local', anchor:'95%' },layout:'form',
+                                                id:'frmFinYr',title: 'Enter Financial Year', defaults: { xtype: 'combo', forceSelection: true, typeAhead: true, mode: 'local', anchor:'95%' },layout:'form',
                                                 items: [
                                                     {
-                                                        id: '', fieldLabel: 'Period From',emptyText:'financial commencement year',
-                                                        store: new Ext.data.Store({
-                                                            autoLoad: true, restful: false,
-                                                            url: '',
-                                                            reader: new Ext.data.JsonReader({ type: 'json', root: 'data' }, [
-                                                                { name: 'Id', type: 'int' },
-                                                                { name: 'year', type: 'int' }
-                                                            ])
-                                                        }), valueField: 'year', displayField: 'year',
-                                                        listeners: {
-                                                            'select': function () {
-                                                                //validation destination year: should be later than year selected here
-
-                                                            }
-                                                        }
+                                                        id: 'pfrom', fieldLabel: 'Period From', emptyText: 'financial commencement year',
+                                                        store: lib.getFinancialYear('current')
                                                     },
                                                     {
-                                                        id: '', fieldLabel: 'Period To', emptyText: 'financial commencement year',
-                                                        store: new Ext.data.Store({
-                                                            autoLoad: true, restful: false,
-                                                            url: '',
-                                                            reader: new Ext.data.JsonReader({ type: 'json', root: 'data' }, [
-                                                                { name: 'Id', type: 'int' },
-                                                                { name: 'year', type: 'int' }
-                                                            ])
-                                                        }), valueField: 'year', displayField: 'year',
-                                                        listeners: {
-                                                            'select': function () {
-                                                                //validation destination year: should be later than year selected here
-
-                                                            }
-                                                        }
-                                                    }
+                                                        id: 'pto', fieldLabel: 'Period To', emptyText: 'financial commencement year',
+                                                        store: lib.getFinancialYear('')
+                                                    },
+                                                    { id:'fncom',xtype:'textarea', fieldLabel:'Comments', emptyText: 'enter comments'}
                                                 ],
                                                 buttons: [
                                                     {
                                                         text: 'Save Financial Year',
                                                         listeners: {
                                                             'click': function (btn) {
-
+                                                                if (Ext.getCmp('frmFinYr').getForm().isValid()) {
+                                                                    if (lib.saveAccPeriod('/Master/SaveAccountingPeriod',
+                                                                                Ext.fly('pfrom').getValue(), Ext.fly('pto').getValue(),
+                                                                                Ext.fly('fncom').getValue()) == "true")
+                                                                                {
+                                                                                    Ext.Msg.alert(lib.stat, 'It worked', this);
+                                                                                    if (lib.stat == "true") {
+                                                                                        $('#frmFinClr').trigger('click');
+                                                                                    }
+                                                                                }  
+                                                                }
                                                             }
                                                         }
                                                     },
                                                     {
-                                                        text: 'Clear Financial Year',
+                                                        id:'frmFinClr',text: 'Clear Financial Year',
                                                         listeners: {
                                                             'click': function (btn) {
-
+                                                                Ext.getCmp('frmFinYr').getForm().reset();
+                                                                $('#pfrom').focus();
                                                             }
                                                         }
                                                     }
@@ -500,7 +610,7 @@
                                                         store: new Ext.data.GroupingStore({
                                                             reader: new Ext.data.ArrayReader({}, [
                                                                 { name: 'FinancialYrID', type: 'int' },
-                                                                { name: 'FinancialYr', type: 'int' },
+                                                                { name: 'FinancialYr', type: 'string' },
                                                                 { name: 'Description', type: 'string' },
                                                                 { name: 'IsActive', type: 'int' }
                                                             ]),
@@ -520,7 +630,12 @@
                                                         listeners: {
                                                             'render': function () {
                                                                 //calls function when the grid is rendered to the screen
-
+                                                                lib.getAccountingPeriod('/Utility/getAccountPeriods', Ext.getCmp('xfin'));
+                                                            },
+                                                            'afterrender': function () {
+                                                                setInterval(function () {
+                                                                    lib.getAccountingPeriod('/Utility/getAccountPeriods', Ext.getCmp('xfin'));
+                                                                },60000)
                                                             }
                                                         }
                                                     })
@@ -540,17 +655,27 @@
                                         columnWidth: .5, defaults: { xtype: 'form', frame: true, border: true },
                                         items: [
                                             {
-                                                title: 'Enter Currency', defaults: { xtype: 'textfield', anchor: '100%' },
+                                                id:'frmCur',title: 'Enter Currency', defaults: { xtype: 'textfield', anchor: '100%' },
                                                 items: [
-                                                    { id: '', fieldLabel: 'Symbol' },
-                                                    { id: '', fieldLabel: 'Currency Name' }
+                                                    { id: 'cursymbol', fieldLabel: 'Symbol' },
+                                                    { id: 'curname', fieldLabel: 'Currency Name' }
                                                 ],
                                                 buttons: [
                                                     {
                                                         text: 'Save',
                                                         listeners: {
                                                             'click': function (btn) {
-
+                                                                if (Ext.getCmp('frmCur').getForm().isValid())
+                                                                {
+                                                                    $.post('/Master/SaveCurrency',
+                                                                        { currency: Ext.fly('curname').getValue(), symbol: Ext.fly('cursymbol').getValue() },
+                                                                        function (rs) {
+                                                                        if (rs.status.toString() == "true") {
+                                                                            //retrieve store from library and load the grid control
+                                                                           lib.currencyGrid('/Utility/GetCurrencies',Ext.getCmp('xcur'));
+                                                                        }
+                                                                    },"json");
+                                                                }
                                                             }
                                                         }
                                                     },
@@ -558,7 +683,8 @@
                                                         text: 'Clear',
                                                         listeners: {
                                                             'click': function (btn) {
-
+                                                                Ext.getCmp('frmCur').getForm().reset();
+                                                                $('#cursymbol').focus();
                                                             }
                                                         }
                                                     }
@@ -594,8 +720,12 @@
                                                         stripeRows: true,
                                                         listeners: {
                                                             'render': function () {
-                                                                //calls function when the grid is rendered to the screen
-
+                                                                lib.currencyGrid('/Utility/GetCurrencies', Ext.getCmp('xcur'));
+                                                            },
+                                                            'afterrender': function () {
+                                                                setInterval(function () {
+                                                                    lib.currencyGrid('/Utility/GetCurrencies', Ext.getCmp('xcur'));
+                                                                },60000)
                                                             }
                                                         }
                                                     })
