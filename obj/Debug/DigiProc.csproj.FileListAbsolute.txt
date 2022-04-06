@@ -76,6 +76,7 @@ C:\Users\Blessings\Documents\Projects\PASL\Apps\eProc\DigiProc\bin\System.Web.We
 C:\Users\Blessings\Documents\Projects\PASL\Apps\eProc\DigiProc\bin\Newtonsoft.Json.xml
 C:\Users\Blessings\Documents\Projects\PASL\Apps\eProc\DigiProc\bin\Antlr3.Runtime.pdb
 C:\Users\Blessings\Documents\Projects\PASL\Apps\eProc\DigiProc\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\Blessings\Documents\Projects\PASL\Apps\eProc\DigiProc\obj\Debug\DigiProc.csproj.AssemblyReference.cache
 C:\Users\Blessings\Documents\Projects\PASL\Apps\eProc\DigiProc\obj\Debug\DigiProc.csproj.CoreCompileInputs.cache
 C:\Users\Blessings\Documents\Projects\PASL\Apps\eProc\DigiProc\obj\Debug\DigiProc.csproj.CopyComplete
 C:\Users\Blessings\Documents\Projects\PASL\Apps\eProc\DigiProc\obj\Debug\DigiProc.dll

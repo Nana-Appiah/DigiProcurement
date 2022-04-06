@@ -1,5 +1,8 @@
 ﻿Ext.onReady(function () {
 
+    var Idx = 0;
+    var editStatus = "";
+
     var currencyGrid = function (ktrl) {
         $.getJSON('/Utility/GetCurrencies', {}, function (rs) {
             var ar = [];
@@ -253,13 +256,25 @@
                                                     'click': function (btn) {
                                                         var f = Ext.getCmp('fVndSave').getForm();
                                                         if (f.isValid()) {
-                                                            $.post('/Master/SaveVendorType', { vendorDescription: Ext.fly('vndtype').getValue() }, function (response) {
-                                                                if (response.status.toString() == "true") {
-                                                                    lib.LoadVendorTypeGrid('/Utility/GetVendorTypes', Ext.getCmp('xVnd'));
-                                                                    f.reset();
-                                                                    $('#vndtype').focus();
-                                                                }
-                                                            },"json")
+                                                            if (editStatus == "vendortype") {
+                                                                $.post('/Master/SaveVendorType', { vendorDescription: Ext.fly('vndtype').getValue() }, function (response) {
+                                                                    if (response.status.toString() == "true") {
+                                                                        lib.LoadVendorTypeGrid('/Utility/GetVendorTypes', Ext.getCmp('xVnd'));
+                                                                        f.reset();
+                                                                        $('#vndtype').focus();
+                                                                    }
+                                                                }, "json")
+                                                            }
+                                                            else {
+                                                                $.post('/Master/UpdateVendorType', { vId: Idx, vendorDescription: Ext.fly('vndtype').getValue() }).done(function (res) {
+                                                                    if (res.status.toString()) {
+                                                                        f.reset();
+                                                                        $('#vndtype').focus();
+                                                                        lib.LoadVendorTypeGrid('/Utility/GetVendorTypes', Ext.getCmp('xVnd'));
+                                                                        
+                                                                    }
+                                                                });
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -273,7 +288,7 @@
                                                 id: '',title:'Vendor Type List',
                                                 items: [
                                                     new Ext.grid.GridPanel({
-                                                        id: 'xVnd', height: 300, autoScroll: true, autoExpandColumn: 'Description',
+                                                        id: 'xVnd', height: 480, autoScroll: true, autoExpandColumn: 'Description',
                                                         store: new Ext.data.GroupingStore({
                                                             reader: new Ext.data.ArrayReader({}, [
                                                                 { name: 'Id', type: 'int' },
@@ -299,6 +314,12 @@
                                                                 setInterval(function () {
                                                                     lib.LoadVendorTypeGrid('/Utility/GetVendorTypes', Ext.getCmp('xVnd'));
                                                                 },180000)
+                                                            },
+                                                            'rowdblclick': function (e, t) {
+                                                                var record = e.getStore().getAt(t);
+                                                                $('#vndtype').val(record.get('Description'));
+                                                                Idx = record.get('Id');
+                                                                editStatus = "vendortype";
                                                             }
                                                         }
                                                     })
@@ -333,13 +354,26 @@
                                                             'click': function (btn) {
                                                                 var f = Ext.getCmp('fItmCat').getForm();
                                                                 if (f.isValid()) {
-                                                                    $.post('/Master/SaveItemCategory',
-                                                                        { name: Ext.fly('xitmcatname').getValue(), describ: Ext.fly('xitmcatdescrib').getValue() }, function (r) {
-                                                                            if (r.status.toString() == "true") {
-                                                                                lib.LoadItemCategoryGrid('/Utility/GetItemCategories', Ext.getCmp('xItmCat'));
-                                                                                $('#btnitmclear').trigger('click');
-                                                                            }
-                                                                    },"json");
+                                                                    if (editStatus == "item-category") {
+                                                                        $.post('/Master/SaveItemCategory',
+                                                                            { name: Ext.fly('xitmcatname').getValue(), describ: Ext.fly('xitmcatdescrib').getValue() }, function (r) {
+                                                                                if (r.status.toString() == "true") {
+                                                                                    lib.LoadItemCategoryGrid('/Utility/GetItemCategories', Ext.getCmp('xItmCat'));
+                                                                                    $('#btnitmclear').trigger('click');
+                                                                                }
+                                                                            }, "json");
+                                                                    }
+                                                                    else {
+                                                                        $.post('/Master/UpdateItemCategory',
+                                                                            { id: Idx, name: Ext.fly('xitmcatname').getValue(), describ: Ext.fly('xitmcatdescrib').getValue() })
+                                                                                .done(function (res) {
+                                                                                    if (res.status.toString() == "true") {
+                                                                                        lib.LoadItemCategoryGrid('/Utility/GetItemCategories', Ext.getCmp('xItmCat'));
+                                                                                        $('#btnitmclear').trigger('click');
+                                                                                        
+                                                                                    }
+                                                                        });
+                                                                    }
                                                                 }
                                                             }
                                                         }
@@ -392,6 +426,13 @@
                                                                 setInterval(function () {
                                                                     lib.LoadItemCategoryGrid('/Utility/GetItemCategories', Ext.getCmp('xItmCat'));
                                                                 },180000)
+                                                            },
+                                                            'rowdblclick': function (e, t) {
+                                                                var record = e.getStore().getAt(t);
+                                                                Idx = record.get('Id');
+                                                                $('#xitmcatname').val(record.get('nameOfCategory'));
+                                                                $('#xitmcatdescrib').val(record.get('descriptionOfCategory'));
+                                                                editStatus = "item-category"
                                                             }
                                                         }
                                                     })
@@ -506,7 +547,7 @@
                                                 title: 'Item Master List',
                                                 items: [
                                                     new Ext.grid.GridPanel({
-                                                        id: 'xItmMaster', height: 450, autoScroll: true, autoExpandColumn: 'ProductName',
+                                                        id: 'xItmMaster', height: 480, autoScroll: true, autoExpandColumn: 'ProductName',
                                                         store: new Ext.data.GroupingStore({
                                                             reader: new Ext.data.ArrayReader({}, [
                                                                 { name: 'Id', type: 'int' },
@@ -536,6 +577,14 @@
                                                                 setInterval(function () {
                                                                     lib.getItemGrid('/Utility/GetItemList', Ext.getCmp('xItmMaster'));
                                                                 },5000)
+                                                            },
+                                                            'rowdblclick': function (e, t) {
+                                                                var record = e.getStore().getAt(t);
+                                                                Idx = record.get('Id');
+                                                                $('#itmname').val(record.get('ProductName'));
+                                                                $('#itmcode').val(record.get('ProductCode'));
+
+                                                                editStatus = "item-master";
                                                             }
                                                         }
                                                     })
@@ -665,16 +714,29 @@
                                                         text: 'Save',
                                                         listeners: {
                                                             'click': function (btn) {
-                                                                if (Ext.getCmp('frmCur').getForm().isValid())
+                                                                var curFrm = Ext.getCmp('frmCur').getForm();
+                                                                if (curFrm.isValid())
                                                                 {
-                                                                    $.post('/Master/SaveCurrency',
-                                                                        { currency: Ext.fly('curname').getValue(), symbol: Ext.fly('cursymbol').getValue() },
-                                                                        function (rs) {
-                                                                        if (rs.status.toString() == "true") {
-                                                                            //retrieve store from library and load the grid control
-                                                                           lib.currencyGrid('/Utility/GetCurrencies',Ext.getCmp('xcur'));
-                                                                        }
-                                                                    },"json");
+                                                                    if (editStatus == "currency-list") {
+                                                                        $.post('/Master/SaveCurrency',
+                                                                            { currency: Ext.fly('curname').getValue(), symbol: Ext.fly('cursymbol').getValue() },
+                                                                            function (rs) {
+                                                                                if (rs.status.toString() == "true") {
+                                                                                    //retrieve store from library and load the grid control
+                                                                                    lib.currencyGrid('/Utility/GetCurrencies', Ext.getCmp('xcur'));
+                                                                                }
+                                                                            }, "json");
+                                                                    }
+                                                                    else {
+                                                                        $.post('/Master/UpdateCurrency', { id: Idx, currency: Ext.fly('curname').getValue(), symbol: Ext.fly('cursymbol').getValue() })
+                                                                            .done(function (res) {
+                                                                                if (res.status.toString() == "true") {
+                                                                                    curFrm.reset();
+                                                                                    lib.currencyGrid('/Utility/GetCurrencies', Ext.getCmp('xcur'));
+                                                                                    currencyEditStatus = false;
+                                                                                }
+                                                                        });
+                                                                    }
                                                                 }
                                                             }
                                                         }
@@ -726,6 +788,13 @@
                                                                 setInterval(function () {
                                                                     lib.currencyGrid('/Utility/GetCurrencies', Ext.getCmp('xcur'));
                                                                 },60000)
+                                                            },
+                                                            'rowdblclick': function (e, t) {
+                                                                var record = e.getStore().getAt(t);
+                                                                Idx = record.get('CurrencyID');
+                                                                $('#cursymbol').val(record.get('CurrencySymbol'));
+                                                                $('#curname').val(record.get('CurrencyName'));
+                                                                editStatus = "currency-list";
                                                             }
                                                         }
                                                     })

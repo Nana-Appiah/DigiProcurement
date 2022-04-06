@@ -90,6 +90,23 @@ namespace DigiProc.Helpers
             }
         }
 
+        public bool UpdateItemCategory()
+        {
+            try
+            {
+                var o = config.ItemCategories.Where(c => c.CategoryID == itemCategory.CategoryID).FirstOrDefault();
+                o.CategoryName = itemCategory.CategoryName;
+                o.CategoryDescription = itemCategory.CategoryDescription;
+
+                config.SaveChanges();
+                return true;
+            }
+            catch(Exception x)
+            {
+                throw x;
+            }
+        }
+
         #endregion
 
         public List<StandardUnit> getItemMetrics()
@@ -205,6 +222,25 @@ namespace DigiProc.Helpers
             }
         }
 
+        public bool updateCurrency(int id, string cName, string cSymbol)
+        {
+            try
+            {
+                var obj = config.Currencies.Where(c => c.CurrencyID == id).FirstOrDefault();
+
+                obj.CurrencyName = cName;
+                obj.CurrencySymbol = cSymbol;
+                config.SaveChanges();
+
+                return true;
+            }
+            catch(Exception x)
+            {
+                Debug.Print($"error: {x.Message}");
+                return false;
+            }
+        }
+
         public List<Currency> getCurrencies()
         {
             List<Currency> currency_list = new List<Currency>();
@@ -228,6 +264,23 @@ namespace DigiProc.Helpers
             try
             {
                 config.VendorTypes.Add(oVendorType);
+                config.SaveChanges();
+
+                return true;
+            }
+            catch(Exception x)
+            {
+                Debug.Print(x.Message);
+                return false;
+            }
+        }
+
+        public bool updateVendorType()
+        {
+            try
+            {
+                var obj = config.VendorTypes.Where(x => x.VendorTypeID == oVendorType.VendorTypeID).FirstOrDefault();
+                obj.VendorDescription = oVendorType.VendorDescription;
                 config.SaveChanges();
 
                 return true;

@@ -40,6 +40,20 @@ namespace DigiProc.Controllers
             }
         }
 
+        [HttpPost]
+        public JsonResult UpdateCurrency(int id, string currency, string symbol)
+        {
+            try
+            {
+                bool bln = new Utility() { }.updateCurrency(id, currency, symbol);
+                return Json(new { status = bln, data = bln },JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception x)
+            {
+                return Json(new { status = false, error = $"error: {x.Message}" },JsonRequestBehavior.AllowGet);
+            }
+        }
+
         #region Vendor-Types
 
         [HttpPost]
@@ -54,6 +68,23 @@ namespace DigiProc.Controllers
 
                 var bln = obj.saveVendorType();
                 return Json(new { status = bln, data = obj },JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception x)
+            {
+                return Json(new { status = false, error = $"error: {x.Message}" },JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult UpdateVendorType(int vId, string vendorDescription)
+        {
+            try
+            {
+                var obj = new Utility() { 
+                    oVendorType = new VendorType { VendorTypeID = vId, VendorDescription = vendorDescription }
+                };
+
+                return Json(new { status = obj.updateVendorType(), data = obj.oVendorType },JsonRequestBehavior.AllowGet);
             }
             catch(Exception x)
             {
@@ -84,6 +115,28 @@ namespace DigiProc.Controllers
             catch(Exception ex)
             {
                 return Json(new { status = false, error = $"error: {ex.Message}"},JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public JsonResult UpdateItemCategory(int id, string name, string describ)
+        {
+            try
+            {
+                var obj = new Utility()
+                {
+                    itemCategory = new ItemCategory()
+                    {
+                        CategoryID = id,
+                        CategoryName = name,
+                        CategoryDescription = describ
+                    }
+                };
+
+                return Json(new { status = obj.UpdateItemCategory(), data = obj.itemCategory },JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception x)
+            {
+                return Json(new { status = false, error = $"error: {x.Message}" },JsonRequestBehavior.AllowGet);
             }
         }
 
