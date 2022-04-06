@@ -241,5 +241,25 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="NotificationLists">
+      <EntityTypeMapping TypeName="EProcurementDbModel.NotificationList">
+        <MappingFragment StoreEntitySet="NotificationList">
+          <ScalarProperty Name="isActive" ColumnName="isActive" />
+          <ScalarProperty Name="tag" ColumnName="tag" />
+          <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="NotificationID" ColumnName="NotificationID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Positions">
+      <EntityTypeMapping TypeName="EProcurementDbModel.Position">
+        <MappingFragment StoreEntitySet="Position">
+          <ScalarProperty Name="Designation" ColumnName="Designation" />
+          <ScalarProperty Name="PositionID" ColumnName="PositionID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

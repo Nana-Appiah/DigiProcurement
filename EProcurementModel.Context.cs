@@ -45,5 +45,7 @@ namespace DigiProc
         public virtual DbSet<Vendor> Vendors { get; set; }
         public virtual DbSet<VendorType> VendorTypes { get; set; }
         public virtual DbSet<BusinessType> BusinessTypes { get; set; }
+        public virtual DbSet<NotificationList> NotificationLists { get; set; }
+        public virtual DbSet<Position> Positions { get; set; }
     }
 }

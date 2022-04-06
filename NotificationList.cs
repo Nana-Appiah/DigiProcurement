@@ -12,18 +12,13 @@ namespace DigiProc
     using System;
     using System.Collections.Generic;
     
-    public partial class CommitteeMember
+    public partial class NotificationList
     {
-        public int CommitteeMemberID { get; set; }
-        public Nullable<int> CommitteeID { get; set; }
-        public string LastName { get; set; }
+        public int NotificationID { get; set; }
         public string FirstName { get; set; }
-        public string OtherNames { get; set; }
-        public Nullable<int> PositionID { get; set; }
+        public string LastName { get; set; }
         public string EmailAddress { get; set; }
-        public Nullable<int> active { get; set; }
-    
-        public virtual Committee Committee { get; set; }
-        public virtual Position Position { get; set; }
+        public string tag { get; set; }
+        public Nullable<int> isActive { get; set; }
     }
 }

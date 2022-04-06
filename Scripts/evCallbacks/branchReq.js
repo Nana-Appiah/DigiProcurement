@@ -1,5 +1,8 @@
 ﻿Ext.onReady(function () {
 
+    //var editor = new Ext.ux.grid.RowEditor();
+    var editor = lib.returnEditorControl();
+
     var breq = Ext.get('branchReq');
 
     breq.on('click', function () {
@@ -53,15 +56,61 @@
                                                             }
                                                         }
                                                     },
+                                                    { title:'Search'},
                                                     {
-                                                        title: 'Add Requisition Items', defaults: { xtype: 'combo', forceSelection: true, typeAhead: true, mode: 'local', allowBlank: false, anchor:'95%' },
+                                                        title: 'Requisition Items::Item Pool',
                                                         items: [
-                                                            { id: '', fieldLabel: 'Item', emptyText: 'select Item' },
-                                                            { id:'',xtype:'numberfield', fieldLabel: 'Quantity', emptyText:'enter quantity'}
+                                                            new Ext.grid.GridPanel({
+                                                                id: 'Req', height: 250, autoScroll: true, autoExpandColumn: 'ProductName',
+                                                                plugins: editor,
+                                                                store: new Ext.data.GroupingStore({
+                                                                    reader: new Ext.data.ArrayReader({}, [
+                                                                        { name: 'Id', type: 'int' },
+                                                                        { name: 'ProductName', type: 'string' },
+                                                                        { name: 'ProductCode', type: 'string' },
+                                                                        { name: 'Metric', type: 'string' },
+                                                                        { name: 'qty', type: 'int' }
+                                                                    ]),
+                                                                    sortInfo: {
+                                                                        field: 'Id',
+                                                                        direction: 'ASC'
+                                                                    },
+                                                                    groupField: 'ProductName'
+                                                                }),
+                                                                columns: [
+                                                                    { id: 'Id', header: 'ID', width: 25, hidden: true, sortable: true, dataIndex: 'Id' },
+                                                                    { id: 'ProductName', header: 'Product', width: 400, hidden: false, sortable: true, dataIndex: 'ProductName' },
+                                                                    { id: 'ProductCode', header: 'Code', width: 100, hidden: false, sortable: true, dataIndex: 'ProductCode' },
+                                                                    { id: 'Metric', header: 'Measurement', width: 100, hidden: true, sortable: true, dataIndex: 'Metric' },
+                                                                    {
+                                                                        id: 'Qty', header: 'Qty', width: 100, hidden: false, sortable: true, dataIndex: 'qty',
+                                                                        editor: { xtype: 'numberfield', allowBlank: true, allowNegative: false, minValue: 0, maxValue: 1000 }
+                                                                    }
+                                                                ],
+                                                                stripeRows: true,
+                                                                listeners: {
+                                                                    'render': function () {
+                                                                        lib.getItemGrid('/Utility/GetItemList', Ext.getCmp('Req'));
+                                                                    },
+                                                                    'afterrender': function () {
+                                                                        setInterval(function () {
+                                                                            lib.getItemGrid('/Utility/GetItemList', Ext.getCmp('Req'));
+                                                                        },180000);
+                                                                    }
+                                                                }
+                                                            })
                                                         ],
                                                         buttons: [
                                                             {
-                                                                id: '', text: 'Add Item',
+                                                                id: '', text: 'Add Selected',
+                                                                listeners: {
+                                                                    'click': function (btn) {
+
+                                                                    }
+                                                                }
+                                                            },
+                                                            {
+                                                                id: '', text: 'Clear Selected',
                                                                 listeners: {
                                                                     'click': function (btn) {
 
@@ -69,43 +118,35 @@
                                                                 }
                                                             }
                                                         ]
-                                                    },
-                                                    {
-                                                        id: '',title:'Brief comments', defaults: { xtype: 'htmleditor', height:150 },layout:'fit',
-                                                        items: [
-                                                            {}
-                                                        ]
                                                     }
                                                 ]
                                             },
                                             {
-                                                columnWidth: .5, title: 'testing', defaults: { xtype: 'form', frame: true, border: true },
+                                                columnWidth: .5, title: 'Requisitioned Items', defaults: { xtype: 'form', frame: true, border: true },
                                                 items: [
                                                     {
                                                         id: '',
                                                         items: [
                                                             new Ext.grid.GridPanel({
-                                                                id: 'xBrRqList', height: 300, autoScroll: true, autoExpandColumn: 'ItemDescription',
+                                                                id: 'xBrRqList', height: 250, autoScroll: true, autoExpandColumn: 'ProductName',
                                                                 store: new Ext.data.GroupingStore({
                                                                     reader: new Ext.data.ArrayReader({}, [
-                                                                        { name: 'ItemID', type: 'int' },
-                                                                        { name: 'ItemDescription', type: 'string' },
-                                                                        { name: 'ItemQuantity', type: 'int' },
-                                                                        { name: 'ItemRate', type: 'double' },
-                                                                        { name: 'ItemAmt', type: 'double' }
+                                                                        { name: 'Id', type: 'int' },
+                                                                        { name: 'ProductName', type: 'string' },
+                                                                        { name: 'ProductCode', type: 'string' },
+                                                                        { name: 'Qty', type: 'int' }
                                                                     ]),
                                                                     sortInfo: {
-                                                                        field: 'ItemID',
+                                                                        field: 'Id',
                                                                         direction: 'ASC'
                                                                     },
-                                                                    groupField: 'ItemDescription'
+                                                                    groupField: 'ProductName'
                                                                 }),
                                                                 columns: [
-                                                                    { id: 'ItemID', header: 'ID', width: 25, hidden: true, sortable: true, dataIndex: 'VendorTypeID' },
-                                                                    { id: 'ItemDescription', header: 'Item Desc', width: 250, hidden: false, sortable: true, dataIndex: 'ItemDescription' },
-                                                                    { id: 'ItemQuantity', header: 'Item Qty', width: 250, hidden: false, sortable: true, dataIndex: 'ItemQuantity' },
-                                                                    { id: 'ItemRate', header: 'Rate', width: 250, hidden: false, sortable: true, dataIndex: 'ItemRate' },
-                                                                    { id: 'ItemAmt', header: 'Amount', width: 250, hidden: false, sortable: true, dataIndex: 'ItemAmt' }
+                                                                    { id: 'Id', header: 'ID', width: 25, hidden: true, sortable: true, dataIndex: 'Id' },
+                                                                    { id: 'ProductName', header: 'Item Desc', width: 250, hidden: false, sortable: true, dataIndex: 'ProductName' },
+                                                                    { id: 'ProductCode', header: 'Item Qty', width: 250, hidden: false, sortable: true, dataIndex: 'ProductCode' },
+                                                                    { id: 'Qty', header: 'Rate', width: 250, hidden: false, sortable: true, dataIndex: 'Qty' }
                                                                 ],
                                                                 stripeRows: true,
                                                                 listeners: {
@@ -118,9 +159,17 @@
                                                         ]
                                                     },
                                                     {
-                                                        title: 'Estimated Total Requisition (based on Average weighted Price)', defaults: { xtype: 'textfield', anchor: '95%', allowBlank: false },
+                                                        title: 'Brief Comments', defaults: { xtype: 'htmleditor', height:150, anchor: '95%', allowBlank: false },layout:'fit',
                                                         items: [
-                                                            {id:'', fieldLabel:'Total Amt'}
+                                                            {id:''}
+                                                        ],
+                                                        buttons: [
+                                                            {
+                                                                id: '', text: 'Send Requistion',
+                                                                handler: function (btn) {
+
+                                                                }
+                                                            }
                                                         ]
                                                     }
                                                 ]

@@ -154,3 +154,6 @@ lib.getItemGrid = function (_URL, controlRef) {
     });
 }
 
+lib.returnEditorControl = function () {
+    return new Ext.ux.grid.RowEditor();
+}

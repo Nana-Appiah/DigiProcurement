@@ -22,6 +22,7 @@
     <Property Name="EmailAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="active" Type="Int32" />
     <NavigationProperty Name="Committee" Relationship="Self.FK_CommitteeMember_Committee" FromRole="CommitteeMember" ToRole="Committee" />
+    <NavigationProperty Name="Position" Relationship="EProcurementDbModel.FK_CommitteeMember_Position" FromRole="CommitteeMember" ToRole="Position" />
   </EntityType>
   <EntityType Name="Currency">
     <Key>
@@ -233,7 +234,7 @@
       <PropertyRef Name="VendorTypeID" />
     </Key>
     <Property Name="VendorTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="VendorDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="VendorDescription" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="Vendors" Relationship="Self.FK_Vendor_VendorType" FromRole="VendorType" ToRole="Vendor" />
   </EntityType>
   <Association Name="FK_CommitteeMember_Committee">
@@ -425,6 +426,12 @@
       <End Role="BusinessType" EntitySet="BusinessTypes" />
       <End Role="Vendor" EntitySet="Vendors" />
     </AssociationSet>
+    <EntitySet Name="NotificationLists" EntityType="EProcurementDbModel.NotificationList" />
+    <EntitySet Name="Positions" EntityType="EProcurementDbModel.Position" />
+    <AssociationSet Name="FK_CommitteeMember_Position" Association="EProcurementDbModel.FK_CommitteeMember_Position">
+      <End Role="Position" EntitySet="Positions" />
+      <End Role="CommitteeMember" EntitySet="CommitteeMembers" />
+    </AssociationSet>
   </EntityContainer>
   <Association Name="FK_UserModule_Module">
     <End Type="EProcurementDbModel.Module" Role="Module" Multiplicity="0..1" />
@@ -455,6 +462,37 @@
       </Principal>
       <Dependent Role="Vendor">
         <PropertyRef Name="CompanyBusinessTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="NotificationList">
+    <Key>
+      <PropertyRef Name="NotificationID" />
+    </Key>
+    <Property Name="NotificationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="EmailAddress" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+    <Property Name="tag" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="isActive" Type="Int32" />
+  </EntityType>
+  <EntityType Name="Position">
+    <Key>
+      <PropertyRef Name="PositionID" />
+    </Key>
+    <Property Name="PositionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Designation" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="CommitteeMembers" Relationship="EProcurementDbModel.FK_CommitteeMember_Position" FromRole="Position" ToRole="CommitteeMember" />
+  </EntityType>
+  <Association Name="FK_CommitteeMember_Position">
+    <End Type="EProcurementDbModel.Position" Role="Position" Multiplicity="0..1" />
+    <End Type="EProcurementDbModel.CommitteeMember" Role="CommitteeMember" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Position">
+        <PropertyRef Name="PositionID" />
+      </Principal>
+      <Dependent Role="CommitteeMember">
+        <PropertyRef Name="PositionID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

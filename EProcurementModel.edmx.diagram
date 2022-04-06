@@ -37,6 +37,9 @@
         <AssociationConnector Association="EProcurementDbModel.FK_UserModule_Module" />
         <EntityTypeShape EntityType="EProcurementDbModel.BusinessType" Width="1.5" PointX="10.375" PointY="12.75" />
         <AssociationConnector Association="EProcurementDbModel.FK_Vendor_BusinessType" />
+        <EntityTypeShape EntityType="EProcurementDbModel.NotificationList" Width="1.5" PointX="13.375" PointY="8.75" />
+        <EntityTypeShape EntityType="EProcurementDbModel.Position" Width="1.5" PointX="12.375" PointY="12.875" />
+        <AssociationConnector Association="EProcurementDbModel.FK_CommitteeMember_Position" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
