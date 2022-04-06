@@ -173,6 +173,36 @@ namespace DigiProc.Controllers
             }
         }
 
+        public JsonResult UpdateItem(int id, string cname, int? catID, string code, string measured, int? minStock, int? maxStock, string describ)
+        {
+            try
+            {
+                var itemObj = new Item()
+                {
+                    ItemID = id,
+                    ItemName = cname,
+                    ItemCategoryID = (int?)catID,
+                    ItemCode = code,
+                    MinStockLevel = minStock,
+                    MaxStockLevel = maxStock,
+                    ItemDescription = describ
+                };
+
+                var obj = new Utility()
+                {
+                    item = itemObj
+                };
+
+                bool bln = obj.UpdateItem();
+
+                return Json(new { status = bln, data = itemObj },JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception x)
+            {
+                return Json(new { status = false, error = $"error: {x.Message}" },JsonRequestBehavior.AllowGet);
+            }
+        }
+
         #endregion
 
         #region Vendor
