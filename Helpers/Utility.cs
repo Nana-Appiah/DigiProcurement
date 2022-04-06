@@ -344,6 +344,28 @@ namespace DigiProc.Helpers
             }
         }
 
+        public bool UpdateItem()
+        {
+            try
+            {
+                var o = config.Items.Where(i => i.ItemID == item.ItemID).FirstOrDefault();
+
+                o.ItemName = item.ItemName;
+                o.ItemCode = item.ItemCode;
+                o.ItemCategoryID = item.ItemCategoryID;
+                o.MinStockLevel = item.MinStockLevel;
+                o.MaxStockLevel = item.MaxStockLevel;
+                o.ItemDescription = item.ItemDescription;
+
+                config.SaveChanges();
+                return true;
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public List<Product> GetItems()
         {
             //gets all the items in the data store

@@ -1227,6 +1227,7 @@
     </Content>
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\Desktop.js" />
+    <Content Include="Scripts\evCallbacks\access.js" />
     <Content Include="Scripts\evCallbacks\config.js" />
     <Content Include="Scripts\evCallbacks\lib.js" />
     <Content Include="Scripts\evCallbacks\branchReq.js" />
@@ -1275,6 +1276,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+    <Folder Include="Properties\PublishProfiles\" />
     <Folder Include="Views\Master\" />
     <Folder Include="Views\Requisition\" />
     <Folder Include="Views\Utility\" />
