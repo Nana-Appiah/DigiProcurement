@@ -116,6 +116,7 @@
     <EntitySetMapping Name="Requisitions">
       <EntityTypeMapping TypeName="EProcurementDbModel.Requisition">
         <MappingFragment StoreEntitySet="Requisition">
+          <ScalarProperty Name="isNotif" ColumnName="isNotif" />
           <ScalarProperty Name="RequisitionID" ColumnName="RequisitionID" />
           <ScalarProperty Name="RequisitionNo" ColumnName="RequisitionNo" />
           <ScalarProperty Name="RequestedBy" ColumnName="RequestedBy" />
@@ -141,12 +142,11 @@
     <EntitySetMapping Name="RequisitionItems">
       <EntityTypeMapping TypeName="EProcurementDbModel.RequisitionItem">
         <MappingFragment StoreEntitySet="RequisitionItem">
+          <ScalarProperty Name="Narration" ColumnName="Narration" />
           <ScalarProperty Name="RequisitionItemID" ColumnName="RequisitionItemID" />
           <ScalarProperty Name="RequisitionID" ColumnName="RequisitionID" />
           <ScalarProperty Name="ItemID" ColumnName="ItemID" />
           <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-          <ScalarProperty Name="ItemRate" ColumnName="ItemRate" />
-          <ScalarProperty Name="ItemAmount" ColumnName="ItemAmount" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -238,6 +238,43 @@
         <MappingFragment StoreEntitySet="BusinessType">
           <ScalarProperty Name="BusinessDescription" ColumnName="BusinessDescription" />
           <ScalarProperty Name="BusinessTypeID" ColumnName="BusinessTypeID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="NotificationLists">
+      <EntityTypeMapping TypeName="EProcurementDbModel.NotificationList">
+        <MappingFragment StoreEntitySet="NotificationList">
+          <ScalarProperty Name="isActive" ColumnName="isActive" />
+          <ScalarProperty Name="tag" ColumnName="tag" />
+          <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="NotificationID" ColumnName="NotificationID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Positions">
+      <EntityTypeMapping TypeName="EProcurementDbModel.Position">
+        <MappingFragment StoreEntitySet="Position">
+          <ScalarProperty Name="Designation" ColumnName="Designation" />
+          <ScalarProperty Name="PositionID" ColumnName="PositionID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Companies">
+      <EntityTypeMapping TypeName="EProcurementDbModel.Company">
+        <MappingFragment StoreEntitySet="Company">
+          <ScalarProperty Name="CompanyDescription" ColumnName="CompanyDescription" />
+          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Departments">
+      <EntityTypeMapping TypeName="EProcurementDbModel.Department">
+        <MappingFragment StoreEntitySet="Department">
+          <ScalarProperty Name="Head" ColumnName="Head" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

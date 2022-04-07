@@ -14,12 +14,6 @@ namespace DigiProc
     
     public partial class Vendor
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Vendor()
-        {
-            this.Requisitions = new HashSet<Requisition>();
-        }
-    
         public int VendorID { get; set; }
         public string VendorName { get; set; }
         public string ContactPerson { get; set; }
@@ -43,8 +37,6 @@ namespace DigiProc
         public string CompanyHomeContact { get; set; }
         public Nullable<int> CompanyBusinessTypeID { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Requisition> Requisitions { get; set; }
         public virtual VendorType VendorType { get; set; }
         public virtual BusinessType BusinessType { get; set; }
     }

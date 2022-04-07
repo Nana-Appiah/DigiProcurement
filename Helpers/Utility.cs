@@ -185,6 +185,21 @@ namespace DigiProc.Helpers
             }
         }
 
+        public FinancialYear getActiveFinancialYear()
+        {
+            FinancialYear obj = null;
+            try
+            {
+                obj = config.FinancialYears.Where(x => x.IsActive == 1).FirstOrDefault();
+                return obj;
+            }
+            catch (Exception x)
+            {
+                Debug.Print(x.Message);
+                return obj;
+            }
+        }
+
         public bool saveFinancialYear(int periodFrm, int periodTo, string brief)
         {
             try
@@ -241,17 +256,33 @@ namespace DigiProc.Helpers
             }
         }
 
-        public List<Currency> getCurrencies()
+        public List<Denomination> getCurrencies()
         {
             List<Currency> currency_list = new List<Currency>();
+            List<Denomination> denomList = new List<Denomination>();
+
             try
             {
                 currency_list = config.Currencies.ToList();
-                return currency_list;
+                if (currency_list.Count() > 0)
+                {
+                    foreach(var item in currency_list)
+                    {
+                        var obj = new Denomination() { 
+                            Id = item.CurrencyID,
+                            nameOfcurrency = item.CurrencyName,
+                            denominationSymbol = item.CurrencySymbol
+                        };
+
+                        denomList.Add(obj);
+                    }
+                }
+
+                return denomList.ToList();
             }
             catch(Exception x)
             {
-                return currency_list;
+                return denomList;
             }
         }
 
@@ -458,6 +489,153 @@ namespace DigiProc.Helpers
             return nextID;
         }
 
+        public int getItemID(string icode)
+        {
+            //get itemId using item code
+            try
+            {
+                var obj = config.Items.Where(i => i.ItemCode == icode).FirstOrDefault();
+                return obj.ItemID;
+            }
+            catch(Exception x)
+            {
+                Debug.Print(x.Message);
+                return 0;
+            }
+        }
+
+        #endregion
+
+        #region Priority
+
+        public List<Priority> GetPriorityTypes()
+        {
+            List<PriorityType> priorityTypes = new List<PriorityType>();
+            List<Priority> data = new List<Priority>();
+
+            try
+            {
+                priorityTypes = config.PriorityTypes.ToList();
+                if (priorityTypes.Count() > 0)
+                {
+                    foreach(var item in priorityTypes)
+                    {
+                        var p = new Priority() { Id = item.PriorityID, nameOfPriority = item.PriorityDescription };
+                        data.Add(p);
+                    }
+                }
+
+                return data.ToList();
+            }
+            catch(Exception x)
+            {
+                Debug.Print(x.Message);
+                throw x;
+            }
+        }
+
+        #endregion
+
+        #region Requisition-Types
+
+        public List<RequisitionType> GetRequisitionTypes()
+        {
+            List<RequisitionType> requisition_types = new List<RequisitionType>();
+            try
+            {
+                var _data = config.RequisitionTypes.ToList();
+                if (_data.Count() > 0)
+                {
+                    foreach(var d in _data)
+                    {
+                        var rq = new RequisitionType() 
+                        { 
+                            RequisitionTypeID = d.RequisitionTypeID,
+                            RequisitionType1 = d.RequisitionType1,
+                            RequisitionDescription = d.RequisitionDescription
+                        };
+
+                        requisition_types.Add(rq);
+                    }
+                }
+
+                return requisition_types;
+            }
+            catch(Exception x)
+            {
+                Debug.Print(x.Message);
+                return requisition_types;
+            }
+        }
+
+
+        #endregion
+
+        #region Company
+
+        public Company getDefaultCompany()
+        {
+            Company obj = null;
+
+            try
+            {
+                var o = config.Companies.Where(c => c.CompanyID == 1).FirstOrDefault();
+                if (o.CompanyID > 0)
+                {
+                    obj = new Company() { 
+                        CompanyID = o.CompanyID,
+                        CompanyDescription = o.CompanyDescription
+                    };
+                }
+
+                return obj;
+            }
+            catch(Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return obj;
+            }
+        }
+
+        #endregion
+
+        #region Departments
+
+        public Department getDepartment(string str)
+        {
+            Department obj = null;
+
+            try
+            {
+                obj = config.Departments.Where(d => d.Name == str).FirstOrDefault();
+                return obj;
+            }
+            catch(Exception x)
+            {
+                Debug.Print(x.Message);
+                return obj;
+            }
+        }
+
+        #endregion
+
+        #region RequisitionStatus
+
+        public RequisitionStatu GetRequisitionStatus(string str)
+        {
+            RequisitionStatu obj = null;
+            try
+            {
+                obj = config.RequisitionStatus.Where(r => r.RequisitionStatusDesc == str).FirstOrDefault();
+                return obj;
+            }
+            catch(Exception x)
+            {
+                Debug.Print(x.Message);
+                return obj;
+            }
+        }
+
         #endregion
 
     }
@@ -520,7 +698,7 @@ namespace DigiProc.Helpers
         }
 
     }
-
+    
     public struct ItemCategorization
     {
         public int Id { get; set; }
@@ -543,6 +721,26 @@ namespace DigiProc.Helpers
     {
         public int Id { get; set; }
         public string Description { get; set; }
+    }
+
+    public struct Denomination
+    {
+        public int Id { get; set; }
+        public string nameOfcurrency { get; set; }
+        public string denominationSymbol { get; set; }
+    }
+
+    public struct Priority
+    {
+        public int Id { get; set; }
+        public string nameOfPriority { get; set; }
+    }
+
+    public struct UserSession
+    {
+        public string userName { get; set; }
+        public Department userDepartment { get; set; }
+
     }
 
     #endregion

@@ -137,11 +137,18 @@
     <Compile Include="CommitteeMember.cs">
       <DependentUpon>EProcurementModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Company.cs">
+      <DependentUpon>EProcurementModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MasterController.cs" />
+    <Compile Include="Controllers\ProcessFlowController.cs" />
     <Compile Include="Controllers\RequisitionController.cs" />
     <Compile Include="Controllers\UtilityController.cs" />
     <Compile Include="Currency.cs">
+      <DependentUpon>EProcurementModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Department.cs">
       <DependentUpon>EProcurementModel.tt</DependentUpon>
     </Compile>
     <Compile Include="EProcurementModel.Context.cs">
@@ -165,6 +172,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\PFHelper.cs" />
     <Compile Include="Helpers\RequisitionHelper.cs" />
     <Compile Include="Helpers\Utility.cs" />
     <Compile Include="Helpers\VendorHelper.cs" />
@@ -181,6 +189,12 @@
       <DependentUpon>EProcurementModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Module.cs">
+      <DependentUpon>EProcurementModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="NotificationList.cs">
+      <DependentUpon>EProcurementModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Position.cs">
       <DependentUpon>EProcurementModel.tt</DependentUpon>
     </Compile>
     <Compile Include="PriorityType.cs">
@@ -230,6 +244,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\desktop.css" />
     <Content Include="Content\htmleditorplugins.css" />
+    <Content Include="Content\RowEditor.css" />
     <Content Include="EProcurementModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>EProcurementModel.edmx</DependentUpon>
@@ -1228,12 +1243,14 @@
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\Desktop.js" />
     <Content Include="Scripts\evCallbacks\access.js" />
+    <Content Include="Scripts\evCallbacks\committee.js" />
     <Content Include="Scripts\evCallbacks\config.js" />
     <Content Include="Scripts\evCallbacks\lib.js" />
     <Content Include="Scripts\evCallbacks\branchReq.js" />
     <Content Include="Scripts\evCallbacks\ext.js" />
     <Content Include="Scripts\evCallbacks\master.js" />
     <Content Include="Scripts\evCallbacks\management.js" />
+    <Content Include="Scripts\evCallbacks\rq.js" />
     <Content Include="Scripts\jquery-1.8.3.min.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -1246,6 +1263,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\Module.js" />
+    <Content Include="Scripts\RowEditor.js" />
     <Content Include="wallpapers\blue.jpg" />
     <Content Include="wallpapers\desk.jpg" />
     <Content Include="wallpapers\desktop2.jpg" />
@@ -1278,6 +1296,7 @@
     <Folder Include="Models\" />
     <Folder Include="Properties\PublishProfiles\" />
     <Folder Include="Views\Master\" />
+    <Folder Include="Views\ProcessFlow\" />
     <Folder Include="Views\Requisition\" />
     <Folder Include="Views\Utility\" />
   </ItemGroup>
