@@ -13,12 +13,19 @@ namespace DigiProc.Controllers
     public class RequisitionController : Controller
     {
         [HttpGet]
-        public JsonResult GetRequisitionNumber()
+        public JsonResult GetRequisitionPrelimData()
         {
             try
             {
                 var strRequisitionNo = new RequisitionHelper() { }.GenerateRequisitionNumber();
-                return Json(new { status = true, data = strRequisitionNo },JsonRequestBehavior.AllowGet);
+                var obj = new Utility();
+                UserSession session = (UserSession)Session["userSession"];
+                var defaultCompany = obj.getDefaultCompany();
+                
+                return Json(new { status = true, reqNo = strRequisitionNo, 
+                    requester = session.userName, department = session.userDepartment.Name, 
+                    companyName = defaultCompany.CompanyDescription },JsonRequestBehavior.AllowGet);
+
             }
             catch(Exception ex)
             {

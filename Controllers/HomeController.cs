@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
+using DigiProc.Helpers;
+
 namespace DigiProc.Controllers
 {
     public class HomeController : Controller
@@ -30,6 +32,14 @@ namespace DigiProc.Controllers
         public ActionResult Desktop()
         {
             ViewBag.Message = @"eProcurement System v1.0";
+
+            var _session = new UserSession() { 
+                userDepartment = new Department { Name = @"IT" },
+                userName = @"nana.appiah"
+            };
+
+            Session["userSession"] = _session;
+
             return View("Desktop");
         }
 

@@ -785,23 +785,23 @@
                                                 id:'',title:'Currency List',
                                                 items: [
                                                     new Ext.grid.GridPanel({
-                                                        id: 'xcur', height: 300, autoScroll: true, autoExpandColumn: 'CurrencyName',
+                                                        id: 'xcur', height: 300, autoScroll: true, autoExpandColumn: 'nameOfcurrency',
                                                         store: new Ext.data.GroupingStore({
                                                             reader: new Ext.data.ArrayReader({}, [
-                                                                { name: 'CurrencyID', type: 'int' },
-                                                                { name: 'CurrencyName', type: 'string' },
-                                                                { name: 'CurrencySymbol', type: 'string' }
+                                                                { name: 'Id', type: 'int' },
+                                                                { name: 'nameOfcurrency', type: 'string' },
+                                                                { name: 'denominationSymbol', type: 'string' }
                                                             ]),
                                                             sortInfo: {
-                                                                field: 'CurrencyName',
+                                                                field: 'nameOfcurrency',
                                                                 direction: 'ASC'
                                                             },
-                                                            groupField: 'CurrencyName'
+                                                            groupField: 'nameOfcurrency'
                                                         }),
                                                         columns: [
-                                                            { id: 'Id', header: 'ID', width: 25, hidden: true, sortable: true, dataIndex: 'CurrencyID' },
-                                                            { id: 'CurrencyName', header: 'Currency', width: 200, hidden: false, sortable: true, dataIndex: 'CurrencyName' },
-                                                            { id: 'CurrencySymbol', header: 'Symbol', width: 60, hidden: false, sortable: true, dataIndex: 'CurrencySymbol' }
+                                                            { id: 'Id', header: 'ID', width: 25, hidden: true, sortable: true, dataIndex: 'Id' },
+                                                            { id: 'nameOfcurrency', header: 'Currency', width: 200, hidden: false, sortable: true, dataIndex: 'nameOfcurrency' },
+                                                            { id: 'denominationSymbol', header: 'Symbol', width: 60, hidden: false, sortable: true, dataIndex: 'denominationSymbol' }
                                                         ],
                                                         stripeRows: true,
                                                         listeners: {
@@ -815,9 +815,9 @@
                                                             },
                                                             'rowdblclick': function (e, t) {
                                                                 var record = e.getStore().getAt(t);
-                                                                Idx = record.get('CurrencyID');
-                                                                $('#cursymbol').val(record.get('CurrencySymbol'));
-                                                                $('#curname').val(record.get('CurrencyName'));
+                                                                Idx = record.get('Id');
+                                                                $('#cursymbol').val(record.get('denominationSymbol'));
+                                                                $('#curname').val(record.get('nameOfcurrency'));
                                                                 currencyEditStatus = true;
                                                             }
                                                         }

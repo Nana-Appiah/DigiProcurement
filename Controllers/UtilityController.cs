@@ -152,5 +152,41 @@ namespace DigiProc.Controllers
 
         #endregion
 
+        #region Priority-Types
+
+        [HttpGet]
+        public JsonResult GetPriorityTypes()
+        {
+            try
+            {
+                var _data = new Utility() { }.GetPriorityTypes();
+                return Json(new { status = true, data = _data },JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception x)
+            {
+                return Json(new { status = false, error = $"error: {x.Message}" },JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        #endregion
+
+        #region Requisition-Types
+
+        [HttpGet]
+        public JsonResult GetRequisitionTypes()
+        {
+            try
+            {
+                var requisition_types = new Utility() { }.GetRequisitionTypes();
+                return Json(new { status = true, data = requisition_types },JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception ex)
+            {
+                return Json(new { status = false, error = $"error: {ex.Message}" },JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        #endregion
+
     }
 }

@@ -33,6 +33,13 @@
           <Property Name="EmailAddress" Type="varchar" MaxLength="50" />
           <Property Name="active" Type="int" />
         </EntityType>
+        <EntityType Name="Company">
+          <Key>
+            <PropertyRef Name="CompanyID" />
+          </Key>
+          <Property Name="CompanyID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyDescription" Type="varchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="Currency">
           <Key>
             <PropertyRef Name="CurrencyID" />
@@ -40,6 +47,14 @@
           <Property Name="CurrencyID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CurrencyName" Type="varchar" MaxLength="50" />
           <Property Name="CurrencySymbol" Type="char" MaxLength="4" />
+        </EntityType>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="DepartmentID" />
+          </Key>
+          <Property Name="DepartmentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="Head" Type="int" />
         </EntityType>
         <EntityType Name="FinancialYear">
           <Key>
@@ -164,8 +179,7 @@
           <Property Name="RequisitionID" Type="int" />
           <Property Name="ItemID" Type="int" />
           <Property Name="Quantity" Type="int" />
-          <Property Name="ItemRate" Type="numeric" Precision="9" Scale="2" />
-          <Property Name="ItemAmount" Type="numeric" Precision="18" Scale="2" />
+          <Property Name="Narration" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="RequisitionStatus">
           <Key>
@@ -291,6 +305,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Requisition_Company">
+          <End Role="Company" Type="Self.Company" Multiplicity="0..1" />
+          <End Role="Requisition" Type="Self.Requisition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="CompanyID" />
+            </Principal>
+            <Dependent Role="Requisition">
+              <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Requisition_Currency">
           <End Role="Currency" Type="Self.Currency" Multiplicity="0..1" />
           <End Role="Requisition" Type="Self.Requisition" Multiplicity="*" />
@@ -300,6 +326,18 @@
             </Principal>
             <Dependent Role="Requisition">
               <PropertyRef Name="CurrencyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Requisition_Department">
+          <End Role="Department" Type="Self.Department" Multiplicity="0..1" />
+          <End Role="Requisition" Type="Self.Requisition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="DepartmentID" />
+            </Principal>
+            <Dependent Role="Requisition">
+              <PropertyRef Name="DepartmentID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -403,7 +441,9 @@
           <EntitySet Name="BusinessType" EntityType="Self.BusinessType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Committee" EntityType="Self.Committee" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CommitteeMember" EntityType="Self.CommitteeMember" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Company" EntityType="Self.Company" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Currency" EntityType="Self.Currency" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FinancialYear" EntityType="Self.FinancialYear" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Item" EntityType="Self.Item" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ItemCategory" EntityType="Self.ItemCategory" Schema="dbo" store:Type="Tables" />
@@ -438,8 +478,16 @@
             <End Role="SIUnit" EntitySet="SIUnit" />
             <End Role="Item" EntitySet="Item" />
           </AssociationSet>
+          <AssociationSet Name="FK_Requisition_Company" Association="Self.FK_Requisition_Company">
+            <End Role="Company" EntitySet="Company" />
+            <End Role="Requisition" EntitySet="Requisition" />
+          </AssociationSet>
           <AssociationSet Name="FK_Requisition_Currency" Association="Self.FK_Requisition_Currency">
             <End Role="Currency" EntitySet="Currency" />
+            <End Role="Requisition" EntitySet="Requisition" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Requisition_Department" Association="Self.FK_Requisition_Department">
+            <End Role="Department" EntitySet="Department" />
             <End Role="Requisition" EntitySet="Requisition" />
           </AssociationSet>
           <AssociationSet Name="FK_Requisition_FinancialYear" Association="Self.FK_Requisition_FinancialYear">
@@ -620,6 +668,8 @@
           <NavigationProperty Name="RequisitionStatu" Relationship="Self.FK_Requisition_RequisitionStatus" FromRole="Requisition" ToRole="RequisitionStatus" />
           <NavigationProperty Name="RequisitionType" Relationship="Self.FK_Requisition_RequisitionType" FromRole="Requisition" ToRole="RequisitionType" />
           <NavigationProperty Name="Vendor" Relationship="Self.FK_Requisition_Vendor" FromRole="Requisition" ToRole="Vendor" />
+          <NavigationProperty Name="Company" Relationship="EProcurementDbModel.FK_Requisition_Company" FromRole="Requisition" ToRole="Company" />
+          <NavigationProperty Name="Department" Relationship="EProcurementDbModel.FK_Requisition_Department" FromRole="Requisition" ToRole="Department" />
         </EntityType>
         <EntityType Name="RequisitionItem">
           <Key>
@@ -631,6 +681,7 @@
           <Property Name="Quantity" Type="Int32" />
           <Property Name="ItemRate" Type="Decimal" Precision="9" Scale="2" />
           <Property Name="ItemAmount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Narration" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="RequisitionStatu">
           <Key>
@@ -911,6 +962,16 @@
             <End Role="Position" EntitySet="Positions" />
             <End Role="CommitteeMember" EntitySet="CommitteeMembers" />
           </AssociationSet>
+          <EntitySet Name="Companies" EntityType="EProcurementDbModel.Company" />
+          <EntitySet Name="Departments" EntityType="EProcurementDbModel.Department" />
+          <AssociationSet Name="FK_Requisition_Company" Association="EProcurementDbModel.FK_Requisition_Company">
+            <End Role="Company" EntitySet="Companies" />
+            <End Role="Requisition" EntitySet="Requisitions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Requisition_Department" Association="EProcurementDbModel.FK_Requisition_Department">
+            <End Role="Department" EntitySet="Departments" />
+            <End Role="Requisition" EntitySet="Requisitions" />
+          </AssociationSet>
         </EntityContainer>
         <Association Name="FK_UserModule_Module">
           <End Type="EProcurementDbModel.Module" Role="Module" Multiplicity="0..1" />
@@ -972,6 +1033,47 @@
             </Principal>
             <Dependent Role="CommitteeMember">
               <PropertyRef Name="PositionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Company">
+          <Key>
+            <PropertyRef Name="CompanyID" />
+          </Key>
+          <Property Name="CompanyID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Requisitions" Relationship="EProcurementDbModel.FK_Requisition_Company" FromRole="Company" ToRole="Requisition" />
+        </EntityType>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="DepartmentID" />
+          </Key>
+          <Property Name="DepartmentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Head" Type="Int32" />
+          <NavigationProperty Name="Requisitions" Relationship="EProcurementDbModel.FK_Requisition_Department" FromRole="Department" ToRole="Requisition" />
+        </EntityType>
+        <Association Name="FK_Requisition_Company">
+          <End Type="EProcurementDbModel.Company" Role="Company" Multiplicity="0..1" />
+          <End Type="EProcurementDbModel.Requisition" Role="Requisition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="CompanyID" />
+            </Principal>
+            <Dependent Role="Requisition">
+              <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Requisition_Department">
+          <End Type="EProcurementDbModel.Department" Role="Department" Multiplicity="0..1" />
+          <End Type="EProcurementDbModel.Requisition" Role="Requisition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="DepartmentID" />
+            </Principal>
+            <Dependent Role="Requisition">
+              <PropertyRef Name="DepartmentID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1121,13 +1223,12 @@
           <EntitySetMapping Name="RequisitionItems">
             <EntityTypeMapping TypeName="EProcurementDbModel.RequisitionItem">
               <MappingFragment StoreEntitySet="RequisitionItem">
+                <ScalarProperty Name="Narration" ColumnName="Narration" />
                 <ScalarProperty Name="RequisitionItemID" ColumnName="RequisitionItemID" />
                 <ScalarProperty Name="RequisitionID" ColumnName="RequisitionID" />
                 <ScalarProperty Name="ItemID" ColumnName="ItemID" />
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="ItemRate" ColumnName="ItemRate" />
-                <ScalarProperty Name="ItemAmount" ColumnName="ItemAmount" />
-              </MappingFragment>
+                </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="RequisitionStatus">
@@ -1238,6 +1339,23 @@
               <MappingFragment StoreEntitySet="Position">
                 <ScalarProperty Name="Designation" ColumnName="Designation" />
                 <ScalarProperty Name="PositionID" ColumnName="PositionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Companies">
+            <EntityTypeMapping TypeName="EProcurementDbModel.Company">
+              <MappingFragment StoreEntitySet="Company">
+                <ScalarProperty Name="CompanyDescription" ColumnName="CompanyDescription" />
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Departments">
+            <EntityTypeMapping TypeName="EProcurementDbModel.Department">
+              <MappingFragment StoreEntitySet="Department">
+                <ScalarProperty Name="Head" ColumnName="Head" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

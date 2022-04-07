@@ -141,6 +141,8 @@
     <NavigationProperty Name="RequisitionStatu" Relationship="Self.FK_Requisition_RequisitionStatus" FromRole="Requisition" ToRole="RequisitionStatus" />
     <NavigationProperty Name="RequisitionType" Relationship="Self.FK_Requisition_RequisitionType" FromRole="Requisition" ToRole="RequisitionType" />
     <NavigationProperty Name="Vendor" Relationship="Self.FK_Requisition_Vendor" FromRole="Requisition" ToRole="Vendor" />
+    <NavigationProperty Name="Company" Relationship="EProcurementDbModel.FK_Requisition_Company" FromRole="Requisition" ToRole="Company" />
+    <NavigationProperty Name="Department" Relationship="EProcurementDbModel.FK_Requisition_Department" FromRole="Requisition" ToRole="Department" />
   </EntityType>
   <EntityType Name="RequisitionItem">
     <Key>
@@ -432,6 +434,16 @@
       <End Role="Position" EntitySet="Positions" />
       <End Role="CommitteeMember" EntitySet="CommitteeMembers" />
     </AssociationSet>
+    <EntitySet Name="Companies" EntityType="EProcurementDbModel.Company" />
+    <EntitySet Name="Departments" EntityType="EProcurementDbModel.Department" />
+    <AssociationSet Name="FK_Requisition_Company" Association="EProcurementDbModel.FK_Requisition_Company">
+      <End Role="Company" EntitySet="Companies" />
+      <End Role="Requisition" EntitySet="Requisitions" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Requisition_Department" Association="EProcurementDbModel.FK_Requisition_Department">
+      <End Role="Department" EntitySet="Departments" />
+      <End Role="Requisition" EntitySet="Requisitions" />
+    </AssociationSet>
   </EntityContainer>
   <Association Name="FK_UserModule_Module">
     <End Type="EProcurementDbModel.Module" Role="Module" Multiplicity="0..1" />
@@ -493,6 +505,47 @@
       </Principal>
       <Dependent Role="CommitteeMember">
         <PropertyRef Name="PositionID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Company">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+    </Key>
+    <Property Name="CompanyID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CompanyDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Requisitions" Relationship="EProcurementDbModel.FK_Requisition_Company" FromRole="Company" ToRole="Requisition" />
+  </EntityType>
+  <EntityType Name="Department">
+    <Key>
+      <PropertyRef Name="DepartmentID" />
+    </Key>
+    <Property Name="DepartmentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Head" Type="Int32" />
+    <NavigationProperty Name="Requisitions" Relationship="EProcurementDbModel.FK_Requisition_Department" FromRole="Department" ToRole="Requisition" />
+  </EntityType>
+  <Association Name="FK_Requisition_Company">
+    <End Type="EProcurementDbModel.Company" Role="Company" Multiplicity="0..1" />
+    <End Type="EProcurementDbModel.Requisition" Role="Requisition" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Company">
+        <PropertyRef Name="CompanyID" />
+      </Principal>
+      <Dependent Role="Requisition">
+        <PropertyRef Name="CompanyID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Requisition_Department">
+    <End Type="EProcurementDbModel.Department" Role="Department" Multiplicity="0..1" />
+    <End Type="EProcurementDbModel.Requisition" Role="Requisition" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Department">
+        <PropertyRef Name="DepartmentID" />
+      </Principal>
+      <Dependent Role="Requisition">
+        <PropertyRef Name="DepartmentID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

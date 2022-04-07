@@ -28,6 +28,13 @@
     <Property Name="EmailAddress" Type="varchar" MaxLength="50" />
     <Property Name="active" Type="int" />
   </EntityType>
+  <EntityType Name="Company">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+    </Key>
+    <Property Name="CompanyID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CompanyDescription" Type="varchar" MaxLength="50" />
+  </EntityType>
   <EntityType Name="Currency">
     <Key>
       <PropertyRef Name="CurrencyID" />
@@ -35,6 +42,14 @@
     <Property Name="CurrencyID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="CurrencyName" Type="varchar" MaxLength="50" />
     <Property Name="CurrencySymbol" Type="char" MaxLength="4" />
+  </EntityType>
+  <EntityType Name="Department">
+    <Key>
+      <PropertyRef Name="DepartmentID" />
+    </Key>
+    <Property Name="DepartmentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="255" />
+    <Property Name="Head" Type="int" />
   </EntityType>
   <EntityType Name="FinancialYear">
     <Key>
@@ -286,6 +301,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_Requisition_Company">
+    <End Role="Company" Type="Self.Company" Multiplicity="0..1" />
+    <End Role="Requisition" Type="Self.Requisition" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Company">
+        <PropertyRef Name="CompanyID" />
+      </Principal>
+      <Dependent Role="Requisition">
+        <PropertyRef Name="CompanyID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Requisition_Currency">
     <End Role="Currency" Type="Self.Currency" Multiplicity="0..1" />
     <End Role="Requisition" Type="Self.Requisition" Multiplicity="*" />
@@ -295,6 +322,18 @@
       </Principal>
       <Dependent Role="Requisition">
         <PropertyRef Name="CurrencyID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Requisition_Department">
+    <End Role="Department" Type="Self.Department" Multiplicity="0..1" />
+    <End Role="Requisition" Type="Self.Requisition" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Department">
+        <PropertyRef Name="DepartmentID" />
+      </Principal>
+      <Dependent Role="Requisition">
+        <PropertyRef Name="DepartmentID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -398,7 +437,9 @@
     <EntitySet Name="BusinessType" EntityType="Self.BusinessType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Committee" EntityType="Self.Committee" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CommitteeMember" EntityType="Self.CommitteeMember" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Company" EntityType="Self.Company" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Currency" EntityType="Self.Currency" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="FinancialYear" EntityType="Self.FinancialYear" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Item" EntityType="Self.Item" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ItemCategory" EntityType="Self.ItemCategory" Schema="dbo" store:Type="Tables" />
@@ -433,8 +474,16 @@
       <End Role="SIUnit" EntitySet="SIUnit" />
       <End Role="Item" EntitySet="Item" />
     </AssociationSet>
+    <AssociationSet Name="FK_Requisition_Company" Association="Self.FK_Requisition_Company">
+      <End Role="Company" EntitySet="Company" />
+      <End Role="Requisition" EntitySet="Requisition" />
+    </AssociationSet>
     <AssociationSet Name="FK_Requisition_Currency" Association="Self.FK_Requisition_Currency">
       <End Role="Currency" EntitySet="Currency" />
+      <End Role="Requisition" EntitySet="Requisition" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Requisition_Department" Association="Self.FK_Requisition_Department">
+      <End Role="Department" EntitySet="Department" />
       <End Role="Requisition" EntitySet="Requisition" />
     </AssociationSet>
     <AssociationSet Name="FK_Requisition_FinancialYear" Association="Self.FK_Requisition_FinancialYear">

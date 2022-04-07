@@ -2,6 +2,7 @@
 
     //var editor = new Ext.ux.grid.RowEditor();
     var editor = lib.returnEditorControl();
+    var BIGDATA = [];
 
     var breq = Ext.get('branchReq');
 
@@ -35,33 +36,51 @@
                                                 columnWidth: .5, defaults: { xtype: 'form', frame: true, border: true },
                                                 items: [
                                                     {
-                                                        title: 'Branch Requisition', defaults: { xtype: 'combo', forceSelection: true, typeAhead: true, mode: 'local', allowBlank: false, anchor: '95%' },
+                                                        id:'ufrmBRequest',title: 'Branch Requisition', defaults: { xtype: 'combo', forceSelection: true, typeAhead: true, mode: 'local', allowBlank: false, anchor: '95%' },
                                                         items: [
                                                             { id: 'bRNo', xtype: 'textfield', fieldLabel: 'RequistionNo', disabled: true },
-                                                            { id: 'bReq', xtype: 'textfield', fieldLabel: 'Requested By', disabled: true },
-                                                            { id: 'bAccYr', xtype: 'textfield', fieldLabel: 'Accounting Yr', disabled: true },
-                                                            { id: 'bDept', xtype: 'textfield', fieldLabel: 'Department', disabled: true }
+                                                            { id: 'bReq', xtype: 'textfield', fieldLabel: 'Requesting By', disabled: true },
+                                                            { id: 'bDept', xtype: 'textfield', fieldLabel: 'Department', disabled: true },
+                                                            { id: 'bComp', xtype: 'textfield', fieldLabel: 'Company', disabled: true }
                                                         ],
                                                         listeners: {
                                                             'render': function () {
-                                                                $.getJSON('/Requisition/GetRequisitionNumber', {}, function (r) {
+                                                                $.getJSON('/Requisition/GetRequisitionPrelimData', {}, function (r) {
                                                                     if (r.status.toString() == "true") {
-                                                                        $('#bRNo').val(r.data.toString()).attr('readonly',true);
+                                                                        $('#bRNo').val(r.reqNo.toString()).attr('readonly', true);
+                                                                        $('#bReq').val(r.requester.toString()).attr('readonly', true);
+                                                                        $('#bComp').val(r.companyName).attr('readonly', true);
+                                                                        $('#bDept').val(r.department).attr('readonly', true);
                                                                     }
                                                                 });
-                                                                
-                                                                $('#bReq').attr('readonly', true);
-                                                                $('#bAccYr').attr('readonly', true);
-                                                                $('#bDept').attr('readonly', true);
                                                             }
                                                         }
                                                     },
-                                                    { title:'Search'},
                                                     {
-                                                        title: 'Requisition Items::Item Pool',
+                                                        id:'ufrmBDetails',title: 'Requisition Details', defaults: { xtype: 'combo', forceSelection: true, typeAhead: true, mode: 'local', allowBlank: false, anchor: '95%' },
+                                                        items: [
+                                                            {
+                                                                id: '', fieldLabel: 'Requisition Type', store: lib.RequisitionTypeStore('/Utility/GetRequisitionTypes'),
+                                                                valueField: 'RequisitionTypeID', displayField:'RequisitionType1'
+                                                            },
+                                                            {
+                                                                id: '', fieldLabel: 'Currency', store: lib.currencyStore('/Utility/GetCurrencies'),
+                                                                valueField: 'Id', displayField: 'nameOfcurrency'
+                                                            },
+                                                            {
+                                                                id: '', fieldLabel: 'Priority', store: lib.PriorityTypeStore('/Utility/GetPriorityTypes'),
+                                                                valueField: 'Id', displayField:'nameOfPriority'
+                                                            },
+                                                            {
+                                                                xtype:'textfield', id:'', fieldLabel: 'Location'
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        title: 'Requisition::Item Pool',
                                                         items: [
                                                             new Ext.grid.GridPanel({
-                                                                id: 'Req', height: 250, autoScroll: true, autoExpandColumn: 'ProductName',
+                                                                id: 'Req', height: 180, autoScroll: true, autoExpandColumn: 'ProductName',
                                                                 plugins: editor,
                                                                 store: new Ext.data.GroupingStore({
                                                                     reader: new Ext.data.ArrayReader({}, [
@@ -105,7 +124,36 @@
                                                                 id: '', text: 'Add Selected',
                                                                 listeners: {
                                                                     'click': function (btn) {
+                                                                        var ff = Ext.getCmp('ufrmBDetails').getForm();
+                                                                        if (ff.isValid())
+                                                                        {
+                                                                            var result = [];
+                                                                            BIGDATA.length = 0;
+                                                                            var orders = [];
+                                                                            var ee = Ext.getCmp('Req').getStore().getRange();
+                                                                            var knt = 0;
 
+                                                                            Ext.each(ee, function (item, idx) {
+                                                                                if (parseInt(item.get('qty')) > 0) {
+                                                                                    orders[idx] = [item.get('Id'), item.get('ProductName'), (item.get('qty') + ' units of ' + item.get('ProductName')), item.get('ProductCode'), item.get('qty')];
+                                                                                    knt++;
+                                                                                }
+                                                                            });
+
+                                                                            console.log(orders);
+
+                                                                            result = orders.filter(function (val) { return val !== undefined; });
+                                                                            for (var z = 0; z < result.length; z++) {
+                                                                                BIGDATA.push(result[z]);
+                                                                            }
+                                                                            console.log(BIGDATA);
+                                                                            //give selection of data to grid 
+                                                                            Ext.getCmp('xBrRqList').getStore().loadData(BIGDATA);
+
+                                                                        }
+                                                                        else {
+                                                                            Ext.Msg.alert('BRANCH REQUISITION STATUS', 'Please enter mandatory fields to do selection of Items', this);
+                                                                        }
                                                                     }
                                                                 }
                                                             },
@@ -113,7 +161,10 @@
                                                                 id: '', text: 'Clear Selected',
                                                                 listeners: {
                                                                     'click': function (btn) {
-
+                                                                        Ext.getCmp('ufrmBRequest').getForm().reset();
+                                                                        Ext.getCmp('Req').getStore().removeAll();
+                                                                        Ext.getCmp('xBrRqList').getStore().removeAll();
+                                                                        lib.getItemGrid('/Utility/GetItemList', Ext.getCmp('Req'));
                                                                     }
                                                                 }
                                                             }
@@ -133,6 +184,7 @@
                                                                     reader: new Ext.data.ArrayReader({}, [
                                                                         { name: 'Id', type: 'int' },
                                                                         { name: 'ProductName', type: 'string' },
+                                                                        { name: 'ProductDescription', type: 'string' },
                                                                         { name: 'ProductCode', type: 'string' },
                                                                         { name: 'Qty', type: 'int' }
                                                                     ]),
@@ -144,9 +196,10 @@
                                                                 }),
                                                                 columns: [
                                                                     { id: 'Id', header: 'ID', width: 25, hidden: true, sortable: true, dataIndex: 'Id' },
-                                                                    { id: 'ProductName', header: 'Item Desc', width: 250, hidden: false, sortable: true, dataIndex: 'ProductName' },
-                                                                    { id: 'ProductCode', header: 'Item Qty', width: 250, hidden: false, sortable: true, dataIndex: 'ProductCode' },
-                                                                    { id: 'Qty', header: 'Rate', width: 250, hidden: false, sortable: true, dataIndex: 'Qty' }
+                                                                    { id: 'ProductName', header: 'Item Name', width: 350, hidden: false, sortable: true, dataIndex: 'ProductName' },
+                                                                    { id: 'ProductDescription', header: 'Reqn Desc', width: 250, hidden: false, sortable: true, dataIndex: 'ProductDescription' },
+                                                                    { id: 'ProductCode', header: 'Item Code', width: 250, hidden: false, sortable: true, dataIndex: 'ProductCode' },
+                                                                    { id: 'Qty', header: 'Units', width: 250, hidden: true, sortable: true, dataIndex: 'Qty' }
                                                                 ],
                                                                 stripeRows: true,
                                                                 listeners: {

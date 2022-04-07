@@ -137,12 +137,18 @@
     <Compile Include="CommitteeMember.cs">
       <DependentUpon>EProcurementModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Company.cs">
+      <DependentUpon>EProcurementModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MasterController.cs" />
     <Compile Include="Controllers\ProcessFlowController.cs" />
     <Compile Include="Controllers\RequisitionController.cs" />
     <Compile Include="Controllers\UtilityController.cs" />
     <Compile Include="Currency.cs">
+      <DependentUpon>EProcurementModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Department.cs">
       <DependentUpon>EProcurementModel.tt</DependentUpon>
     </Compile>
     <Compile Include="EProcurementModel.Context.cs">

@@ -20,5 +20,6 @@ namespace DigiProc
         public Nullable<int> Quantity { get; set; }
         public Nullable<decimal> ItemRate { get; set; }
         public Nullable<decimal> ItemAmount { get; set; }
+        public string Narration { get; set; }
     }
 }
