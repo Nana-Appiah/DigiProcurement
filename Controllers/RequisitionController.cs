@@ -65,7 +65,8 @@ namespace DigiProc.Controllers
                     RequisitionDescription = comment,
                     RequisitionStatusID = oReqStatus.RequisitionStatusID,
                     CreatedBy = session.userName,
-                    CreatedDate = DateTime.Now
+                    CreatedDate = DateTime.Now,
+                    isNotif = 0
                 };
 
                 var helper = new RequisitionHelper();

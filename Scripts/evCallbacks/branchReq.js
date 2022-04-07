@@ -158,7 +158,7 @@
                                                                 }
                                                             },
                                                             {
-                                                                id: '', text: 'Clear Selected',
+                                                                id: 'x-btn-rq-clear', text: 'Clear Selected',
                                                                 listeners: {
                                                                     'click': function (btn) {
                                                                         Ext.getCmp('ufrmBRequest').getForm().reset();
@@ -206,7 +206,7 @@
                                                         ]
                                                     },
                                                     {
-                                                        title: 'Brief Comments', defaults: { xtype: 'htmleditor', height:150, anchor: '95%', allowBlank: false },layout:'fit',
+                                                        title: 'Brief Comments', defaults: { xtype: 'textarea', height:150, anchor: '95%', allowBlank: false },layout:'fit',
                                                         items: [
                                                             {id:'xBrComments'}
                                                         ],
@@ -227,12 +227,17 @@
 
                                                                             $.post('/Requisition/PostRequisitionRequest', {
                                                                                 rqNo: Ext.fly('bRNo').getValue(), requestee: Ext.fly('bRequestee').getValue(), comp: Ext.fly('bComp').getValue(),
-                                                                                dept: Ext.fly('bDept').getValue(),rqnId: Ext.getCmp('cborqnId').getValue(), currencyId: Ext.getCmp('cbocurrId').getValue(),
+                                                                                dept: Ext.fly('bDept').getValue(), rqnId: Ext.getCmp('cborqnId').getValue(), currencyId: Ext.getCmp('cbocurrId').getValue(),
                                                                                 priorityId: Ext.getCmp('cbopriorityId').getValue(), location: Ext.fly('rqnlocation').getValue(), comment: Ext.fly('xBrComments').getValue(),
                                                                                 values: dta
                                                                             })
                                                                                 .done(function (res) {
-                                                                                    alert(res.data.toString());
+                                                                                    //alert(res.data.toString());
+                                                                                    Ext.MessageBox.alert("REQUISITION REQUEST STATUS", res.data.toString(), this);
+                                                                                    Ext.getCmp('xBrRqList').getStore().removeAll();
+                                                                                    Ext.getCmp('ufrmBDetails').getForm().reset();
+                                                                                    $('#x-btn-rq-clear').trigger('click');
+                                                                                    $('#xBrComments').val('');
                                                                             });
                                                                         }
                                                                     }

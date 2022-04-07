@@ -142,6 +142,7 @@
     <NavigationProperty Name="RequisitionType" Relationship="Self.FK_Requisition_RequisitionType" FromRole="Requisition" ToRole="RequisitionType" />
     <NavigationProperty Name="Company" Relationship="EProcurementDbModel.FK_Requisition_Company" FromRole="Requisition" ToRole="Company" />
     <NavigationProperty Name="Department" Relationship="EProcurementDbModel.FK_Requisition_Department" FromRole="Requisition" ToRole="Department" />
+    <Property Name="isNotif" Type="Int32" />
   </EntityType>
   <EntityType Name="RequisitionItem">
     <Key>

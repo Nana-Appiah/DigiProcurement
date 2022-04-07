@@ -116,6 +116,7 @@
     <EntitySetMapping Name="Requisitions">
       <EntityTypeMapping TypeName="EProcurementDbModel.Requisition">
         <MappingFragment StoreEntitySet="Requisition">
+          <ScalarProperty Name="isNotif" ColumnName="isNotif" />
           <ScalarProperty Name="RequisitionID" ColumnName="RequisitionID" />
           <ScalarProperty Name="RequisitionNo" ColumnName="RequisitionNo" />
           <ScalarProperty Name="RequestedBy" ColumnName="RequestedBy" />
