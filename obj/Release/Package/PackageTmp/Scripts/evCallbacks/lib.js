@@ -33,6 +33,32 @@ lib.categoryStore = function(_urlString) {
     return _store;
 }
 
+lib.PriorityTypeStore = function (_urlString) {
+    var priority_store = new Ext.data.Store({
+        autoLoad: true, restful: false,
+        url: _urlString,
+        reader: new Ext.data.JsonReader({ type: 'json', root: 'data' }, [
+            { name: 'Id', type: 'int' },
+            { name: 'nameOfPriority', type: 'string' }
+        ])
+    });
+
+    return priority_store;
+}
+
+lib.RequisitionTypeStore = function (_urlString) {
+    var requisition_type_store = new Ext.data.Store({
+        autoLoad: true, restful: false,
+        url: _urlString,
+        reader: new Ext.data.JsonReader({ type: 'json', root: 'data' }, [
+            { name: 'RequisitionTypeID', type: 'int' },
+            { name: 'RequisitionType1', type: 'string' }
+        ])
+    });
+
+    return requisition_type_store;
+}
+
 lib.LoadVendorTypeStore = function (URL) {
     var vendorStore = new Ext.data.Store({
         autoLoad: true, restful: false,
@@ -88,12 +114,25 @@ lib.currencyGrid = function (URL,ktrl) {
         if (rs.status.toString() == "true") {
 
             $.each(rs.data, function (i, d) {
-                ar[i] = [d.CurrencyID, d.CurrencyName, d.CurrencySymbol];
+                ar[i] = [d.Id, d.nameOfcurrency, d.denominationSymbol];
             });
 
             ktrl.getStore().loadData(ar);
         }
     }, "json");
+}
+
+lib.currencyStore = function (URLString) {
+    var cur_store = new Ext.data.Store({
+        autoLoad: true, restful: false,
+        url: URLString,
+        reader: new Ext.data.JsonReader({ type: 'json', root: 'data' }, [
+            { name: 'Id', type: 'int' },
+            { name: 'nameOfcurrency', type: 'string' }
+        ])
+    })
+
+    return cur_store;
 }
 
 lib.LoadVendorTypeGrid = function (URL, control) {
@@ -154,3 +193,6 @@ lib.getItemGrid = function (_URL, controlRef) {
     });
 }
 
+lib.returnEditorControl = function () {
+    return new Ext.ux.grid.RowEditor();
+}

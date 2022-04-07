@@ -175,7 +175,22 @@ namespace DigiProc.Helpers
             var account_periods = new List<FinancialYear>();
             try
             {
-                account_periods = config.FinancialYears.Where(x => x.IsActive == 1).ToList();
+                var data = config.FinancialYears.Where(x => x.IsActive == 1).ToList();
+                if (data.Count() > 0)
+                {
+                    foreach(var d in data)
+                    {
+                        var o = new FinancialYear() { 
+                            FinancialYrID = d.FinancialYrID,
+                            FinancialYr = d.FinancialYr,
+                            Description = d.Description,
+                            IsActive = d.IsActive
+                        };
+
+                        account_periods.Add(o);
+                    }
+                }
+
                 return account_periods;
             }
             catch (Exception x)

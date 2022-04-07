@@ -28,6 +28,13 @@
     <Property Name="EmailAddress" Type="varchar" MaxLength="50" />
     <Property Name="active" Type="int" />
   </EntityType>
+  <EntityType Name="Company">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+    </Key>
+    <Property Name="CompanyID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CompanyDescription" Type="varchar" MaxLength="50" />
+  </EntityType>
   <EntityType Name="Currency">
     <Key>
       <PropertyRef Name="CurrencyID" />
@@ -35,6 +42,14 @@
     <Property Name="CurrencyID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="CurrencyName" Type="varchar" MaxLength="50" />
     <Property Name="CurrencySymbol" Type="char" MaxLength="4" />
+  </EntityType>
+  <EntityType Name="Department">
+    <Key>
+      <PropertyRef Name="DepartmentID" />
+    </Key>
+    <Property Name="DepartmentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="255" />
+    <Property Name="Head" Type="int" />
   </EntityType>
   <EntityType Name="FinancialYear">
     <Key>
@@ -102,6 +117,24 @@
     <Property Name="PublicName" Type="varchar" MaxLength="50" />
     <Property Name="DateAssigned" Type="date" />
   </EntityType>
+  <EntityType Name="NotificationList">
+    <Key>
+      <PropertyRef Name="NotificationID" />
+    </Key>
+    <Property Name="NotificationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FirstName" Type="varchar" MaxLength="50" />
+    <Property Name="LastName" Type="varchar" MaxLength="50" />
+    <Property Name="EmailAddress" Type="varchar" MaxLength="60" />
+    <Property Name="tag" Type="varchar" MaxLength="200" />
+    <Property Name="isActive" Type="int" />
+  </EntityType>
+  <EntityType Name="Position">
+    <Key>
+      <PropertyRef Name="PositionID" />
+    </Key>
+    <Property Name="PositionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Designation" Type="varchar" MaxLength="100" />
+  </EntityType>
   <EntityType Name="PriorityType">
     <Key>
       <PropertyRef Name="PriorityID" />
@@ -132,6 +165,7 @@
     <Property Name="AuthorizedDate" Type="date" />
     <Property Name="LastUpdatedBy" Type="varchar" MaxLength="50" />
     <Property Name="LastUpdatedDate" Type="date" />
+    <Property Name="isNotif" Type="int" />
   </EntityType>
   <EntityType Name="RequisitionItem">
     <Key>
@@ -141,8 +175,7 @@
     <Property Name="RequisitionID" Type="int" />
     <Property Name="ItemID" Type="int" />
     <Property Name="Quantity" Type="int" />
-    <Property Name="ItemRate" Type="numeric" Precision="9" Scale="2" />
-    <Property Name="ItemAmount" Type="numeric" Precision="18" Scale="2" />
+    <Property Name="Narration" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="RequisitionStatus">
     <Key>
@@ -218,7 +251,7 @@
       <PropertyRef Name="VendorTypeID" />
     </Key>
     <Property Name="VendorTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="VendorDescription" Type="varchar" MaxLength="50" />
+    <Property Name="VendorDescription" Type="varchar" MaxLength="500" />
   </EntityType>
   <Association Name="FK_CommitteeMember_Committee">
     <End Role="Committee" Type="Self.Committee" Multiplicity="0..1" />
@@ -229,6 +262,18 @@
       </Principal>
       <Dependent Role="CommitteeMember">
         <PropertyRef Name="CommitteeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CommitteeMember_Position">
+    <End Role="Position" Type="Self.Position" Multiplicity="0..1" />
+    <End Role="CommitteeMember" Type="Self.CommitteeMember" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Position">
+        <PropertyRef Name="PositionID" />
+      </Principal>
+      <Dependent Role="CommitteeMember">
+        <PropertyRef Name="PositionID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -256,6 +301,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_Requisition_Company">
+    <End Role="Company" Type="Self.Company" Multiplicity="0..1" />
+    <End Role="Requisition" Type="Self.Requisition" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Company">
+        <PropertyRef Name="CompanyID" />
+      </Principal>
+      <Dependent Role="Requisition">
+        <PropertyRef Name="CompanyID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Requisition_Currency">
     <End Role="Currency" Type="Self.Currency" Multiplicity="0..1" />
     <End Role="Requisition" Type="Self.Requisition" Multiplicity="*" />
@@ -265,6 +322,18 @@
       </Principal>
       <Dependent Role="Requisition">
         <PropertyRef Name="CurrencyID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Requisition_Department">
+    <End Role="Department" Type="Self.Department" Multiplicity="0..1" />
+    <End Role="Requisition" Type="Self.Requisition" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Department">
+        <PropertyRef Name="DepartmentID" />
+      </Principal>
+      <Dependent Role="Requisition">
+        <PropertyRef Name="DepartmentID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -316,18 +385,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_Requisition_Vendor">
-    <End Role="Vendor" Type="Self.Vendor" Multiplicity="0..1" />
-    <End Role="Requisition" Type="Self.Requisition" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Vendor">
-        <PropertyRef Name="VendorID" />
-      </Principal>
-      <Dependent Role="Requisition">
-        <PropertyRef Name="CompanyID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_UserModule_Module">
     <End Role="Module" Type="Self.Module" Multiplicity="0..1" />
     <End Role="UserModule" Type="Self.UserModule" Multiplicity="*" />
@@ -368,13 +425,17 @@
     <EntitySet Name="BusinessType" EntityType="Self.BusinessType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Committee" EntityType="Self.Committee" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CommitteeMember" EntityType="Self.CommitteeMember" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Company" EntityType="Self.Company" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Currency" EntityType="Self.Currency" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="FinancialYear" EntityType="Self.FinancialYear" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Item" EntityType="Self.Item" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ItemCategory" EntityType="Self.ItemCategory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Logger" EntityType="Self.Logger" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="LPO" EntityType="Self.LPO" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Module" EntityType="Self.Module" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="NotificationList" EntityType="Self.NotificationList" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Position" EntityType="Self.Position" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PriorityType" EntityType="Self.PriorityType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Requisition" EntityType="Self.Requisition" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RequisitionItem" EntityType="Self.RequisitionItem" Schema="dbo" store:Type="Tables" />
@@ -389,6 +450,10 @@
       <End Role="Committee" EntitySet="Committee" />
       <End Role="CommitteeMember" EntitySet="CommitteeMember" />
     </AssociationSet>
+    <AssociationSet Name="FK_CommitteeMember_Position" Association="Self.FK_CommitteeMember_Position">
+      <End Role="Position" EntitySet="Position" />
+      <End Role="CommitteeMember" EntitySet="CommitteeMember" />
+    </AssociationSet>
     <AssociationSet Name="FK_Item_ItemCategory" Association="Self.FK_Item_ItemCategory">
       <End Role="ItemCategory" EntitySet="ItemCategory" />
       <End Role="Item" EntitySet="Item" />
@@ -397,8 +462,16 @@
       <End Role="SIUnit" EntitySet="SIUnit" />
       <End Role="Item" EntitySet="Item" />
     </AssociationSet>
+    <AssociationSet Name="FK_Requisition_Company" Association="Self.FK_Requisition_Company">
+      <End Role="Company" EntitySet="Company" />
+      <End Role="Requisition" EntitySet="Requisition" />
+    </AssociationSet>
     <AssociationSet Name="FK_Requisition_Currency" Association="Self.FK_Requisition_Currency">
       <End Role="Currency" EntitySet="Currency" />
+      <End Role="Requisition" EntitySet="Requisition" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Requisition_Department" Association="Self.FK_Requisition_Department">
+      <End Role="Department" EntitySet="Department" />
       <End Role="Requisition" EntitySet="Requisition" />
     </AssociationSet>
     <AssociationSet Name="FK_Requisition_FinancialYear" Association="Self.FK_Requisition_FinancialYear">
@@ -415,10 +488,6 @@
     </AssociationSet>
     <AssociationSet Name="FK_Requisition_RequisitionType" Association="Self.FK_Requisition_RequisitionType">
       <End Role="RequisitionType" EntitySet="RequisitionType" />
-      <End Role="Requisition" EntitySet="Requisition" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Requisition_Vendor" Association="Self.FK_Requisition_Vendor">
-      <End Role="Vendor" EntitySet="Vendor" />
       <End Role="Requisition" EntitySet="Requisition" />
     </AssociationSet>
     <AssociationSet Name="FK_UserModule_Module" Association="Self.FK_UserModule_Module">

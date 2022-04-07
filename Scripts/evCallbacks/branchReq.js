@@ -36,7 +36,7 @@
                                                 columnWidth: .5, defaults: { xtype: 'form', frame: true, border: true },
                                                 items: [
                                                     {
-                                                        id:'ufrmBRequest',title: 'Branch Requisition', defaults: { xtype: 'combo', forceSelection: true, typeAhead: true, mode: 'local', allowBlank: false, anchor: '95%' },
+                                                        id: 'ufrmBRequest', title: 'Branch Requisition', defaults: { xtype: 'combo', forceSelection: true, typeAhead: true, mode: 'local', allowBlank: false, anchor: '95%' },
                                                         items: [
                                                             { id: 'bRNo', xtype: 'textfield', fieldLabel: 'RequistionNo', disabled: true },
                                                             { id: 'bRequestee', xtype: 'textfield', fieldLabel: 'Requesting By', disabled: true },
@@ -45,7 +45,7 @@
                                                         ],
                                                         listeners: {
                                                             'render': function () {
-                                                                $.getJSON('/Requisition/GetRequisitionPrelimData', {}, function (r) {
+                                                                $.getJSON('Requisition/GetRequisitionPrelimData', {}, function (r) {
                                                                     if (r.status.toString() == "true") {
                                                                         $('#bRNo').val(r.reqNo.toString()).attr('readonly', true);
                                                                         $('#bRequestee').val(r.requester.toString()).attr('readonly', true);
@@ -57,22 +57,22 @@
                                                         }
                                                     },
                                                     {
-                                                        id:'ufrmBDetails',title: 'Requisition Details', defaults: { xtype: 'combo', forceSelection: true, typeAhead: true, mode: 'local', allowBlank: false, anchor: '95%' },
+                                                        id: 'ufrmBDetails', title: 'Requisition Details', defaults: { xtype: 'combo', forceSelection: true, typeAhead: true, mode: 'local', allowBlank: false, anchor: '95%' },
                                                         items: [
                                                             {
-                                                                id: 'cborqnId', fieldLabel: 'Requisition Type', store: lib.RequisitionTypeStore('/Utility/GetRequisitionTypes'),
-                                                                valueField: 'RequisitionTypeID', displayField:'RequisitionType1'
+                                                                id: 'cborqnId', fieldLabel: 'Requisition Type', store: lib.RequisitionTypeStore('Utility/GetRequisitionTypes'),
+                                                                valueField: 'RequisitionTypeID', displayField: 'RequisitionType1'
                                                             },
                                                             {
-                                                                id: 'cbocurrId', fieldLabel: 'Currency', store: lib.currencyStore('/Utility/GetCurrencies'),
+                                                                id: 'cbocurrId', fieldLabel: 'Currency', store: lib.currencyStore('Utility/GetCurrencies'),
                                                                 valueField: 'Id', displayField: 'nameOfcurrency'
                                                             },
                                                             {
-                                                                id: 'cbopriorityId', fieldLabel: 'Priority', store: lib.PriorityTypeStore('/Utility/GetPriorityTypes'),
-                                                                valueField: 'Id', displayField:'nameOfPriority'
+                                                                id: 'cbopriorityId', fieldLabel: 'Priority', store: lib.PriorityTypeStore('Utility/GetPriorityTypes'),
+                                                                valueField: 'Id', displayField: 'nameOfPriority'
                                                             },
                                                             {
-                                                                xtype:'textfield', id:'rqnlocation', fieldLabel: 'Location'
+                                                                xtype: 'textfield', id: 'rqnlocation', fieldLabel: 'Location'
                                                             }
                                                         ]
                                                     },
@@ -109,12 +109,12 @@
                                                                 stripeRows: true,
                                                                 listeners: {
                                                                     'render': function () {
-                                                                        lib.getItemGrid('/Utility/GetItemList', Ext.getCmp('Req'));
+                                                                        lib.getItemGrid('Utility/GetItemList', Ext.getCmp('Req'));
                                                                     },
                                                                     'afterrender': function () {
                                                                         setInterval(function () {
-                                                                            lib.getItemGrid('/Utility/GetItemList', Ext.getCmp('Req'));
-                                                                        },180000);
+                                                                            lib.getItemGrid('Utility/GetItemList', Ext.getCmp('Req'));
+                                                                        }, 180000);
                                                                     }
                                                                 }
                                                             })
@@ -125,8 +125,7 @@
                                                                 listeners: {
                                                                     'click': function (btn) {
                                                                         var ff = Ext.getCmp('ufrmBDetails').getForm();
-                                                                        if (ff.isValid())
-                                                                        {
+                                                                        if (ff.isValid()) {
                                                                             var result = [];
                                                                             BIGDATA.length = 0;
                                                                             var orders = [];
@@ -206,9 +205,9 @@
                                                         ]
                                                     },
                                                     {
-                                                        title: 'Brief Comments', defaults: { xtype: 'textarea', height:150, anchor: '95%', allowBlank: false },layout:'fit',
+                                                        title: 'Brief Comments', defaults: { xtype: 'textarea', height: 150, anchor: '95%', allowBlank: false }, layout: 'fit',
                                                         items: [
-                                                            {id:'xBrComments'}
+                                                            { id: 'xBrComments' }
                                                         ],
                                                         buttons: [
                                                             {
@@ -225,7 +224,7 @@
                                                                                 dta[i] = str;
                                                                             });
 
-                                                                            $.post('/Requisition/PostRequisitionRequest', {
+                                                                            $.post('Requisition/PostRequisitionRequest', {
                                                                                 rqNo: Ext.fly('bRNo').getValue(), requestee: Ext.fly('bRequestee').getValue(), comp: Ext.fly('bComp').getValue(),
                                                                                 dept: Ext.fly('bDept').getValue(), rqnId: Ext.getCmp('cborqnId').getValue(), currencyId: Ext.getCmp('cbocurrId').getValue(),
                                                                                 priorityId: Ext.getCmp('cbopriorityId').getValue(), location: Ext.fly('rqnlocation').getValue(), comment: Ext.fly('xBrComments').getValue(),
@@ -238,7 +237,7 @@
                                                                                     Ext.getCmp('ufrmBDetails').getForm().reset();
                                                                                     $('#x-btn-rq-clear').trigger('click');
                                                                                     $('#xBrComments').val('');
-                                                                            });
+                                                                                });
                                                                         }
                                                                     }
                                                                 }
