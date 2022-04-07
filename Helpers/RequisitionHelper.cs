@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 
 using DigiProc;
+using System.Diagnostics;
+
 
 namespace DigiProc.Helpers
 {
@@ -43,6 +45,41 @@ namespace DigiProc.Helpers
                 return 1;
             }
         }
+
+        public int SaveRequisition(Requisition item)
+        {
+            try
+            {
+                config.Requisitions.Add(item);
+                config.SaveChanges();
+                return item.RequisitionID;
+            }
+            catch(Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return 0;
+            }
+        }
+
+        #region RequisitionItems
+
+        public bool SaveRequisitionItems(RequisitionItem obj)
+        {
+            //saves requisition items
+            try
+            {
+                config.RequisitionItems.Add(obj);
+                config.SaveChanges();
+                return true;
+            }
+            catch(Exception x)
+            {
+                Debug.Print(x.Message);
+                return false;
+            }
+        }
+
+        #endregion
 
     }
 }

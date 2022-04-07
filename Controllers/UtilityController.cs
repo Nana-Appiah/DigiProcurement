@@ -18,10 +18,10 @@ namespace DigiProc.Controllers
             //system uses the username session variable to get the modules assigned to this user
             try
             {
-                Session["username"] = @"nappiah";
+                UserSession session = (UserSession)Session["userSession"];
 
                 var obj = new Utility();
-                var usModules = obj.getUserModules(Session["username"].ToString());
+                var usModules = obj.getUserModules(session.userName);
                 return Json(usModules, JsonRequestBehavior.AllowGet);
                 //return Json(new { status = true, data = usModules }, JsonRequestBehavior.AllowGet);
             }

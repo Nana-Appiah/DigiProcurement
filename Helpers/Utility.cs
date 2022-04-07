@@ -185,6 +185,21 @@ namespace DigiProc.Helpers
             }
         }
 
+        public FinancialYear getActiveFinancialYear()
+        {
+            FinancialYear obj = null;
+            try
+            {
+                obj = config.FinancialYears.Where(x => x.IsActive == 1).FirstOrDefault();
+                return obj;
+            }
+            catch (Exception x)
+            {
+                Debug.Print(x.Message);
+                return obj;
+            }
+        }
+
         public bool saveFinancialYear(int periodFrm, int periodTo, string brief)
         {
             try
@@ -474,6 +489,21 @@ namespace DigiProc.Helpers
             return nextID;
         }
 
+        public int getItemID(string icode)
+        {
+            //get itemId using item code
+            try
+            {
+                var obj = config.Items.Where(i => i.ItemCode == icode).FirstOrDefault();
+                return obj.ItemID;
+            }
+            catch(Exception x)
+            {
+                Debug.Print(x.Message);
+                return 0;
+            }
+        }
+
         #endregion
 
         #region Priority
@@ -538,6 +568,7 @@ namespace DigiProc.Helpers
             }
         }
 
+
         #endregion
 
         #region Company
@@ -562,6 +593,45 @@ namespace DigiProc.Helpers
             catch(Exception ex)
             {
                 Debug.Print(ex.Message);
+                return obj;
+            }
+        }
+
+        #endregion
+
+        #region Departments
+
+        public Department getDepartment(string str)
+        {
+            Department obj = null;
+
+            try
+            {
+                obj = config.Departments.Where(d => d.Name == str).FirstOrDefault();
+                return obj;
+            }
+            catch(Exception x)
+            {
+                Debug.Print(x.Message);
+                return obj;
+            }
+        }
+
+        #endregion
+
+        #region RequisitionStatus
+
+        public RequisitionStatu GetRequisitionStatus(string str)
+        {
+            RequisitionStatu obj = null;
+            try
+            {
+                obj = config.RequisitionStatus.Where(r => r.RequisitionStatusDesc == str).FirstOrDefault();
+                return obj;
+            }
+            catch(Exception x)
+            {
+                Debug.Print(x.Message);
                 return obj;
             }
         }

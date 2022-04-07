@@ -141,12 +141,11 @@
     <EntitySetMapping Name="RequisitionItems">
       <EntityTypeMapping TypeName="EProcurementDbModel.RequisitionItem">
         <MappingFragment StoreEntitySet="RequisitionItem">
+          <ScalarProperty Name="Narration" ColumnName="Narration" />
           <ScalarProperty Name="RequisitionItemID" ColumnName="RequisitionItemID" />
           <ScalarProperty Name="RequisitionID" ColumnName="RequisitionID" />
           <ScalarProperty Name="ItemID" ColumnName="ItemID" />
           <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-          <ScalarProperty Name="ItemRate" ColumnName="ItemRate" />
-          <ScalarProperty Name="ItemAmount" ColumnName="ItemAmount" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

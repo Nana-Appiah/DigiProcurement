@@ -39,7 +39,7 @@
                                                         id:'ufrmBRequest',title: 'Branch Requisition', defaults: { xtype: 'combo', forceSelection: true, typeAhead: true, mode: 'local', allowBlank: false, anchor: '95%' },
                                                         items: [
                                                             { id: 'bRNo', xtype: 'textfield', fieldLabel: 'RequistionNo', disabled: true },
-                                                            { id: 'bReq', xtype: 'textfield', fieldLabel: 'Requesting By', disabled: true },
+                                                            { id: 'bRequestee', xtype: 'textfield', fieldLabel: 'Requesting By', disabled: true },
                                                             { id: 'bDept', xtype: 'textfield', fieldLabel: 'Department', disabled: true },
                                                             { id: 'bComp', xtype: 'textfield', fieldLabel: 'Company', disabled: true }
                                                         ],
@@ -48,7 +48,7 @@
                                                                 $.getJSON('/Requisition/GetRequisitionPrelimData', {}, function (r) {
                                                                     if (r.status.toString() == "true") {
                                                                         $('#bRNo').val(r.reqNo.toString()).attr('readonly', true);
-                                                                        $('#bReq').val(r.requester.toString()).attr('readonly', true);
+                                                                        $('#bRequestee').val(r.requester.toString()).attr('readonly', true);
                                                                         $('#bComp').val(r.companyName).attr('readonly', true);
                                                                         $('#bDept').val(r.department).attr('readonly', true);
                                                                     }
@@ -60,19 +60,19 @@
                                                         id:'ufrmBDetails',title: 'Requisition Details', defaults: { xtype: 'combo', forceSelection: true, typeAhead: true, mode: 'local', allowBlank: false, anchor: '95%' },
                                                         items: [
                                                             {
-                                                                id: '', fieldLabel: 'Requisition Type', store: lib.RequisitionTypeStore('/Utility/GetRequisitionTypes'),
+                                                                id: 'cborqnId', fieldLabel: 'Requisition Type', store: lib.RequisitionTypeStore('/Utility/GetRequisitionTypes'),
                                                                 valueField: 'RequisitionTypeID', displayField:'RequisitionType1'
                                                             },
                                                             {
-                                                                id: '', fieldLabel: 'Currency', store: lib.currencyStore('/Utility/GetCurrencies'),
+                                                                id: 'cbocurrId', fieldLabel: 'Currency', store: lib.currencyStore('/Utility/GetCurrencies'),
                                                                 valueField: 'Id', displayField: 'nameOfcurrency'
                                                             },
                                                             {
-                                                                id: '', fieldLabel: 'Priority', store: lib.PriorityTypeStore('/Utility/GetPriorityTypes'),
+                                                                id: 'cbopriorityId', fieldLabel: 'Priority', store: lib.PriorityTypeStore('/Utility/GetPriorityTypes'),
                                                                 valueField: 'Id', displayField:'nameOfPriority'
                                                             },
                                                             {
-                                                                xtype:'textfield', id:'', fieldLabel: 'Location'
+                                                                xtype:'textfield', id:'rqnlocation', fieldLabel: 'Location'
                                                             }
                                                         ]
                                                     },
@@ -201,26 +201,41 @@
                                                                     { id: 'ProductCode', header: 'Item Code', width: 250, hidden: false, sortable: true, dataIndex: 'ProductCode' },
                                                                     { id: 'Qty', header: 'Units', width: 250, hidden: true, sortable: true, dataIndex: 'Qty' }
                                                                 ],
-                                                                stripeRows: true,
-                                                                listeners: {
-                                                                    'render': function () {
-                                                                        //calls function when the grid is rendered to the screen
-
-                                                                    }
-                                                                }
+                                                                stripeRows: true
                                                             })
                                                         ]
                                                     },
                                                     {
                                                         title: 'Brief Comments', defaults: { xtype: 'htmleditor', height:150, anchor: '95%', allowBlank: false },layout:'fit',
                                                         items: [
-                                                            {id:''}
+                                                            {id:'xBrComments'}
                                                         ],
                                                         buttons: [
                                                             {
                                                                 id: '', text: 'Send Requistion',
-                                                                handler: function (btn) {
+                                                                listeners: {
+                                                                    'click': function (btn) {
+                                                                        //send requisition data
+                                                                        var dta = [];
+                                                                        if (Ext.getCmp('xBrRqList').getStore().getCount() > 0) {
+                                                                            var store = Ext.getCmp('xBrRqList').getStore().getRange();
 
+                                                                            $.each(store, function (i, item) {
+                                                                                var str = item.get('ProductCode') + ',' + item.get('ProductDescription') + ',' + item.get('Qty');
+                                                                                dta[i] = str;
+                                                                            });
+
+                                                                            $.post('/Requisition/PostRequisitionRequest', {
+                                                                                rqNo: Ext.fly('bRNo').getValue(), requestee: Ext.fly('bRequestee').getValue(), comp: Ext.fly('bComp').getValue(),
+                                                                                dept: Ext.fly('bDept').getValue(),rqnId: Ext.getCmp('cborqnId').getValue(), currencyId: Ext.getCmp('cbocurrId').getValue(),
+                                                                                priorityId: Ext.getCmp('cbopriorityId').getValue(), location: Ext.fly('rqnlocation').getValue(), comment: Ext.fly('xBrComments').getValue(),
+                                                                                values: dta
+                                                                            })
+                                                                                .done(function (res) {
+                                                                                    alert(res.data.toString());
+                                                                            });
+                                                                        }
+                                                                    }
                                                                 }
                                                             }
                                                         ]

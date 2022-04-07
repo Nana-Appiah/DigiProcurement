@@ -35,7 +35,7 @@ namespace DigiProc.Controllers
 
             var _session = new UserSession() { 
                 userDepartment = new Department { Name = @"IT" },
-                userName = @"nana.appiah"
+                userName = @"nappiah"
             };
 
             Session["userSession"] = _session;

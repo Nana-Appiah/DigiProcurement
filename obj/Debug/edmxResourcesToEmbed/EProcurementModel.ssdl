@@ -174,8 +174,7 @@
     <Property Name="RequisitionID" Type="int" />
     <Property Name="ItemID" Type="int" />
     <Property Name="Quantity" Type="int" />
-    <Property Name="ItemRate" Type="numeric" Precision="9" Scale="2" />
-    <Property Name="ItemAmount" Type="numeric" Precision="18" Scale="2" />
+    <Property Name="Narration" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="RequisitionStatus">
     <Key>
@@ -385,18 +384,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_Requisition_Vendor">
-    <End Role="Vendor" Type="Self.Vendor" Multiplicity="0..1" />
-    <End Role="Requisition" Type="Self.Requisition" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Vendor">
-        <PropertyRef Name="VendorID" />
-      </Principal>
-      <Dependent Role="Requisition">
-        <PropertyRef Name="CompanyID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_UserModule_Module">
     <End Role="Module" Type="Self.Module" Multiplicity="0..1" />
     <End Role="UserModule" Type="Self.UserModule" Multiplicity="*" />
@@ -500,10 +487,6 @@
     </AssociationSet>
     <AssociationSet Name="FK_Requisition_RequisitionType" Association="Self.FK_Requisition_RequisitionType">
       <End Role="RequisitionType" EntitySet="RequisitionType" />
-      <End Role="Requisition" EntitySet="Requisition" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Requisition_Vendor" Association="Self.FK_Requisition_Vendor">
-      <End Role="Vendor" EntitySet="Vendor" />
       <End Role="Requisition" EntitySet="Requisition" />
     </AssociationSet>
     <AssociationSet Name="FK_UserModule_Module" Association="Self.FK_UserModule_Module">

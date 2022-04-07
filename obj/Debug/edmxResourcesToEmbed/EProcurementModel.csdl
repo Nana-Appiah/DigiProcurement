@@ -140,7 +140,6 @@
     <NavigationProperty Name="PriorityType" Relationship="Self.FK_Requisition_PriorityType" FromRole="Requisition" ToRole="PriorityType" />
     <NavigationProperty Name="RequisitionStatu" Relationship="Self.FK_Requisition_RequisitionStatus" FromRole="Requisition" ToRole="RequisitionStatus" />
     <NavigationProperty Name="RequisitionType" Relationship="Self.FK_Requisition_RequisitionType" FromRole="Requisition" ToRole="RequisitionType" />
-    <NavigationProperty Name="Vendor" Relationship="Self.FK_Requisition_Vendor" FromRole="Requisition" ToRole="Vendor" />
     <NavigationProperty Name="Company" Relationship="EProcurementDbModel.FK_Requisition_Company" FromRole="Requisition" ToRole="Company" />
     <NavigationProperty Name="Department" Relationship="EProcurementDbModel.FK_Requisition_Department" FromRole="Requisition" ToRole="Department" />
   </EntityType>
@@ -152,8 +151,7 @@
     <Property Name="RequisitionID" Type="Int32" />
     <Property Name="ItemID" Type="Int32" />
     <Property Name="Quantity" Type="Int32" />
-    <Property Name="ItemRate" Type="Decimal" Precision="9" Scale="2" />
-    <Property Name="ItemAmount" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Narration" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="RequisitionStatu">
     <Key>
@@ -220,7 +218,6 @@
     <Property Name="CreatedDate" Type="DateTime" Precision="0" />
     <Property Name="LastUpdatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="LastUpdatedDate" Type="DateTime" Precision="0" />
-    <NavigationProperty Name="Requisitions" Relationship="Self.FK_Requisition_Vendor" FromRole="Vendor" ToRole="Requisition" />
     <NavigationProperty Name="VendorType" Relationship="Self.FK_Vendor_VendorType" FromRole="Vendor" ToRole="VendorType" />
     <Property Name="VendorNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="VendorLocation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
@@ -335,18 +332,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_Requisition_Vendor">
-    <End Role="Vendor" Type="Self.Vendor" Multiplicity="0..1" />
-    <End Role="Requisition" Type="Self.Requisition" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Vendor">
-        <PropertyRef Name="VendorID" />
-      </Principal>
-      <Dependent Role="Requisition">
-        <PropertyRef Name="CompanyID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_Vendor_VendorType">
     <End Role="VendorType" Type="Self.VendorType" Multiplicity="0..1" />
     <End Role="Vendor" Type="Self.Vendor" Multiplicity="*" />
@@ -409,10 +394,6 @@
     </AssociationSet>
     <AssociationSet Name="FK_Requisition_RequisitionType" Association="Self.FK_Requisition_RequisitionType">
       <End Role="RequisitionType" EntitySet="RequisitionTypes" />
-      <End Role="Requisition" EntitySet="Requisitions" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Requisition_Vendor" Association="Self.FK_Requisition_Vendor">
-      <End Role="Vendor" EntitySet="Vendors" />
       <End Role="Requisition" EntitySet="Requisitions" />
     </AssociationSet>
     <AssociationSet Name="FK_Vendor_VendorType" Association="Self.FK_Vendor_VendorType">
