@@ -13,9 +13,9 @@ namespace DigiProc.Helpers
     {
         private ProcurementDbEntities config = new ProcurementDbEntities();
 
-        public string GenerateRequisitionNumber()
+        public string GenerateRequisitionNumber(string dept)
         {
-            var dateStr = string.Format("{0}-{1}",@"REQN", getDate());
+            var dateStr = string.Format("{0}-{1}-{2}",@"REQN",dept, getDate());
             int _id = GetRequisitionCounter(dateStr);
 
             string _idString = new VendorHelper() { }.formatVendorID(_id.ToString());

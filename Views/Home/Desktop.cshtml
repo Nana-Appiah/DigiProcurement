@@ -20,7 +20,7 @@
         <dt id="mast" class="master">
             <a id="dtCap">
                 <img src="~/images/grid48x48.png" />
-                <div>Menu Master</div>
+                <div>Setup</div>
             </a>
         </dt>
 
@@ -94,35 +94,7 @@
         Ext.chart.Chart.CHART_URL = '~/images/charts.swf';
 
         access.GetAssignedModules('/Utility/GetAssignedModules', $('.dl dt'));
-        //alert('I am here with data');
-        //console.log(_data);
-        //return false;
-        //$.getScript('../../Scripts/applicationparts.js', function () {
-            //var mdata = [];
-            //$.getJSON('/Utility/GetAssignedModules', {}, function (data) {
-            //    var count = data.length;
-            //    //var icons = $('#x-shortcuts dt');
-            //    var icons = $('.dl dt');
-            //    var icons_count = icons.length;
-
-            //    //iterating over the data array
-            //    $.each(data, function (idx, _value) {
-            //        //iterating over the controls
-            //        $.each(icons, function (i, ctrl) {
-            //            var control = $(this);
-            //            if (i <= icons_count - 1) {
-            //                if (control.hasClass(_value.SystemName)) {
-            //                    $.getScript('../../Scripts/evCallbacks/' + _value.SystemName + '.js');
-            //                    control.show();
-            //                }
-            //            }
-
-            //        });
-            //    });
-
-            //}); //end of get method call
-        //}); // end of getScript
-
+        
         $('#x-desktop').zoom = '90%';
 
     });

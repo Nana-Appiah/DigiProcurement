@@ -140,6 +140,7 @@
     <Compile Include="Company.cs">
       <DependentUpon>EProcurementModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\CommitteeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MasterController.cs" />
     <Compile Include="Controllers\ProcessFlowController.cs" />
@@ -172,6 +173,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\CommitteeHelper.cs" />
     <Compile Include="Helpers\PFHelper.cs" />
     <Compile Include="Helpers\RequisitionHelper.cs" />
     <Compile Include="Helpers\Utility.cs" />
@@ -1295,6 +1297,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
     <Folder Include="Properties\PublishProfiles\" />
+    <Folder Include="Views\Committee\" />
     <Folder Include="Views\Master\" />
     <Folder Include="Views\ProcessFlow\" />
     <Folder Include="Views\Requisition\" />

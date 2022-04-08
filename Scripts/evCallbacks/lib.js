@@ -193,6 +193,95 @@ lib.getItemGrid = function (_URL, controlRef) {
     });
 }
 
+//branch Requistion functions
+
 lib.returnEditorControl = function () {
     return new Ext.ux.grid.RowEditor();
+}
+
+lib.getPrelimData = function (URL, bRNo, requestee, bComp, bDept) {
+    var postBody = {};
+
+    $.getJSON(URL, {}, function (r) {
+        if (r.status.toString() == "true") {
+            postBody = {
+                reqNo: r.reqNo.toString(),
+                requester: r.requester.toString(),
+                companyName: r.companyName.toString(),
+                department: r.department.toString()
+            };
+            
+            bRNo.setValue(postBody.reqNo);
+            requestee.setValue(postBody.requester);
+            bComp.setValue(postBody.companyName);
+            bDept.setValue(postBody.department);
+        }
+    });
+}
+
+//committee functions
+lib.returnPositionGrid = function (urlString, _widget) {
+    var pos = [];
+    $.getJSON(urlString, {}, function (r) {
+        if (r.status.toString() == "true") {
+            $.each(r.data, function (i, d) {
+                pos[i] = [d.PositionID, d.Designation];
+            });
+
+            //load widget
+            _widget.getStore().loadData(pos);
+        }
+    });
+}
+
+lib.returnCommitteeGrid = function (url, _widget) {
+    var committee = [];
+    $.getJSON(url, {}, function (r) {
+        if (r.status.toString() == "true") {
+            $.each(r.data, function (i, d) {
+                committee[i] = [d.CommitteeID, d.CommitteeName, d.CommitteeDescription];
+            });
+
+            _widget.getStore().loadData(committee);
+        }
+    });
+}
+
+lib.returnCommitteeMembershipGrid = function (_urlString, _widget, _flag) {
+    var members = [];
+    $.getJSON(_urlString, {cId:_flag}, function (r) {
+        if (r.status.toString() == "true") {
+            $.each(r.data, function (i, d) {
+                members[i] = [d.CommitteeMemberID, d.CommitteeID, d.FirstName, d.LastName, d.OtherNames, d.PositionID, d.EmailAddress, d.active];
+            });
+
+            _widget.getStore().loadData(members);
+        }
+    });
+}
+
+lib.getPositionStore = function (_urlString) {
+    var positionStore = new Ext.data.Store({
+        autoLoad: true, restful: false,
+        url: _urlString,
+        reader: new Ext.data.JsonReader({ type: 'json', root: 'data' }, [
+            { name: 'PositionID', type: 'int' },
+            { name: 'Designation', type: 'string' }
+        ])
+    });
+
+    return positionStore;
+}
+
+lib.getCommitteeStore = function (_urlString) {
+    var committeeStore = new Ext.data.Store({
+        autoLoad: true, restful: false,
+        url: _urlString,
+        reader: new Ext.data.JsonReader({ type: 'json', root: 'data' }, [
+            { name: 'CommitteeID', type: 'int' },
+            { name: 'CommitteeName', type: 'string' }
+        ])
+    });
+
+    return committeeStore;
 }
