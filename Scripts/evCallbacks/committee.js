@@ -250,7 +250,7 @@
                                                                 handler: function (btn) {
                                                                     var frm = Ext.getCmp('cMemFrm').getForm();
                                                                     if (frm.isValid()) {
-                                                                        alert('I am here');
+                                                                        
                                                                         $.post('Committee/AddCommitteeMember',
                                                                             {
                                                                                 id: recordId, fname: Ext.fly('cmem-fname').getValue(), lname: Ext.fly('cmemlname').getValue(),
@@ -260,7 +260,7 @@
                                                                             })
                                                                             .done(function (r) {
                                                                                 if (r.status.toString()) {
-
+                                                                                    lib.returnCommitteeMembershipGrid('Committee/GetCommitteeMembers', Ext.getCmp('cMemgrid'), Ext.getCmp('cbomem-com').getValue());
                                                                                     $('#cMem-btn-clear').trigger('click');
                                                                                     recordId = 0;
                                                                                 }
