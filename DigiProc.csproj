@@ -193,13 +193,28 @@
     <Compile Include="Module.cs">
       <DependentUpon>EProcurementModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="NotificationGroup.cs">
+      <DependentUpon>EProcurementModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="NotificationList.cs">
+      <DependentUpon>EProcurementModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PFNotificationList.cs">
       <DependentUpon>EProcurementModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Position.cs">
       <DependentUpon>EProcurementModel.tt</DependentUpon>
     </Compile>
     <Compile Include="PriorityType.cs">
+      <DependentUpon>EProcurementModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProcessFlow.cs">
+      <DependentUpon>EProcurementModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProcessFlowList.cs">
+      <DependentUpon>EProcurementModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProcurementType.cs">
       <DependentUpon>EProcurementModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />

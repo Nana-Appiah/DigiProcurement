@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Users\Blessings\Documents\Projects\PASL\Apps\eProc\DigiProc\EProcurementModel.edmx'. 
+﻿// T4 code generation is enabled for model 'G:\Dev_Repository\Projects\Nana\Apps\eProc\EProcurementModel.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

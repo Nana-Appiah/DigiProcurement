@@ -49,5 +49,10 @@ namespace DigiProc
         public virtual DbSet<Position> Positions { get; set; }
         public virtual DbSet<Company> Companies { get; set; }
         public virtual DbSet<Department> Departments { get; set; }
+        public virtual DbSet<NotificationGroup> NotificationGroups { get; set; }
+        public virtual DbSet<PFNotificationList> PFNotificationLists { get; set; }
+        public virtual DbSet<ProcessFlow> ProcessFlows { get; set; }
+        public virtual DbSet<ProcurementType> ProcurementTypes { get; set; }
+        public virtual DbSet<ProcessFlowList> ProcessFlowLists { get; set; }
     }
 }
