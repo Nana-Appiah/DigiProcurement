@@ -193,6 +193,200 @@ lib.getItemGrid = function (_URL, controlRef) {
     });
 }
 
+//branch Requistion functions
+
 lib.returnEditorControl = function () {
     return new Ext.ux.grid.RowEditor();
+}
+
+lib.getPrelimData = function (URL, bRNo, requestee, bComp, bDept) {
+    var postBody = {};
+
+    $.getJSON(URL, {}, function (r) {
+        if (r.status.toString() == "true") {
+            postBody = {
+                reqNo: r.reqNo.toString(),
+                requester: r.requester.toString(),
+                companyName: r.companyName.toString(),
+                department: r.department.toString()
+            };
+            
+            bRNo.setValue(postBody.reqNo);
+            requestee.setValue(postBody.requester);
+            bComp.setValue(postBody.companyName);
+            bDept.setValue(postBody.department);
+        }
+    });
+}
+
+//committee functions
+lib.returnPositionGrid = function (urlString, _widget) {
+    var pos = [];
+    $.getJSON(urlString, {}, function (r) {
+        if (r.status.toString() == "true") {
+            $.each(r.data, function (i, d) {
+                pos[i] = [d.PositionID, d.Designation];
+            });
+
+            //load widget
+            _widget.getStore().loadData(pos);
+        }
+    });
+}
+
+lib.returnCommitteeGrid = function (url, _widget) {
+    var committee = [];
+    $.getJSON(url, {}, function (r) {
+        if (r.status.toString() == "true") {
+            $.each(r.data, function (i, d) {
+                committee[i] = [d.CommitteeID, d.CommitteeName, d.CommitteeDescription];
+            });
+
+            _widget.getStore().loadData(committee);
+        }
+    });
+}
+
+lib.returnCommitteeMembershipGrid = function (_urlString, _widget, _flag) {
+    var members = [];
+    $.getJSON(_urlString, {cId:_flag}, function (r) {
+        if (r.status.toString() == "true") {
+            $.each(r.data, function (i, d) {
+                members[i] = [d.Id, d.nameOfCommittee, d.firstname, d.surname, d.othernames, d.nameOfposition, d.email, d.actStatus];
+            });
+
+            _widget.getStore().loadData(members);
+        }
+    });
+}
+
+lib.getPositionStore = function (_urlString) {
+    var positionStore = new Ext.data.Store({
+        autoLoad: true, restful: false,
+        url: _urlString,
+        reader: new Ext.data.JsonReader({ type: 'json', root: 'data' }, [
+            { name: 'PositionID', type: 'int' },
+            { name: 'Designation', type: 'string' }
+        ])
+    });
+
+    return positionStore;
+}
+
+lib.getCommitteeStore = function (_urlString) {
+    var committeeStore = new Ext.data.Store({
+        autoLoad: true, restful: false,
+        url: _urlString,
+        reader: new Ext.data.JsonReader({ type: 'json', root: 'data' }, [
+            { name: 'CommitteeID', type: 'int' },
+            { name: 'CommitteeName', type: 'string' }
+        ])
+    });
+
+    return committeeStore;
+}
+
+lib.returnProcurementTypeGrid = function (_urlString, _widget) {
+    var proctypes = [];
+    $.getJSON(_urlString, {}, function (r) {
+        if (r.status.toString() == "true") {
+            $.each(r.data, function (i, d) {
+                proctypes[i] = [d.ProcurementTypeID, d.ProcurementDescription];
+            });
+
+            _widget.getStore().loadData(proctypes);
+        }
+    });
+}
+
+lib.returnProcurementTypeStore = function (_urlString) {
+    var proctypeStore = new Ext.data.Store({
+        autoLoad: true, restful: false,
+        url: _urlString,
+        reader: new Ext.data.JsonReader({ type: 'json', root: 'data' }, [
+            { name: 'ProcurementTypeID', type: 'int' },
+            { name: 'ProcurementDescription', type: 'string' }
+        ])
+    })
+
+    return proctypeStore;
+}
+
+lib.returnNotificationGroupGrid = function (_urlString, _widget) {
+    var notif = [];
+    $.getJSON(_urlString, {}, function (r) {
+        if (r.status.toString() == "true") {
+            $.each(r.data, function (i, d) {
+                notif[i] = [d.NotificationGroupID, d.NotificationGroupName, d.NotificationMailString, d.NotificationDescription];
+            });
+
+            _widget.getStore().removeAll();
+            _widget.getStore().loadData(notif);
+        }
+    });
+}
+
+lib.returnNotificationStore = function (_urlString) {
+    var notifStore = new Ext.data.Store({
+        autoLoad: true, restful: false,
+        url: _urlString,
+        reader: new Ext.data.JsonReader({ type: 'json', root: 'data' }, [
+            { name: 'NotificationGroupID', type: 'int' },
+            { name: 'NotificationGroupName', type: 'string' }
+            //,{ name: 'NotificationMailString', type: 'string' },
+            //{ name: 'NotificationDescription', type: 'string' }
+        ])
+    });
+
+    return notifStore;
+}
+
+lib.returnProcessFlowGrid = function (_urlString, _widget) {
+    var pfgrid = [];
+    $.getJSON(_urlString, {}, function (r) {
+        if (r.status.toString() == "true") {
+            $.each(r.data, function (i, d) {
+                pfgrid[i] = [d.Id, d.nameOfProcurement, d.limit, d.order];
+            });
+
+            _widget.getStore().removeAll();
+            _widget.getStore().loadData(pfgrid);
+        }
+    });
+}
+
+lib.returnProcessFlowStore = function (_urlString) {
+    var pfStore = new Ext.data.Store({
+        autoLoad: true, restful: false,
+        url: _urlString,
+        reader: new Ext.data.JsonReader({ type: 'json', root: 'data' }, [
+            { name: 'Id', type: 'int' },
+            { name: 'nameOfProcurement', type: 'string' }
+        ])
+    });
+
+    return pfStore;
+}
+
+lib.returnPFNotificationGrid = function (_urlString, _widget) {
+    var pfnotif = [];
+    $.getJSON(_urlString, {}, function (r) {
+        if (r.status.toString() == "true") {
+            $.each(r.data, function (i, d) {
+                pfnotif[i] = [d.Id, d.IdOfProcessFlow, d.nameOfGroup];
+            });
+
+            _widget.getStore().removeAll();
+            _widget.getStore().loadData(pfnotif);
+        }
+    });
+}
+
+lib.returnPflowList = function (_urlString, processflowID, _widget) {
+    $.getJSON(_urlString, { _processflowID: processflowID }, function (r) {
+        if (r.status.toString() == "true") {
+            _widget.val(r.data.Flow.toString());
+            _widget.attr('readonly', true);
+        }
+    });
 }

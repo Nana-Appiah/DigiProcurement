@@ -43,6 +43,14 @@
         <EntityTypeShape EntityType="EProcurementDbModel.Department" Width="1.5" PointX="14.375" PointY="3.875" />
         <AssociationConnector Association="EProcurementDbModel.FK_Requisition_Company" />
         <AssociationConnector Association="EProcurementDbModel.FK_Requisition_Department" />
+        <EntityTypeShape EntityType="EProcurementDbModel.NotificationGroup" Width="1.5" PointX="16.625" PointY="9" />
+        <EntityTypeShape EntityType="EProcurementDbModel.PFNotificationList" Width="1.5" PointX="18.875" PointY="12" />
+        <EntityTypeShape EntityType="EProcurementDbModel.ProcessFlow" Width="1.5" PointX="16.625" PointY="11.875" />
+        <EntityTypeShape EntityType="EProcurementDbModel.ProcurementType" Width="1.5" PointX="14.375" PointY="12.25" />
+        <AssociationConnector Association="EProcurementDbModel.FK_PFNotificationList_NotificationGroup" />
+        <AssociationConnector Association="EProcurementDbModel.FK_PFNotificationList_ProcessFlow" />
+        <AssociationConnector Association="EProcurementDbModel.FK_ProcessFlow_ProcurementType" />
+        <EntityTypeShape EntityType="EProcurementDbModel.ProcessFlowList" Width="1.5" PointX="15.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

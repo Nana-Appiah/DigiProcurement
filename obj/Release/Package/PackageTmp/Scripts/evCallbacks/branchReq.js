@@ -45,14 +45,7 @@
                                                         ],
                                                         listeners: {
                                                             'render': function () {
-                                                                $.getJSON('Requisition/GetRequisitionPrelimData', {}, function (r) {
-                                                                    if (r.status.toString() == "true") {
-                                                                        $('#bRNo').val(r.reqNo.toString()).attr('readonly', true);
-                                                                        $('#bRequestee').val(r.requester.toString()).attr('readonly', true);
-                                                                        $('#bComp').val(r.companyName).attr('readonly', true);
-                                                                        $('#bDept').val(r.department).attr('readonly', true);
-                                                                    }
-                                                                });
+                                                                lib.getPrelimData('/Requisition/GetRequisitionPrelimData',Ext.getCmp('bRNo'), Ext.getCmp('bRequestee'), Ext.getCmp('bComp'), Ext.getCmp('bDept'));
                                                             }
                                                         }
                                                     },
@@ -237,6 +230,7 @@
                                                                                     Ext.getCmp('ufrmBDetails').getForm().reset();
                                                                                     $('#x-btn-rq-clear').trigger('click');
                                                                                     $('#xBrComments').val('');
+                                                                                    lib.getPrelimData('/Requisition/GetRequisitionPrelimData', Ext.getCmp('bRNo'), Ext.getCmp('bRequestee'), Ext.getCmp('bComp'), Ext.getCmp('bDept'));
                                                                                 });
                                                                         }
                                                                     }

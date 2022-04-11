@@ -426,6 +426,23 @@
       <End Role="Department" EntitySet="Departments" />
       <End Role="Requisition" EntitySet="Requisitions" />
     </AssociationSet>
+    <EntitySet Name="NotificationGroups" EntityType="EProcurementDbModel.NotificationGroup" />
+    <EntitySet Name="PFNotificationLists" EntityType="EProcurementDbModel.PFNotificationList" />
+    <EntitySet Name="ProcessFlows" EntityType="EProcurementDbModel.ProcessFlow" />
+    <EntitySet Name="ProcurementTypes" EntityType="EProcurementDbModel.ProcurementType" />
+    <AssociationSet Name="FK_PFNotificationList_NotificationGroup" Association="EProcurementDbModel.FK_PFNotificationList_NotificationGroup">
+      <End Role="NotificationGroup" EntitySet="NotificationGroups" />
+      <End Role="PFNotificationList" EntitySet="PFNotificationLists" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PFNotificationList_ProcessFlow" Association="EProcurementDbModel.FK_PFNotificationList_ProcessFlow">
+      <End Role="ProcessFlow" EntitySet="ProcessFlows" />
+      <End Role="PFNotificationList" EntitySet="PFNotificationLists" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProcessFlow_ProcurementType" Association="EProcurementDbModel.FK_ProcessFlow_ProcurementType">
+      <End Role="ProcurementType" EntitySet="ProcurementTypes" />
+      <End Role="ProcessFlow" EntitySet="ProcessFlows" />
+    </AssociationSet>
+    <EntitySet Name="ProcessFlowLists" EntityType="EProcurementDbModel.ProcessFlowList" />
   </EntityContainer>
   <Association Name="FK_UserModule_Module">
     <End Type="EProcurementDbModel.Module" Role="Module" Multiplicity="0..1" />
@@ -531,4 +548,87 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <EntityType Name="NotificationGroup">
+    <Key>
+      <PropertyRef Name="NotificationGroupID" />
+    </Key>
+    <Property Name="NotificationGroupID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="NotificationGroupName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="NotificationMailString" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="NotificationDescription" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="PFNotificationLists" Relationship="EProcurementDbModel.FK_PFNotificationList_NotificationGroup" FromRole="NotificationGroup" ToRole="PFNotificationList" />
+  </EntityType>
+  <EntityType Name="PFNotificationList">
+    <Key>
+      <PropertyRef Name="PFNotificationListID" />
+    </Key>
+    <Property Name="PFNotificationListID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PFID" Type="Int32" Nullable="false" />
+    <Property Name="NotificationGroupID" Type="Int32" />
+    <NavigationProperty Name="NotificationGroup" Relationship="EProcurementDbModel.FK_PFNotificationList_NotificationGroup" FromRole="PFNotificationList" ToRole="NotificationGroup" />
+    <NavigationProperty Name="ProcessFlow" Relationship="EProcurementDbModel.FK_PFNotificationList_ProcessFlow" FromRole="PFNotificationList" ToRole="ProcessFlow" />
+  </EntityType>
+  <EntityType Name="ProcessFlow">
+    <Key>
+      <PropertyRef Name="ProcessFlowID" />
+    </Key>
+    <Property Name="ProcessFlowID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProcurementTypeId" Type="Int32" />
+    <Property Name="Limit" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="ProcessFlowOrder" Type="Int32" />
+    <NavigationProperty Name="PFNotificationLists" Relationship="EProcurementDbModel.FK_PFNotificationList_ProcessFlow" FromRole="ProcessFlow" ToRole="PFNotificationList" />
+    <NavigationProperty Name="ProcurementType" Relationship="EProcurementDbModel.FK_ProcessFlow_ProcurementType" FromRole="ProcessFlow" ToRole="ProcurementType" />
+  </EntityType>
+  <EntityType Name="ProcurementType">
+    <Key>
+      <PropertyRef Name="ProcurementTypeID" />
+    </Key>
+    <Property Name="ProcurementTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProcurementDescription" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="ProcessFlows" Relationship="EProcurementDbModel.FK_ProcessFlow_ProcurementType" FromRole="ProcurementType" ToRole="ProcessFlow" />
+  </EntityType>
+  <Association Name="FK_PFNotificationList_NotificationGroup">
+    <End Type="EProcurementDbModel.NotificationGroup" Role="NotificationGroup" Multiplicity="0..1" />
+    <End Type="EProcurementDbModel.PFNotificationList" Role="PFNotificationList" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="NotificationGroup">
+        <PropertyRef Name="NotificationGroupID" />
+      </Principal>
+      <Dependent Role="PFNotificationList">
+        <PropertyRef Name="NotificationGroupID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PFNotificationList_ProcessFlow">
+    <End Type="EProcurementDbModel.ProcessFlow" Role="ProcessFlow" Multiplicity="1" />
+    <End Type="EProcurementDbModel.PFNotificationList" Role="PFNotificationList" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProcessFlow">
+        <PropertyRef Name="ProcessFlowID" />
+      </Principal>
+      <Dependent Role="PFNotificationList">
+        <PropertyRef Name="PFID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProcessFlow_ProcurementType">
+    <End Type="EProcurementDbModel.ProcurementType" Role="ProcurementType" Multiplicity="0..1" />
+    <End Type="EProcurementDbModel.ProcessFlow" Role="ProcessFlow" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProcurementType">
+        <PropertyRef Name="ProcurementTypeID" />
+      </Principal>
+      <Dependent Role="ProcessFlow">
+        <PropertyRef Name="ProcurementTypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="ProcessFlowList">
+    <Key>
+      <PropertyRef Name="ProcessFlowListID" />
+    </Key>
+    <Property Name="ProcessFlowListID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProcessFlowID" Type="Int32" />
+    <Property Name="Flow" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+  </EntityType>
 </Schema>

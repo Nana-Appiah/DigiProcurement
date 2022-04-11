@@ -117,6 +117,15 @@
     <Property Name="PublicName" Type="varchar" MaxLength="50" />
     <Property Name="DateAssigned" Type="date" />
   </EntityType>
+  <EntityType Name="NotificationGroup">
+    <Key>
+      <PropertyRef Name="NotificationGroupID" />
+    </Key>
+    <Property Name="NotificationGroupID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NotificationGroupName" Type="varchar" MaxLength="100" />
+    <Property Name="NotificationMailString" Type="varchar(max)" />
+    <Property Name="NotificationDescription" Type="varchar" MaxLength="200" />
+  </EntityType>
   <EntityType Name="NotificationList">
     <Key>
       <PropertyRef Name="NotificationID" />
@@ -127,6 +136,14 @@
     <Property Name="EmailAddress" Type="varchar" MaxLength="60" />
     <Property Name="tag" Type="varchar" MaxLength="200" />
     <Property Name="isActive" Type="int" />
+  </EntityType>
+  <EntityType Name="PFNotificationList">
+    <Key>
+      <PropertyRef Name="PFNotificationListID" />
+    </Key>
+    <Property Name="PFNotificationListID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PFID" Type="int" Nullable="false" />
+    <Property Name="NotificationGroupID" Type="int" />
   </EntityType>
   <EntityType Name="Position">
     <Key>
@@ -141,6 +158,30 @@
     </Key>
     <Property Name="PriorityID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="PriorityDescription" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="ProcessFlow">
+    <Key>
+      <PropertyRef Name="ProcessFlowID" />
+    </Key>
+    <Property Name="ProcessFlowID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ProcurementTypeId" Type="int" />
+    <Property Name="Limit" Type="numeric" Precision="18" Scale="2" />
+    <Property Name="ProcessFlowOrder" Type="int" />
+  </EntityType>
+  <EntityType Name="ProcessFlowList">
+    <Key>
+      <PropertyRef Name="ProcessFlowListID" />
+    </Key>
+    <Property Name="ProcessFlowListID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ProcessFlowID" Type="int" />
+    <Property Name="Flow" Type="varchar(max)" />
+  </EntityType>
+  <EntityType Name="ProcurementType">
+    <Key>
+      <PropertyRef Name="ProcurementTypeID" />
+    </Key>
+    <Property Name="ProcurementTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ProcurementDescription" Type="varchar" MaxLength="200" />
   </EntityType>
   <EntityType Name="Requisition">
     <Key>
@@ -301,6 +342,42 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_PFNotificationList_NotificationGroup">
+    <End Role="NotificationGroup" Type="Self.NotificationGroup" Multiplicity="0..1" />
+    <End Role="PFNotificationList" Type="Self.PFNotificationList" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="NotificationGroup">
+        <PropertyRef Name="NotificationGroupID" />
+      </Principal>
+      <Dependent Role="PFNotificationList">
+        <PropertyRef Name="NotificationGroupID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PFNotificationList_ProcessFlow">
+    <End Role="ProcessFlow" Type="Self.ProcessFlow" Multiplicity="1" />
+    <End Role="PFNotificationList" Type="Self.PFNotificationList" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProcessFlow">
+        <PropertyRef Name="ProcessFlowID" />
+      </Principal>
+      <Dependent Role="PFNotificationList">
+        <PropertyRef Name="PFID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProcessFlow_ProcurementType">
+    <End Role="ProcurementType" Type="Self.ProcurementType" Multiplicity="0..1" />
+    <End Role="ProcessFlow" Type="Self.ProcessFlow" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProcurementType">
+        <PropertyRef Name="ProcurementTypeID" />
+      </Principal>
+      <Dependent Role="ProcessFlow">
+        <PropertyRef Name="ProcurementTypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Requisition_Company">
     <End Role="Company" Type="Self.Company" Multiplicity="0..1" />
     <End Role="Requisition" Type="Self.Requisition" Multiplicity="*" />
@@ -434,9 +511,14 @@
     <EntitySet Name="Logger" EntityType="Self.Logger" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="LPO" EntityType="Self.LPO" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Module" EntityType="Self.Module" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="NotificationGroup" EntityType="Self.NotificationGroup" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="NotificationList" EntityType="Self.NotificationList" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PFNotificationList" EntityType="Self.PFNotificationList" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Position" EntityType="Self.Position" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PriorityType" EntityType="Self.PriorityType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProcessFlow" EntityType="Self.ProcessFlow" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProcessFlowList" EntityType="Self.ProcessFlowList" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProcurementType" EntityType="Self.ProcurementType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Requisition" EntityType="Self.Requisition" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RequisitionItem" EntityType="Self.RequisitionItem" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RequisitionStatus" EntityType="Self.RequisitionStatus" Schema="dbo" store:Type="Tables" />
@@ -461,6 +543,18 @@
     <AssociationSet Name="FK_Item_SIUnit" Association="Self.FK_Item_SIUnit">
       <End Role="SIUnit" EntitySet="SIUnit" />
       <End Role="Item" EntitySet="Item" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PFNotificationList_NotificationGroup" Association="Self.FK_PFNotificationList_NotificationGroup">
+      <End Role="NotificationGroup" EntitySet="NotificationGroup" />
+      <End Role="PFNotificationList" EntitySet="PFNotificationList" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PFNotificationList_ProcessFlow" Association="Self.FK_PFNotificationList_ProcessFlow">
+      <End Role="ProcessFlow" EntitySet="ProcessFlow" />
+      <End Role="PFNotificationList" EntitySet="PFNotificationList" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProcessFlow_ProcurementType" Association="Self.FK_ProcessFlow_ProcurementType">
+      <End Role="ProcurementType" EntitySet="ProcurementType" />
+      <End Role="ProcessFlow" EntitySet="ProcessFlow" />
     </AssociationSet>
     <AssociationSet Name="FK_Requisition_Company" Association="Self.FK_Requisition_Company">
       <End Role="Company" EntitySet="Company" />

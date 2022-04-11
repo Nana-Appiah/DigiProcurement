@@ -278,5 +278,51 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="NotificationGroups">
+      <EntityTypeMapping TypeName="EProcurementDbModel.NotificationGroup">
+        <MappingFragment StoreEntitySet="NotificationGroup">
+          <ScalarProperty Name="NotificationDescription" ColumnName="NotificationDescription" />
+          <ScalarProperty Name="NotificationMailString" ColumnName="NotificationMailString" />
+          <ScalarProperty Name="NotificationGroupName" ColumnName="NotificationGroupName" />
+          <ScalarProperty Name="NotificationGroupID" ColumnName="NotificationGroupID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PFNotificationLists">
+      <EntityTypeMapping TypeName="EProcurementDbModel.PFNotificationList">
+        <MappingFragment StoreEntitySet="PFNotificationList">
+          <ScalarProperty Name="NotificationGroupID" ColumnName="NotificationGroupID" />
+          <ScalarProperty Name="PFID" ColumnName="PFID" />
+          <ScalarProperty Name="PFNotificationListID" ColumnName="PFNotificationListID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProcessFlows">
+      <EntityTypeMapping TypeName="EProcurementDbModel.ProcessFlow">
+        <MappingFragment StoreEntitySet="ProcessFlow">
+          <ScalarProperty Name="ProcessFlowOrder" ColumnName="ProcessFlowOrder" />
+          <ScalarProperty Name="Limit" ColumnName="Limit" />
+          <ScalarProperty Name="ProcurementTypeId" ColumnName="ProcurementTypeId" />
+          <ScalarProperty Name="ProcessFlowID" ColumnName="ProcessFlowID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProcurementTypes">
+      <EntityTypeMapping TypeName="EProcurementDbModel.ProcurementType">
+        <MappingFragment StoreEntitySet="ProcurementType">
+          <ScalarProperty Name="ProcurementDescription" ColumnName="ProcurementDescription" />
+          <ScalarProperty Name="ProcurementTypeID" ColumnName="ProcurementTypeID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProcessFlowLists">
+      <EntityTypeMapping TypeName="EProcurementDbModel.ProcessFlowList">
+        <MappingFragment StoreEntitySet="ProcessFlowList">
+          <ScalarProperty Name="Flow" ColumnName="Flow" />
+          <ScalarProperty Name="ProcessFlowID" ColumnName="ProcessFlowID" />
+          <ScalarProperty Name="ProcessFlowListID" ColumnName="ProcessFlowListID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>
