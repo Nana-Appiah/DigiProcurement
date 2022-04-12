@@ -150,6 +150,21 @@ namespace DigiProc.Controllers
             }
         }
 
+        [HttpGet]
+        public JsonResult GetVendors()
+        {
+            try
+            {
+                var helper = new Utility() { };
+                var vendor_data = helper.GetVendors();
+                return Json(new { status = true, data = vendor_data },JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception ex)
+            {
+                return Json(new { status = false, error = $"error: {ex.Message}" },JsonRequestBehavior.AllowGet);
+            }
+        }
+
         #endregion
 
         #region Priority-Types

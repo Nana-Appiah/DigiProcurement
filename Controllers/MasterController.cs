@@ -208,13 +208,14 @@ namespace DigiProc.Controllers
         #region Vendor
 
         [HttpPost]
-        public JsonResult SaveBasicVendorInformation(string vID, string vName, int? vTypeID, string location, string vTIN, 
+        public JsonResult SaveBasicVendorInformation(int _id,string vID, string vName, int? vTypeID, string location, string vTIN, 
                                                         string regNo, DateTime? incDate, int? bTypeID,string vcon,string votel, string vhtel,
                                                             string vemail, string vghpost, string vweb, string vlinkedin, string fb)
         {
             try
             {
                 Vendor obj = new Vendor() { 
+                    VendorID = _id,
                     VendorNo = vID,
                     VendorName = vName,
                     VendorLocation = location,

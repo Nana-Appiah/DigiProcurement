@@ -109,6 +109,7 @@ namespace DigiProc.Helpers
 
         #endregion
 
+        #region StandardUnit
         public List<StandardUnit> getItemMetrics()
         {
             var item_metrics = new List<SIUnit>();
@@ -139,6 +140,9 @@ namespace DigiProc.Helpers
             }
         }
 
+        #endregion
+
+        #region BusinessType
         public List<BusinessType> getBusinessTypes()
         {
             var business_types = new List<BusinessType>();
@@ -166,6 +170,8 @@ namespace DigiProc.Helpers
                 return business_types;
             }
         }
+
+        #endregion
 
         #region Accounting Periods
 
@@ -648,6 +654,46 @@ namespace DigiProc.Helpers
             {
                 Debug.Print(x.Message);
                 return obj;
+            }
+        }
+
+        #endregion
+
+        #region Vendor-List
+
+        public List<Vendor> GetVendors()
+        {
+            //method gets all vendors in the system
+            List<Vendor> vendor_list = new List<Vendor>();
+            try
+            {
+                var dta = config.Vendors.ToList();
+                if (dta.Count() > 0)
+                {
+                    foreach(var d in dta)
+                    {
+                        var vendor = new Vendor() { 
+                            VendorID = d.VendorID,
+                            VendorNo = d.VendorNo,
+                            VendorName = d.VendorName,
+                            VendorLocation = d.VendorLocation,
+                            ContactPerson = d.ContactPerson,
+                            NameOfOwner = d.NameOfOwner,
+                            CompanyContact = d.CompanyContact,
+                            CompanyHomeContact = d.CompanyHomeContact
+                        };
+
+                        vendor_list.Add(vendor);
+                    }
+                }
+                else { return vendor_list; }
+
+                return vendor_list;
+            }
+            catch(Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return vendor_list;
             }
         }
 

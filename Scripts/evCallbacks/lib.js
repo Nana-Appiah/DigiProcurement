@@ -390,3 +390,18 @@ lib.returnPflowList = function (_urlString, processflowID, _widget) {
         }
     });
 }
+
+//vendor grid
+lib.returnVendorGrid = function (_urlString, _widget) {
+    var vendor_list = [];
+    $.getJSON(_urlString, {}, function (r) {
+        if (r.status.toString() == "true") {
+            $.each(r.data, function (i, d) {
+                vendor_list[i] = [d.VendorID, d.VendorNo, d.VendorName, d.VendorLocation, d.ContactPerson, d.NameOfOwner, d.CompanyContact, d.CompanyHomeContact];
+            });
+
+            _widget.getStore().removeAll();
+            _widget.getStore().loadData(vendor_list);
+        }
+    });
+}

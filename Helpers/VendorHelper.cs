@@ -63,9 +63,37 @@ namespace DigiProc.Helpers
         {
             try
             {
-                config.Vendors.Add(oVendor);
-                config.SaveChanges();
-                return true;
+                if (oVendor.VendorID == 0)
+                {
+                    config.Vendors.Add(oVendor);
+                    config.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    var o = config.Vendors.Where(v => v.VendorID == oVendor.VendorID).FirstOrDefault();
+
+                    o.VendorNo = oVendor.VendorNo;
+                    o.VendorName = oVendor.VendorName;
+                    o.VendorLocation = oVendor.VendorLocation;
+                    o.ContactPerson = oVendor.ContactPerson;
+                    o.VendorTypeID = oVendor.VendorTypeID;
+                    o.TIN = oVendor.TIN;
+                    o.CompanyRegistrationNo = oVendor.CompanyRegistrationNo;
+                    o.IncorporationDate = oVendor.IncorporationDate;
+                    o.CompanyBusinessTypeID = oVendor.CompanyBusinessTypeID;
+                    o.CompanyContact = oVendor.CompanyContact;
+                    o.CompanyHomeContact = oVendor.CompanyHomeContact;
+                    o.CompanyEmailAddress = oVendor.CompanyEmailAddress;
+                    o.CompanyGHPostAddress = oVendor.CompanyGHPostAddress;
+                    o.CompanyWebsite = oVendor.CompanyWebsite;
+                    o.CompanyLinkedIn = oVendor.CompanyLinkedIn;
+                    o.CompanyFb = oVendor.CompanyFb;
+
+                    config.SaveChanges();
+                    return true;
+                }
+
             }
             catch(Exception x)
             {
