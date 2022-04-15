@@ -150,7 +150,7 @@ namespace DigiProc.Controllers
             }
         }
     
-        [HttpPost]
+        [HttpPost]        
         public JsonResult ApproveRequisition(string[] dta)
         {
             try
