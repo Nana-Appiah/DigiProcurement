@@ -418,6 +418,34 @@ namespace DigiProc.Helpers
             }
         }
 
+        public Product GetItem(int itemID)
+        {
+            //gets product using itemID
+            Product product = new Product();
+            try
+            {
+                var item = config.Items.Where(i => i.ItemID == itemID).FirstOrDefault();
+                if (item != null)
+                {
+
+                    product.Id = item.ItemID;
+                    product.ProductName = item.ItemName;
+                    product.ProductCode = item.ItemCode;
+                    product.ProductMinimumStock = (int)item.MinStockLevel;
+                    product.ProductMaximumStock = (int)item.MaxStockLevel;
+                    product.ProductDescription = item.ItemDescription;
+                    product.SIUnit = new StandardUnit { }.get(config, (int)item.SIUnitID);
+                }
+
+                return product;
+            }
+            catch(Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return product;
+            }
+        }
+
         public List<Product> GetItems()
         {
             //gets all the items in the data store
@@ -555,6 +583,22 @@ namespace DigiProc.Helpers
             }
         }
 
+        public PriorityType GetPriority(int? _id)
+        {
+            //gets priority
+            PriorityType obj = null;
+            try
+            {
+                obj = config.PriorityTypes.Where(p => p.PriorityID == _id).FirstOrDefault();
+                return obj;
+            }
+            catch(Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return obj;
+            }
+        }
+
         #endregion
 
         #region Requisition-Types
@@ -635,6 +679,53 @@ namespace DigiProc.Helpers
             {
                 Debug.Print(x.Message);
                 return obj;
+            }
+        }
+
+        public Department getDepartment(int? _id)
+        {
+            Department obj = null;
+
+            try
+            {
+                obj = config.Departments.Where(d => d.DepartmentID == _id).FirstOrDefault();
+                return obj;
+            }
+            catch(Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return obj;
+            }
+        }
+
+        public List<Department> GetDepartments()
+        {
+            List<Department> departments = null;
+            try
+            {
+                var list = config.Departments.ToList();
+                if (list.Count() > 0)
+                {
+                    departments = new List<Department>();
+
+                    foreach(var item in list)
+                    {
+                        var d = new Department() { 
+                            DepartmentID = item.DepartmentID,
+                            Name = item.Name,
+                            Head = item.Head
+                        };
+
+                        departments.Add(d);
+                    }
+                }
+
+                return departments;
+            }
+            catch(Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return departments;
             }
         }
 

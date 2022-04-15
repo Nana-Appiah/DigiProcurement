@@ -142,6 +142,7 @@
     <EntitySetMapping Name="RequisitionItems">
       <EntityTypeMapping TypeName="EProcurementDbModel.RequisitionItem">
         <MappingFragment StoreEntitySet="RequisitionItem">
+          <ScalarProperty Name="FinApprovalStatus" ColumnName="FinApprovalStatus" />
           <ScalarProperty Name="Narration" ColumnName="Narration" />
           <ScalarProperty Name="RequisitionItemID" ColumnName="RequisitionItemID" />
           <ScalarProperty Name="RequisitionID" ColumnName="RequisitionID" />

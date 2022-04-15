@@ -224,7 +224,6 @@
                                                                                 values: dta
                                                                             })
                                                                                 .done(function (res) {
-                                                                                    //alert(res.data.toString());
                                                                                     Ext.MessageBox.alert("REQUISITION REQUEST STATUS", res.data.toString(), this);
                                                                                     Ext.getCmp('xBrRqList').getStore().removeAll();
                                                                                     Ext.getCmp('ufrmBDetails').getForm().reset();

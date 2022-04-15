@@ -83,6 +83,20 @@ namespace DigiProc.Controllers
             catch(Exception x) { return Json(new { status = false, error = $"error: {x.Message}" },JsonRequestBehavior.AllowGet); }
         }
 
+        [HttpGet]
+        public JsonResult GetDepartments()
+        {
+            try
+            {
+                var department_data = new Utility() { }.GetDepartments();
+                return Json(new { status = true, data = department_data },JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception ex)
+            {
+                return Json(new { status = false, error = $"error: {ex.Message}" },JsonRequestBehavior.AllowGet);
+            }
+        }
+
         #region Vendor - Types
 
         [HttpGet]

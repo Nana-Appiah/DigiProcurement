@@ -193,6 +193,32 @@ lib.getItemGrid = function (_URL, controlRef) {
     });
 }
 
+lib.returnItemStore = function (_urlString) {
+    var item_store = new Ext.data.Store({
+        autoLoad: true, restful: false,
+        url: _urlString,
+        reader: new Ext.data.JsonReader({ type: 'json', root: 'data' }, [
+            { name: 'Id', type: 'int' },
+            { name: 'ProductName', type: 'string' }
+        ])
+    });
+
+    return item_store;
+}
+
+lib.getItemGridGivenRequisitionID = function (_URL,_ID, controlRef) {
+    var dta = [];
+    $.getJSON(_URL, { requisitionID: _ID }, function (res) {
+        if (res.status.toString() == "true") {
+            $.each(res.data, function (i, d) {
+                dta[i] = [d.Id, d.RequisitionId, d.item.ProductCode, d.item.ProductName, d.Quantity, d.narration];
+            });
+
+            controlRef.getStore().loadData(dta);
+        }
+    });
+}
+
 //branch Requistion functions
 
 lib.returnEditorControl = function () {
@@ -402,6 +428,45 @@ lib.returnVendorGrid = function (_urlString, _widget) {
 
             _widget.getStore().removeAll();
             _widget.getStore().loadData(vendor_list);
+        }
+    });
+}
+
+//Financial Controller
+lib.returnDepartmentStore = function (_urlString) {
+    var department_store = new Ext.data.Store({
+        autoLoad: true, restful: false,
+        url: _urlString,
+        reader: new Ext.data.JsonReader({ type: 'json', root: 'data' }, [
+            { name: 'DepartmentID', type: 'int' },
+            { name: 'Name', type: 'string' }
+        ])
+    });
+
+    return department_store;
+}
+
+lib.returnRequisitionNumbersGrid = function (_urlString,ID, _widget) {
+    var req_nos = [];
+    $.getJSON(_urlString, { departmentID: ID }, function (r) {
+        if (r.status.toString() == "true") {
+            $.each(r.data, function (i, d) {
+                req_nos[i] = [d.Id, d.RequisitionNo];
+            });
+
+            _widget.getStore().removeAll();
+            _widget.getStore().loadData(req_nos);
+        }
+    });
+}
+
+lib.returnRequistionDetails = function (_urlString, _ID, rno, req, d, p) {
+    $.getJSON(_urlString, { requisitionID: _ID }, function (r) {
+        if (r.status.toString() == "true") {
+            rno.val(r.data.RequisitionNo);
+            req.val(r.data.Requestee);
+            d.val(r.data.nameOfDepartment);
+            p.val(r.data.priority);
         }
     });
 }

@@ -40,6 +40,34 @@ namespace DigiProc.Controllers
             }
         }
 
+        [HttpGet]
+        public JsonResult GetRequisitionDetails(int requisitionID)
+        {
+            try
+            {
+                var _details = new RequisitionHelper() { }.getRequisitionDetails(requisitionID);
+                return Json(new { status = true, data = _details },JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception x)
+            {
+                return Json(new { status = false, error = $"error: {x.Message}" },JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpGet]
+        public JsonResult GetRequisitionNos(int departmentID)
+        {
+            try
+            {
+                var requisition_numbers = new RequisitionHelper() { }.getRequisitionNumbers(departmentID);
+                return Json(new { status = true, data = requisition_numbers },JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception x)
+            {
+                return Json(new { status = false, error = $"error: {x.Message}" },JsonRequestBehavior.AllowGet);
+            }
+        }
+
         [HttpPost]
         public JsonResult PostRequisitionRequest(string rqNo, string requestee, string comp, string dept,
                                                     int? rqnId, int? currencyId, int? priorityId, string location,string comment, string[] values)
@@ -106,5 +134,34 @@ namespace DigiProc.Controllers
                 return Json(new { status = false, error = $"error: {exc.Message}" },JsonRequestBehavior.AllowGet);
             }
         }
+    
+    
+        [HttpGet]
+        public JsonResult GetRequisitionItemList(int requisitionID)
+        {
+            try
+            {
+                var requisition_items = new RequisitionHelper() { }.GetRequisitionItemLookups(requisitionID);
+                return Json(new { status = true, data = requisition_items },JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception exc)
+            {
+                return Json(new { status = false, error = $"error: {exc.Message}"},JsonRequestBehavior.AllowGet);
+            }
+        }
+    
+        [HttpPost]
+        public JsonResult ApproveRequisition(string[] dta)
+        {
+            try
+            {
+                return Json(new { status = true, data = dta },JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception ex)
+            {
+                return Json(new { status = false, error = $"error: {ex.Message}" },JsonRequestBehavior.AllowGet);
+            }
+        }
+
     }
 }

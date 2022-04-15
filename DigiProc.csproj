@@ -1262,6 +1262,7 @@
     <Content Include="Scripts\evCallbacks\access.js" />
     <Content Include="Scripts\evCallbacks\committee.js" />
     <Content Include="Scripts\evCallbacks\config.js" />
+    <Content Include="Scripts\evCallbacks\finControl.js" />
     <Content Include="Scripts\evCallbacks\lib.js" />
     <Content Include="Scripts\evCallbacks\branchReq.js" />
     <Content Include="Scripts\evCallbacks\ext.js" />
