@@ -1260,6 +1260,7 @@
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\Desktop.js" />
     <Content Include="Scripts\evCallbacks\access.js" />
+    <Content Include="Scripts\evCallbacks\capex.js" />
     <Content Include="Scripts\evCallbacks\committee.js" />
     <Content Include="Scripts\evCallbacks\config.js" />
     <Content Include="Scripts\evCallbacks\finControl.js" />

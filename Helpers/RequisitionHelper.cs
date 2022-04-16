@@ -170,6 +170,28 @@ namespace DigiProc.Helpers
             }
         }
 
+        public bool ApproveRequisitionItem(int _id,int _statusId)
+        {
+            //method is responsible for the approval of a requisition item
+            try
+            {
+                var obj = config.RequisitionItems.Where(rq => rq.RequisitionItemID == _id).FirstOrDefault();
+                if (obj != null)
+                {
+                    obj.FinApprovalStatus = _statusId;
+                    config.SaveChanges();
+
+                    return true;
+                }
+                else { return false; }
+            }
+            catch(Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return false;
+            }
+        }
+
         #endregion
 
     }

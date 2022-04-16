@@ -169,7 +169,7 @@
                                                                         $.post('Requisition/ApproveRequisition', { dta: APPROVED_REQUISITIONS })
                                                                             .done(function (r) {
                                                                                 if (r.status.toString() == "true") {
-
+                                                                                    Ext.MessageBox.alert("Financial Approval", r.data, this);
                                                                                     $('#finC-btn-clear').trigger('click');
                                                                                 }
                                                                         });

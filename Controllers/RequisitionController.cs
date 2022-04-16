@@ -120,7 +120,8 @@ namespace DigiProc.Controllers
                             RequisitionID = requisition_id,
                             ItemID = new Utility() { }.getItemID(str[0]),
                             Narration = str[1],
-                            Quantity = Convert.ToInt32(str[2])
+                            Quantity = Convert.ToInt32(str[2]),
+                            FinApprovalStatus = 1  //PENDING
                         };
 
                         if (helper.SaveRequisitionItems(oReqItem)) { success += 1; } else { failed += 1; }
@@ -155,7 +156,23 @@ namespace DigiProc.Controllers
         {
             try
             {
-                return Json(new { status = true, data = dta },JsonRequestBehavior.AllowGet);
+                int success = 0;
+                int failed = 0;
+                bool bln = false;
+
+                if (dta.Length > 0)
+                {                    
+                    foreach (var d in dta)
+                    {
+                        var str = d.Split(',');
+                        var obj = new RequisitionItem() { RequisitionItemID = int.Parse(str[0]) };
+                        bln = new RequisitionHelper() { }.ApproveRequisitionItem(obj.RequisitionItemID, 2);
+
+                        if (bln) { success += 1; } else { failed += 1; }
+                    }
+                }
+
+                return Json(new { status = bln, data = $"{success.ToString()} requisition items approved" },JsonRequestBehavior.AllowGet);
             }
             catch(Exception ex)
             {
