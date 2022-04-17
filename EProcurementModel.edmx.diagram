@@ -20,7 +20,6 @@
         <EntityTypeShape EntityType="EProcurementDbModel.RequisitionStatu" Width="1.5" PointX="3" PointY="15.125" IsExpanded="true" />
         <EntityTypeShape EntityType="EProcurementDbModel.RequisitionType" Width="1.5" PointX="3" PointY="17.5" IsExpanded="true" />
         <EntityTypeShape EntityType="EProcurementDbModel.SIUnit" Width="1.5" PointX="7.75" PointY="6" IsExpanded="true" />
-        <EntityTypeShape EntityType="EProcurementDbModel.sysdiagram" Width="1.5" PointX="5.75" PointY="12.75" IsExpanded="true" />
         <EntityTypeShape EntityType="EProcurementDbModel.UserModule" Width="1.5" PointX="7.75" PointY="12.75" IsExpanded="true" />
         <EntityTypeShape EntityType="EProcurementDbModel.Vendor" Width="2" PointX="2.875" PointY="0.625" IsExpanded="true" />
         <EntityTypeShape EntityType="EProcurementDbModel.VendorType" Width="1.5" PointX="0.625" PointY="2.875" IsExpanded="true" />
@@ -51,6 +50,7 @@
         <AssociationConnector Association="EProcurementDbModel.FK_PFNotificationList_ProcessFlow" />
         <AssociationConnector Association="EProcurementDbModel.FK_ProcessFlow_ProcurementType" />
         <EntityTypeShape EntityType="EProcurementDbModel.ProcessFlowList" Width="1.5" PointX="15.375" PointY="0.75" />
+        <EntityTypeShape EntityType="EProcurementDbModel.Capex" Width="1.5" PointX="11.375" PointY="15.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -7,6 +7,19 @@
     <Property Name="BusinessTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="BusinessDescription" Type="varchar" MaxLength="50" />
   </EntityType>
+  <EntityType Name="Capex">
+    <Key>
+      <PropertyRef Name="CapexID" />
+    </Key>
+    <Property Name="CapexID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CapexTypeID" Type="int" />
+    <Property Name="EstimatedDeadline" Type="varchar" MaxLength="50" />
+    <Property Name="QuantityRequested" Type="int" />
+    <Property Name="QuantitySupplied" Type="int" />
+    <Property Name="QuantityOutstanding" Type="int" />
+    <Property Name="Justification" Type="varchar(max)" />
+    <Property Name="FinancialYrId" Type="int" />
+  </EntityType>
   <EntityType Name="Committee">
     <Key>
       <PropertyRef Name="CommitteeID" />
@@ -241,16 +254,6 @@
     <Property Name="SIUnitID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Metric" Type="varchar" MaxLength="50" />
     <Property Name="Measurement" Type="varchar" MaxLength="50" />
-  </EntityType>
-  <EntityType Name="sysdiagrams">
-    <Key>
-      <PropertyRef Name="diagram_id" />
-    </Key>
-    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
-    <Property Name="principal_id" Type="int" Nullable="false" />
-    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="version" Type="int" />
-    <Property Name="definition" Type="varbinary(max)" />
   </EntityType>
   <EntityType Name="UserModule">
     <Key>
@@ -501,6 +504,7 @@
   </Association>
   <EntityContainer Name="EProcurementDbModelStoreContainer">
     <EntitySet Name="BusinessType" EntityType="Self.BusinessType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Capex" EntityType="Self.Capex" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Committee" EntityType="Self.Committee" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CommitteeMember" EntityType="Self.CommitteeMember" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Company" EntityType="Self.Company" Schema="dbo" store:Type="Tables" />
@@ -525,7 +529,6 @@
     <EntitySet Name="RequisitionStatus" EntityType="Self.RequisitionStatus" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RequisitionType" EntityType="Self.RequisitionType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SIUnit" EntityType="Self.SIUnit" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserModule" EntityType="Self.UserModule" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Vendor" EntityType="Self.Vendor" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="VendorType" EntityType="Self.VendorType" Schema="dbo" store:Type="Tables" />

@@ -194,6 +194,29 @@ namespace DigiProc.Helpers
 
         #endregion
 
+        #region Capex
+
+        public bool SaveCapex(Capex item)
+        {
+            try
+            {
+                if (item.CapexID == 0)
+                {
+                    config.Capexes.Add(item);
+                    config.SaveChanges();
+                    return true;
+                }
+                else { return false; }
+            }
+            catch (Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return false;
+            }
+        }
+
+        #endregion
+
     }
 
     public struct RequisitionLookup
@@ -214,4 +237,17 @@ namespace DigiProc.Helpers
         public int Quantity { get; set; }
         public string narration { get; set; }
     }
+
+    public struct CapexLookup
+    {
+        public int Id { get; set; }
+        public string capexCategory { get; set; }  //same as item category
+        public string deadline { get; set; }
+        public int QtyRequested { get; set; }
+        public int QtySupplied { get; set; }
+        public int QtyOutstanding { get; set; }
+        public string justification { get; set; }
+        public string financialYear { get; set; }
+    }
+
 }

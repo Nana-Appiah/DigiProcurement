@@ -131,6 +131,9 @@
     <Compile Include="BusinessType.cs">
       <DependentUpon>EProcurementModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Capex.cs">
+      <DependentUpon>EProcurementModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Committee.cs">
       <DependentUpon>EProcurementModel.tt</DependentUpon>
     </Compile>
@@ -140,6 +143,7 @@
     <Compile Include="Company.cs">
       <DependentUpon>EProcurementModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\CapexController.cs" />
     <Compile Include="Controllers\CommitteeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MasterController.cs" />
@@ -231,9 +235,6 @@
       <DependentUpon>EProcurementModel.tt</DependentUpon>
     </Compile>
     <Compile Include="SIUnit.cs">
-      <DependentUpon>EProcurementModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="sysdiagram.cs">
       <DependentUpon>EProcurementModel.tt</DependentUpon>
     </Compile>
     <Compile Include="UserModule.cs">
@@ -1314,6 +1315,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
     <Folder Include="Properties\PublishProfiles\" />
+    <Folder Include="Views\Capex\" />
     <Folder Include="Views\Committee\" />
     <Folder Include="Views\Master\" />
     <Folder Include="Views\ProcessFlow\" />

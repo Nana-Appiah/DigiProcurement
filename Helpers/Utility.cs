@@ -107,6 +107,30 @@ namespace DigiProc.Helpers
             }
         }
 
+        public ItemCategorization getItemCategory(int _categoryID)
+        {
+            //gets item categorization using id
+            ItemCategorization obj = new ItemCategorization();
+
+            try
+            {
+                var o = config.ItemCategories.Where(ic => ic.CategoryID == _categoryID).FirstOrDefault();
+                if (o != null)
+                {
+                    obj.Id = o.CategoryID;
+                    obj.nameOfCategory = o.CategoryName;
+                    obj.descriptionOfCategory = o.CategoryDescription;
+                }
+
+                return obj;
+            }
+            catch(Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return obj;
+            }
+        }
+
         #endregion
 
         #region StandardUnit

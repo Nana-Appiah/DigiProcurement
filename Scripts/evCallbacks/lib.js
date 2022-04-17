@@ -470,3 +470,9 @@ lib.returnRequistionDetails = function (_urlString, _ID, rno, req, d, p) {
         }
     });
 }
+
+lib.returnMonthStore = function () {
+    //returns an array of the months of the year
+    var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    return months;
+}

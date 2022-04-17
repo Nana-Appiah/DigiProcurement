@@ -177,17 +177,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="sysdiagrams">
-      <EntityTypeMapping TypeName="EProcurementDbModel.sysdiagram">
-        <MappingFragment StoreEntitySet="sysdiagrams">
-          <ScalarProperty Name="name" ColumnName="name" />
-          <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-          <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-          <ScalarProperty Name="version" ColumnName="version" />
-          <ScalarProperty Name="definition" ColumnName="definition" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="UserModules">
       <EntityTypeMapping TypeName="EProcurementDbModel.UserModule">
         <MappingFragment StoreEntitySet="UserModule">
@@ -322,6 +311,20 @@
           <ScalarProperty Name="Flow" ColumnName="Flow" />
           <ScalarProperty Name="ProcessFlowID" ColumnName="ProcessFlowID" />
           <ScalarProperty Name="ProcessFlowListID" ColumnName="ProcessFlowListID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Capexes">
+      <EntityTypeMapping TypeName="EProcurementDbModel.Capex">
+        <MappingFragment StoreEntitySet="Capex">
+          <ScalarProperty Name="FinancialYrId" ColumnName="FinancialYrId" />
+          <ScalarProperty Name="Justification" ColumnName="Justification" />
+          <ScalarProperty Name="QuantityOutstanding" ColumnName="QuantityOutstanding" />
+          <ScalarProperty Name="QuantitySupplied" ColumnName="QuantitySupplied" />
+          <ScalarProperty Name="QuantityRequested" ColumnName="QuantityRequested" />
+          <ScalarProperty Name="EstimatedDeadline" ColumnName="EstimatedDeadline" />
+          <ScalarProperty Name="CapexTypeID" ColumnName="CapexTypeID" />
+          <ScalarProperty Name="CapexID" ColumnName="CapexID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

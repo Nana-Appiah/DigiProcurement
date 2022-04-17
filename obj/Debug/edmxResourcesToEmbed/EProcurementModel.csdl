@@ -181,16 +181,6 @@
     <Property Name="Measurement" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="Items" Relationship="Self.FK_Item_SIUnit" FromRole="SIUnit" ToRole="Item" />
   </EntityType>
-  <EntityType Name="sysdiagram">
-    <Key>
-      <PropertyRef Name="diagram_id" />
-    </Key>
-    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="principal_id" Type="Int32" Nullable="false" />
-    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="version" Type="Int32" />
-    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
-  </EntityType>
   <EntityType Name="UserModule">
     <Key>
       <PropertyRef Name="UserModuleID" />
@@ -362,7 +352,6 @@
     <EntitySet Name="RequisitionStatus" EntityType="Self.RequisitionStatu" />
     <EntitySet Name="RequisitionTypes" EntityType="Self.RequisitionType" />
     <EntitySet Name="SIUnits" EntityType="Self.SIUnit" />
-    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
     <EntitySet Name="UserModules" EntityType="Self.UserModule" />
     <EntitySet Name="Vendors" EntityType="Self.Vendor" />
     <EntitySet Name="VendorTypes" EntityType="Self.VendorType" />
@@ -444,6 +433,7 @@
       <End Role="ProcessFlow" EntitySet="ProcessFlows" />
     </AssociationSet>
     <EntitySet Name="ProcessFlowLists" EntityType="EProcurementDbModel.ProcessFlowList" />
+    <EntitySet Name="Capexes" EntityType="EProcurementDbModel.Capex" />
   </EntityContainer>
   <Association Name="FK_UserModule_Module">
     <End Type="EProcurementDbModel.Module" Role="Module" Multiplicity="0..1" />
@@ -631,5 +621,18 @@
     <Property Name="ProcessFlowListID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="ProcessFlowID" Type="Int32" />
     <Property Name="Flow" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Capex">
+    <Key>
+      <PropertyRef Name="CapexID" />
+    </Key>
+    <Property Name="CapexID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CapexTypeID" Type="Int32" />
+    <Property Name="EstimatedDeadline" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="QuantityRequested" Type="Int32" />
+    <Property Name="QuantitySupplied" Type="Int32" />
+    <Property Name="QuantityOutstanding" Type="Int32" />
+    <Property Name="Justification" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="FinancialYrId" Type="Int32" />
   </EntityType>
 </Schema>

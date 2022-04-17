@@ -12,6 +12,19 @@
           <Property Name="BusinessTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="BusinessDescription" Type="varchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="Capex">
+          <Key>
+            <PropertyRef Name="CapexID" />
+          </Key>
+          <Property Name="CapexID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CapexTypeID" Type="int" />
+          <Property Name="EstimatedDeadline" Type="varchar" MaxLength="50" />
+          <Property Name="QuantityRequested" Type="int" />
+          <Property Name="QuantitySupplied" Type="int" />
+          <Property Name="QuantityOutstanding" Type="int" />
+          <Property Name="Justification" Type="varchar(max)" />
+          <Property Name="FinancialYrId" Type="int" />
+        </EntityType>
         <EntityType Name="Committee">
           <Key>
             <PropertyRef Name="CommitteeID" />
@@ -246,16 +259,6 @@
           <Property Name="SIUnitID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Metric" Type="varchar" MaxLength="50" />
           <Property Name="Measurement" Type="varchar" MaxLength="50" />
-        </EntityType>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="principal_id" Type="int" Nullable="false" />
-          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="version" Type="int" />
-          <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
         <EntityType Name="UserModule">
           <Key>
@@ -506,6 +509,7 @@
         </Association>
         <EntityContainer Name="EProcurementDbModelStoreContainer">
           <EntitySet Name="BusinessType" EntityType="Self.BusinessType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Capex" EntityType="Self.Capex" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Committee" EntityType="Self.Committee" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CommitteeMember" EntityType="Self.CommitteeMember" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Company" EntityType="Self.Company" Schema="dbo" store:Type="Tables" />
@@ -530,7 +534,6 @@
           <EntitySet Name="RequisitionStatus" EntityType="Self.RequisitionStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RequisitionType" EntityType="Self.RequisitionType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SIUnit" EntityType="Self.SIUnit" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserModule" EntityType="Self.UserModule" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Vendor" EntityType="Self.Vendor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VendorType" EntityType="Self.VendorType" Schema="dbo" store:Type="Tables" />
@@ -788,16 +791,6 @@
           <Property Name="Measurement" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Items" Relationship="Self.FK_Item_SIUnit" FromRole="SIUnit" ToRole="Item" />
         </EntityType>
-        <EntityType Name="sysdiagram">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="version" Type="Int32" />
-          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
-        </EntityType>
         <EntityType Name="UserModule">
           <Key>
             <PropertyRef Name="UserModuleID" />
@@ -969,7 +962,6 @@
           <EntitySet Name="RequisitionStatus" EntityType="Self.RequisitionStatu" />
           <EntitySet Name="RequisitionTypes" EntityType="Self.RequisitionType" />
           <EntitySet Name="SIUnits" EntityType="Self.SIUnit" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
           <EntitySet Name="UserModules" EntityType="Self.UserModule" />
           <EntitySet Name="Vendors" EntityType="Self.Vendor" />
           <EntitySet Name="VendorTypes" EntityType="Self.VendorType" />
@@ -1051,6 +1043,7 @@
             <End Role="ProcessFlow" EntitySet="ProcessFlows" />
           </AssociationSet>
           <EntitySet Name="ProcessFlowLists" EntityType="EProcurementDbModel.ProcessFlowList" />
+          <EntitySet Name="Capexes" EntityType="EProcurementDbModel.Capex" />
         </EntityContainer>
         <Association Name="FK_UserModule_Module">
           <End Type="EProcurementDbModel.Module" Role="Module" Multiplicity="0..1" />
@@ -1239,6 +1232,19 @@
           <Property Name="ProcessFlowID" Type="Int32" />
           <Property Name="Flow" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="Capex">
+          <Key>
+            <PropertyRef Name="CapexID" />
+          </Key>
+          <Property Name="CapexID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CapexTypeID" Type="Int32" />
+          <Property Name="EstimatedDeadline" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="QuantityRequested" Type="Int32" />
+          <Property Name="QuantitySupplied" Type="Int32" />
+          <Property Name="QuantityOutstanding" Type="Int32" />
+          <Property Name="Justification" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="FinancialYrId" Type="Int32" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1421,17 +1427,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="EProcurementDbModel.sysdiagram">
-              <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="definition" ColumnName="definition" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="UserModules">
             <EntityTypeMapping TypeName="EProcurementDbModel.UserModule">
               <MappingFragment StoreEntitySet="UserModule">
@@ -1566,6 +1561,20 @@
                 <ScalarProperty Name="Flow" ColumnName="Flow" />
                 <ScalarProperty Name="ProcessFlowID" ColumnName="ProcessFlowID" />
                 <ScalarProperty Name="ProcessFlowListID" ColumnName="ProcessFlowListID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Capexes">
+            <EntityTypeMapping TypeName="EProcurementDbModel.Capex">
+              <MappingFragment StoreEntitySet="Capex">
+                <ScalarProperty Name="FinancialYrId" ColumnName="FinancialYrId" />
+                <ScalarProperty Name="Justification" ColumnName="Justification" />
+                <ScalarProperty Name="QuantityOutstanding" ColumnName="QuantityOutstanding" />
+                <ScalarProperty Name="QuantitySupplied" ColumnName="QuantitySupplied" />
+                <ScalarProperty Name="QuantityRequested" ColumnName="QuantityRequested" />
+                <ScalarProperty Name="EstimatedDeadline" ColumnName="EstimatedDeadline" />
+                <ScalarProperty Name="CapexTypeID" ColumnName="CapexTypeID" />
+                <ScalarProperty Name="CapexID" ColumnName="CapexID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
