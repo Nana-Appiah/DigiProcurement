@@ -90,13 +90,13 @@ namespace DigiProc.Helpers
             }
         }
 
-        public List<RequisitionLookup> getRequisitionNumbers(int departmentId)
+        public List<RequisitionLookup> getRequisitionNumbers(int departmentId, int statusId)
         {
             List<RequisitionLookup> list = new List<RequisitionLookup>();
             try
             {
                 //var dta = config.Requisitions.ToList();
-                var dta = config.Requisitions.Where(rq => rq.DepartmentID == departmentId).ToList();
+                var dta = config.Requisitions.Where(rq => rq.DepartmentID == departmentId).Where(r => r.RequisitionStatusID == statusId).ToList();
                 if (dta.Count() > 0)
                 {
                     foreach(var d in dta)
@@ -116,6 +116,24 @@ namespace DigiProc.Helpers
             {
                 Debug.Print(x.Message);
                 return list;
+            }
+        }
+
+        public bool ChangeRequisitionStatus(int _requisitionID, int _statusID)
+        {
+            //change the requisition status using requisition and status id 
+            try
+            {
+                var obj = config.Requisitions.Where(r => r.RequisitionID == _requisitionID).FirstOrDefault();
+                obj.RequisitionStatusID = _statusID;
+
+                config.SaveChanges();
+                return true;
+            }
+            catch(Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return false;
             }
         }
 

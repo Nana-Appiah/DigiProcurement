@@ -446,9 +446,9 @@ lib.returnDepartmentStore = function (_urlString) {
     return department_store;
 }
 
-lib.returnRequisitionNumbersGrid = function (_urlString,ID, _widget) {
+lib.returnRequisitionNumbersGrid = function (_urlString,_status,ID, _widget) {
     var req_nos = [];
-    $.getJSON(_urlString, { departmentID: ID }, function (r) {
+    $.getJSON(_urlString, { departmentID: ID, statusID: _status }, function (r) {
         if (r.status.toString() == "true") {
             $.each(r.data, function (i, d) {
                 req_nos[i] = [d.Id, d.RequisitionNo];

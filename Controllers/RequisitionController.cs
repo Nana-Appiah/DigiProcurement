@@ -55,11 +55,11 @@ namespace DigiProc.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetRequisitionNos(int departmentID)
+        public JsonResult GetRequisitionNos(int departmentID, int statusID)
         {
             try
             {
-                var requisition_numbers = new RequisitionHelper() { }.getRequisitionNumbers(departmentID);
+                var requisition_numbers = new RequisitionHelper() { }.getRequisitionNumbers(departmentID,statusID);
                 return Json(new { status = true, data = requisition_numbers },JsonRequestBehavior.AllowGet);
             }
             catch(Exception x)
@@ -160,16 +160,22 @@ namespace DigiProc.Controllers
                 int failed = 0;
                 bool bln = false;
 
+                int req_id = 0;
+
                 if (dta.Length > 0)
                 {                    
                     foreach (var d in dta)
                     {
                         var str = d.Split(',');
+                        req_id = int.Parse(str[1]);
+
                         var obj = new RequisitionItem() { RequisitionItemID = int.Parse(str[0]) };
                         bln = new RequisitionHelper() { }.ApproveRequisitionItem(obj.RequisitionItemID, 2);
 
                         if (bln) { success += 1; } else { failed += 1; }
                     }
+
+                    if (success == dta.Length) { new RequisitionHelper { }.ChangeRequisitionStatus(req_id, 2); }
                 }
 
                 return Json(new { status = bln, data = $"{success.ToString()} requisition items approved" },JsonRequestBehavior.AllowGet);

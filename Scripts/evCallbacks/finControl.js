@@ -42,7 +42,7 @@
                                                                 id: 'fnDept', store: lib.returnDepartmentStore('Utility/GetDepartments'), valueField: 'DepartmentID', displayField: 'Name',
                                                                 listeners: {
                                                                     'select': function () {
-                                                                        lib.returnRequisitionNumbersGrid('Requisition/GetRequisitionNos', Ext.getCmp('fnDept').getValue(), Ext.getCmp('fnReqGrid'));
+                                                                        lib.returnRequisitionNumbersGrid('Requisition/GetRequisitionNos', 1, Ext.getCmp('fnDept').getValue(), Ext.getCmp('fnReqGrid'));
                                                                     }
                                                                 }
                                                             }
