@@ -227,7 +227,80 @@
                                     }
                                 ]
                             },
-                            //{ title: 'Testing'}
+                            {
+                                title: 'Capex', defaults: { xtype: 'panel' },
+                                items: [
+                                    {
+                                        defaults: { xtype: 'panel' },
+                                        items: [
+                                            {
+                                                defaults: { xtype: 'form', frame: true, border: true },layout:'form',
+                                                items: [
+                                                    {
+                                                        id: '', title: 'Search',
+                                                        defaults: { xtype: 'combo', forceSelection: true, typeAhead: true, mode: 'local', allowBlank: false }, layout: 'fit',
+                                                        items: [
+                                                            {
+                                                                id: 'capexdept', store: lib.returnDepartmentStore('Utility/GetDepartments'), valueField: 'DepartmentID', displayField: 'Name',
+                                                                listeners: {
+                                                                    'select': function () {
+                                                                        lib.getCapexItemGrid('Capex/GetCapexData', Ext.getCmp('capexdept').getValue(), Ext.getCmp('capexGridAppr'));
+                                                                    }
+                                                                }
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        id: '', title: 'Results', height: 500,
+                                                        items: [
+                                                            new Ext.grid.GridPanel({
+                                                                id: 'capexGridAppr', height: 450, autoScroll: true, autoExpandColumn: 'itemName',
+                                                                //plugins: editor,
+                                                                store: new Ext.data.GroupingStore({
+                                                                    reader: new Ext.data.ArrayReader({}, [
+                                                                        { name: 'Id', type: 'int' },
+                                                                        { name: 'itemName', type: 'string' },
+                                                                        { name: 'capexCategory', type: 'string' },
+                                                                        { name: 'QtyRequested', type: 'string' },
+                                                                        { name: 'QtySupplied', type: 'int' },
+                                                                        { name: 'QtyOutstanding', type: 'string' },
+                                                                        { name: 'justification', type: 'string' },
+                                                                        { name: 'financialYear', type:'string'}
+                                                                    ]),
+                                                                    sortInfo: {
+                                                                        field: 'Id',
+                                                                        direction: 'ASC'
+                                                                    },
+                                                                    groupField: 'itemName'
+                                                                }),
+                                                                columns: [
+                                                                    { id: 'Id', header: 'ID', width: 25, hidden: true, sortable: true, dataIndex: 'Id' },
+                                                                    { id: 'itemName', header: 'Product', width: 150, hidden: false, sortable: true, dataIndex: 'itemName' },
+                                                                    { id: 'capexCategory', header: 'Category', width: 100, hidden: true, sortable: true, dataIndex: 'capexCategory' },
+                                                                    { id: 'QtyRequested', header: 'Qty Requested', width: 100, hidden: true, sortable: true, dataIndex: 'QtyRequested' },
+                                                                    {
+                                                                        id: 'QtySupplied', header: 'Qty Supplied', width: 80, hidden: false, sortable: true, dataIndex: 'QtySupplied'
+                                                                    },
+                                                                    {
+                                                                        id: 'QtyOutstanding', header: 'Qty Outstanding', width: 150, hidden: false, sortable: false, dataIndex: 'QtyOutstanding'
+                                                                    },
+                                                                    {
+                                                                        id: 'justification', header: 'Justification', width: 120, hidden: false, sortable: false, dataIndex: 'justification'
+                                                                    },                                                                   
+                                                                    {
+                                                                        id: 'financialYear', header: 'Deadline', width: 120, hidden: false, sortable: false, dataIndex: 'financialYear'
+                                                                    }
+                                                                ],
+                                                                stripeRows: true
+                                                            })
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
                         ]
                     }
                 ]

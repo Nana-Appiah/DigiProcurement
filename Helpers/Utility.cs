@@ -459,6 +459,7 @@ namespace DigiProc.Helpers
                     product.ProductMaximumStock = (int)item.MaxStockLevel;
                     product.ProductDescription = item.ItemDescription;
                     product.SIUnit = new StandardUnit { }.get(config, (int)item.SIUnitID);
+                    product.ProductCategoryId = (int)item.ItemCategoryID;
                 }
 
                 return product;
@@ -891,6 +892,8 @@ namespace DigiProc.Helpers
         public int ProductMaximumStock { get; set; }
         public string ProductDescription { get; set; }
         public StandardUnit SIUnit { get; set; }
+
+        public int ProductCategoryId { get; set; }
     }
 
     public struct VendorTypeLookup

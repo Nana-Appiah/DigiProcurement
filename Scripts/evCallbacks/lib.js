@@ -476,3 +476,17 @@ lib.returnMonthStore = function () {
     var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     return months;
 }
+
+lib.getCapexItemGrid = function (_urlString,_ID, _widget) {
+    var capex_data = [];
+    $.getJSON(_urlString, { departmentID: _ID }, function (r) {
+        if (r.status.toString() == "true") {
+            $.each(r.data, function (i, d) {
+                capex_data[i] = [d.Id, d.itemName, d.capexCategory, d.QtyRequested, d.QtySupplied, d.QtyOutstanding, d.justification, d.financialYear];
+            });
+        }
+
+        _widget.getStore().removeAll();
+        _widget.getStore().loadData(capex_data);
+    });
+}

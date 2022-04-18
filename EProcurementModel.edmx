@@ -17,6 +17,7 @@
             <PropertyRef Name="CapexID" />
           </Key>
           <Property Name="CapexID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CapexItemID" Type="int" />
           <Property Name="CapexTypeID" Type="int" />
           <Property Name="EstimatedDeadline" Type="varchar" MaxLength="50" />
           <Property Name="QuantityRequested" Type="int" />
@@ -24,6 +25,7 @@
           <Property Name="QuantityOutstanding" Type="int" />
           <Property Name="Justification" Type="varchar(max)" />
           <Property Name="FinancialYrId" Type="int" />
+          <Property Name="DId" Type="int" />
         </EntityType>
         <EntityType Name="Committee">
           <Key>
@@ -1244,6 +1246,8 @@
           <Property Name="QuantityOutstanding" Type="Int32" />
           <Property Name="Justification" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="FinancialYrId" Type="Int32" />
+          <Property Name="DId" Type="Int32" />
+          <Property Name="CapexItemID" Type="Int32" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1567,6 +1571,8 @@
           <EntitySetMapping Name="Capexes">
             <EntityTypeMapping TypeName="EProcurementDbModel.Capex">
               <MappingFragment StoreEntitySet="Capex">
+                <ScalarProperty Name="CapexItemID" ColumnName="CapexItemID" />
+                <ScalarProperty Name="DId" ColumnName="DId" />
                 <ScalarProperty Name="FinancialYrId" ColumnName="FinancialYrId" />
                 <ScalarProperty Name="Justification" ColumnName="Justification" />
                 <ScalarProperty Name="QuantityOutstanding" ColumnName="QuantityOutstanding" />

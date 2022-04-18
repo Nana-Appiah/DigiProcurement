@@ -634,5 +634,7 @@
     <Property Name="QuantityOutstanding" Type="Int32" />
     <Property Name="Justification" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
     <Property Name="FinancialYrId" Type="Int32" />
+    <Property Name="DId" Type="Int32" />
+    <Property Name="CapexItemID" Type="Int32" />
   </EntityType>
 </Schema>

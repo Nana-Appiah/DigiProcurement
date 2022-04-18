@@ -12,6 +12,7 @@
       <PropertyRef Name="CapexID" />
     </Key>
     <Property Name="CapexID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CapexItemID" Type="int" />
     <Property Name="CapexTypeID" Type="int" />
     <Property Name="EstimatedDeadline" Type="varchar" MaxLength="50" />
     <Property Name="QuantityRequested" Type="int" />
@@ -19,6 +20,7 @@
     <Property Name="QuantityOutstanding" Type="int" />
     <Property Name="Justification" Type="varchar(max)" />
     <Property Name="FinancialYrId" Type="int" />
+    <Property Name="DId" Type="int" />
   </EntityType>
   <EntityType Name="Committee">
     <Key>

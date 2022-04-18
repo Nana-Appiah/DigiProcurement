@@ -15,11 +15,13 @@ namespace DigiProc.Controllers
         {
             try
             {
+                UserSession session = (UserSession)Session["userSession"];
+                var deptObj = new Utility() { }.getDepartment(session.userDepartment.Name);
                 var finObj = new Utility() { }.getActiveFinancialYear();
                 int success = 0; int failed = 0;
                 if (_data.Length > 0)
                 {
-                    
+                    new RequisitionHelper() { }.ClearCapex(deptObj.DepartmentID);
                     var helper = new Utility();
 
                     foreach(var dt in _data)
@@ -28,23 +30,41 @@ namespace DigiProc.Controllers
                         var itemObj = helper.GetItem(int.Parse(s[0]));
                         var objCapex = new Capex() 
                         { 
-                            CapexTypeID = helper.getItemCategory(itemObj.Id).Id,
+                            CapexItemID = itemObj.Id,
+                            CapexTypeID = itemObj.ProductCategoryId,
                             QuantityRequested = int.Parse(s[3]),
+                            QuantitySupplied = 0,
+                            QuantityOutstanding = int.Parse(s[3]),
                             Justification = s[4],
                             EstimatedDeadline = s[5],
-                            FinancialYrId = finObj.FinancialYrID
+                            FinancialYrId = finObj.FinancialYrID,
+                            DId = deptObj.DepartmentID
                         };
 
                         if (new RequisitionHelper { }.SaveCapex(objCapex)) { success += 1; } else { failed += 1; }
                     }
                 }
 
-                return Json(new { status = true, data = $"CAPEX process completed;{success.ToString()}" },JsonRequestBehavior.AllowGet);
+                return Json(new { status = true, data = $"CAPEX process completed;{success.ToString()} purchase request sent for approval" },JsonRequestBehavior.AllowGet);
             }
             catch(Exception ex)
             {
                 return Json(new { status = false, error = $"error: {ex.Message}" },JsonRequestBehavior.AllowGet);
             }
         }
+
+        public JsonResult GetCapexData(int departmentID)
+        {
+            try
+            {
+                var capex_list = new RequisitionHelper() { }.GetDepartmentCapexRecords(departmentID);
+                return Json(new { status = true, data = capex_list },JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { status = false, error = $"error: {ex.Message}" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
     }
 }

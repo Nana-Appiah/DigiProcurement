@@ -34,6 +34,10 @@ public partial class Capex
 
     public Nullable<int> FinancialYrId { get; set; }
 
+    public Nullable<int> DId { get; set; }
+
+    public Nullable<int> CapexItemID { get; set; }
+
 }
 
 }

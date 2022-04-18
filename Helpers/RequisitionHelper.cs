@@ -196,6 +196,27 @@ namespace DigiProc.Helpers
 
         #region Capex
 
+        public bool ClearCapex(int _id)
+        {
+            //clears all current records of capex for the current financial year
+            try
+            {
+                var dta = config.Capexes.Where(c => c.DId == _id).ToList();
+                foreach(var d in dta)
+                {
+                    config.Capexes.Remove(d);
+                    config.SaveChanges();
+                }
+
+                return true;
+            }
+            catch(Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return false;
+            }
+        }
+
         public bool SaveCapex(Capex item)
         {
             try
@@ -212,6 +233,42 @@ namespace DigiProc.Helpers
             {
                 Debug.Print(ex.Message);
                 return false;
+            }
+        }
+
+        public List<CapexLookup> GetDepartmentCapexRecords(int dId)
+        {
+            //gets capex records for selected department
+            List<CapexLookup> records = new List<CapexLookup>();
+
+            try
+            {
+                var data = config.Capexes.Where(c => c.DId == dId).ToList();
+                if (data.Count() > 0)
+                {
+                    foreach(var d in data)
+                    {
+                        var o = new CapexLookup() { 
+                            Id = d.CapexID,
+                            itemName = new Utility() { }.GetItem((int) d.CapexItemID).ProductName,
+                            deadline = d.EstimatedDeadline,
+                            QtyRequested = (int) d.QuantityRequested,
+                            QtySupplied = (int) d.QuantitySupplied,
+                            QtyOutstanding = (int) d.QuantityOutstanding,
+                            justification = d.Justification,
+                            capexCategory = new Utility() { }.getItemCategory((int) d.CapexTypeID).nameOfCategory,
+                            financialYear = new Utility() { }.getActiveFinancialYear().FinancialYr
+                        };
+                        records.Add(o);
+                    }
+                }
+
+                return records;
+            }
+            catch(Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return records;
             }
         }
 
@@ -241,6 +298,7 @@ namespace DigiProc.Helpers
     public struct CapexLookup
     {
         public int Id { get; set; }
+        public string itemName { get; set; }
         public string capexCategory { get; set; }  //same as item category
         public string deadline { get; set; }
         public int QtyRequested { get; set; }

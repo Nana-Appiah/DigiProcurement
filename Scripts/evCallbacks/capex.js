@@ -110,7 +110,8 @@
                                                                     $.post('Capex/PostCapexData', { _data: CAPEX_LIST })
                                                                         .done(function (r) {
                                                                             if (r.status.toString() == "true") {
-
+                                                                                Ext.MessageBox.alert("CAPEX", r.data, this);
+                                                                                $('#capex-btn-clear').trigger('click');
                                                                             }
                                                                     });
 
@@ -133,9 +134,10 @@
                                     }
                                 ]
                             },
-                            {
-                                title:'Another title'
-                            }
+                            //another panel
+                            //{
+                            //    title:'Another title'
+                            //}
                         ]
                     }
                 ]

@@ -317,6 +317,8 @@
     <EntitySetMapping Name="Capexes">
       <EntityTypeMapping TypeName="EProcurementDbModel.Capex">
         <MappingFragment StoreEntitySet="Capex">
+          <ScalarProperty Name="CapexItemID" ColumnName="CapexItemID" />
+          <ScalarProperty Name="DId" ColumnName="DId" />
           <ScalarProperty Name="FinancialYrId" ColumnName="FinancialYrId" />
           <ScalarProperty Name="Justification" ColumnName="Justification" />
           <ScalarProperty Name="QuantityOutstanding" ColumnName="QuantityOutstanding" />
