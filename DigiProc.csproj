@@ -237,6 +237,9 @@
     <Compile Include="SIUnit.cs">
       <DependentUpon>EProcurementModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="sysdiagram.cs">
+      <DependentUpon>EProcurementModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="UserModule.cs">
       <DependentUpon>EProcurementModel.tt</DependentUpon>
     </Compile>
@@ -1261,6 +1264,7 @@
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\Desktop.js" />
     <Content Include="Scripts\evCallbacks\access.js" />
+    <Content Include="Scripts\evCallbacks\approval.js" />
     <Content Include="Scripts\evCallbacks\capex.js" />
     <Content Include="Scripts\evCallbacks\committee.js" />
     <Content Include="Scripts\evCallbacks\config.js" />

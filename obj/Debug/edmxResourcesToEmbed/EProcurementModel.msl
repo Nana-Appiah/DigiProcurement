@@ -84,6 +84,12 @@
     <EntitySetMapping Name="LPOes">
       <EntityTypeMapping TypeName="EProcurementDbModel.LPO">
         <MappingFragment StoreEntitySet="LPO">
+          <ScalarProperty Name="ProcurementTypeId" ColumnName="ProcurementTypeId" />
+          <ScalarProperty Name="NetAmt" ColumnName="NetAmt" />
+          <ScalarProperty Name="LPONo" ColumnName="LPONo" />
+          <ScalarProperty Name="TotAmt" ColumnName="TotAmt" />
+          <ScalarProperty Name="VendorID" ColumnName="VendorID" />
+          <ScalarProperty Name="LPOStatusID" ColumnName="LPOStatusID" />
           <ScalarProperty Name="LPOID" ColumnName="LPOID" />
           <ScalarProperty Name="RequisitionNo" ColumnName="RequisitionNo" />
           <ScalarProperty Name="VAT" ColumnName="VAT" />
@@ -142,6 +148,8 @@
     <EntitySetMapping Name="RequisitionItems">
       <EntityTypeMapping TypeName="EProcurementDbModel.RequisitionItem">
         <MappingFragment StoreEntitySet="RequisitionItem">
+          <ScalarProperty Name="LPOID" ColumnName="LPOID" />
+          <ScalarProperty Name="Amt" ColumnName="Amt" />
           <ScalarProperty Name="FinApprovalStatus" ColumnName="FinApprovalStatus" />
           <ScalarProperty Name="Narration" ColumnName="Narration" />
           <ScalarProperty Name="RequisitionItemID" ColumnName="RequisitionItemID" />
@@ -327,6 +335,17 @@
           <ScalarProperty Name="EstimatedDeadline" ColumnName="EstimatedDeadline" />
           <ScalarProperty Name="CapexTypeID" ColumnName="CapexTypeID" />
           <ScalarProperty Name="CapexID" ColumnName="CapexID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="sysdiagrams">
+      <EntityTypeMapping TypeName="EProcurementDbModel.sysdiagram">
+        <MappingFragment StoreEntitySet="sysdiagrams">
+          <ScalarProperty Name="definition" ColumnName="definition" />
+          <ScalarProperty Name="version" ColumnName="version" />
+          <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+          <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+          <ScalarProperty Name="name" ColumnName="name" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

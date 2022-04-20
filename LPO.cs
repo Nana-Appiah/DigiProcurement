@@ -18,6 +18,15 @@ using System;
 public partial class LPO
 {
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+    public LPO()
+    {
+
+        this.RequisitionItems = new HashSet<RequisitionItem>();
+
+    }
+
+
     public int LPOID { get; set; }
 
     public string RequisitionNo { get; set; }
@@ -33,6 +42,24 @@ public partial class LPO
     public string PaymentTerm { get; set; }
 
     public string OtherTermsAndConditions { get; set; }
+
+    public Nullable<int> LPOStatusID { get; set; }
+
+    public Nullable<int> VendorID { get; set; }
+
+    public Nullable<decimal> TotAmt { get; set; }
+
+    public string LPONo { get; set; }
+
+    public Nullable<decimal> NetAmt { get; set; }
+
+    public Nullable<int> ProcurementTypeId { get; set; }
+
+
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+
+    public virtual ICollection<RequisitionItem> RequisitionItems { get; set; }
 
 }
 

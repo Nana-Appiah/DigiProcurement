@@ -103,7 +103,9 @@ namespace DigiProc.Helpers
                     {
                         var o = new RequisitionLookup() { 
                             Id = d.RequisitionID,
-                            RequisitionNo = d.RequisitionNo
+                            RequisitionNo = d.RequisitionNo,
+                            Requestee = d.RequestedBy,
+                            priority = new Utility() { }.GetPriority(d.PriorityID).PriorityDescription
                         };
 
                         list.Add(o);
@@ -156,13 +158,13 @@ namespace DigiProc.Helpers
             }
         }
 
-        public List<RequisitionItemLookup> GetRequisitionItemLookups(int reqId)
+        public List<RequisitionItemLookup> GetRequisitionItemLookups(int reqId, int statusId)
         {
             //use requisitionId to fetch requisition items
             List<RequisitionItemLookup> rqitems = new List<RequisitionItemLookup>();
             try
             {
-                var dta = config.RequisitionItems.Where(rq => rq.RequisitionID == reqId).ToList();
+                var dta = config.RequisitionItems.Where(rq => rq.RequisitionID == reqId).Where(r => r.FinApprovalStatus == statusId).ToList();
                 if (dta.Count() > 0)
                 {
                     foreach(var d in dta)
@@ -188,6 +190,40 @@ namespace DigiProc.Helpers
             }
         }
 
+        public List<RequisitionItemLookup> GetRequisitionItemLookups(int LPO_ID)
+        {
+            //use requisitionId to fetch requisition items
+            List<RequisitionItemLookup> rqitems = new List<RequisitionItemLookup>();
+            try
+            {
+                var dta = config.RequisitionItems.Where(rq => rq.LPOID == LPO_ID).ToList();
+                if (dta.Count() > 0)
+                {
+                    foreach (var d in dta)
+                    {
+                        var o = new RequisitionItemLookup()
+                        {
+                            Id = d.RequisitionItemID,
+                            RequisitionId = (int)d.RequisitionID,
+                            item = new Utility { }.GetItem((int)d.ItemID),
+                            Quantity = (int)d.Quantity,
+                            narration = d.Narration,
+                            amt = d.Amt
+                        };
+
+                        rqitems.Add(o);
+                    }
+                }
+
+                return rqitems;
+            }
+            catch (Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return rqitems;
+            }
+        }
+
         public bool ApproveRequisitionItem(int _id,int _statusId)
         {
             //method is responsible for the approval of a requisition item
@@ -207,6 +243,178 @@ namespace DigiProc.Helpers
             {
                 Debug.Print(ex.Message);
                 return false;
+            }
+        }
+
+        public bool UpdateRequisitionItem(RequisitionItem item)
+        {
+            //method updates requisition item
+            try
+            {
+                var obj = config.RequisitionItems.Where(r => r.RequisitionItemID == item.RequisitionItemID).FirstOrDefault();
+                if (obj != null)
+                {
+                    obj.Amt = item.Amt;
+                    obj.FinApprovalStatus = item.FinApprovalStatus;
+                    obj.LPOID = item.LPOID;
+
+                    config.SaveChanges();
+                    return true;
+                }
+                else { return false; }
+            }
+            catch(Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return false;
+            }
+        }
+
+        #endregion
+
+        #region Local Purchase Order - LPO
+
+        public bool SaveLocalPurchaseOrder(LPO item)
+        {
+            try
+            {
+                if (item.LPOID == 0)
+                {
+                    config.LPOes.Add(item);
+                    config.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    var obj = config.LPOes.Where(x => x.LPOID == item.LPOID).FirstOrDefault();
+                    obj.VAT = item.VAT;
+                    obj.PurchaseOrderDate = item.PurchaseOrderDate;
+                    obj.ExpectedDeliveryDate = item.ExpectedDeliveryDate;
+                    obj.ShippingAddress = item.ShippingAddress;
+                    obj.PaymentTerm = item.PaymentTerm;
+                    obj.OtherTermsAndConditions = item.OtherTermsAndConditions;
+                    obj.LPOStatusID = item.LPOStatusID;
+                    obj.NetAmt = (obj.TotAmt - (obj.VAT / 100));
+                    obj.ProcurementTypeId = item.ProcurementTypeId;
+
+                    config.SaveChanges();
+                    return true;
+                }
+            }
+            catch(Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return false;
+            }
+        }
+
+        public int SaveLPO(LPO item)
+        {
+            try
+            {
+                config.LPOes.Add(item);
+                config.SaveChanges();
+                return item.LPOID;
+            }
+            catch (Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return 0;
+            }
+        }
+
+        public List<LocalPurchaseOrderLookup> GetLocalPurchaseOrders()
+        {
+            //get all local purchase orders
+            List<LocalPurchaseOrderLookup> purchase_orders = new List<LocalPurchaseOrderLookup>();
+
+            try
+            {
+                var dta = config.LPOes.ToList();
+                if (dta.Count() > 0)
+                {
+                    foreach(var d in dta)
+                    {
+                        var obj = new LocalPurchaseOrderLookup() 
+                        { 
+                            Id = d.LPOID,
+                            requisitionNumber = d.RequisitionNo,
+                            nameOfVendor = new Utility() { }.GetVendor(d.VendorID).VendorName,
+                            statusOfLPO = new Utility() { }.GetRequisitionStatus(d.LPOStatusID).RequisitionStatusDesc,
+                            LPOTotalAmount = (decimal) d.TotAmt,
+                            LPONumber = d.LPONo
+                        };
+
+                        purchase_orders.Add(obj);
+                    }
+                }
+
+                return purchase_orders;
+            }
+            catch(Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return purchase_orders;
+            }
+        }
+
+        public List<LocalPurchaseOrderLookup> GetDistinctLPORequisitionNumbers()
+        {
+            List<LocalPurchaseOrderLookup> retString = new List<LocalPurchaseOrderLookup>();
+            try
+            {
+                var _values = config.LPOes.Select(m => m.LPONo).Distinct().ToList();
+                //var _values = config.LPOes.ToList();
+                if (_values.Count() > 0)
+                {
+                    foreach(var v in _values)
+                    {
+                        var o = new LocalPurchaseOrderLookup() { requisitionNumber = v };
+                        retString.Add(o);
+                    }
+                }
+
+                return retString;
+            }
+            catch(Exception x)
+            {
+                Debug.Print(x.Message);
+                return retString;
+            }
+        }
+
+        public string GetLPOCount(string LPORef)
+        {
+            try
+            {
+                var n = config.LPOes.Select(m => m.LPONo == LPORef).Count();
+                var retString = formatNumber(n + 1);
+                return string.Format("{0}-{1}", LPORef, retString);
+            }
+            catch(Exception e)
+            {
+                Debug.Print(e.Message);
+                return string.Empty;
+            }
+        }
+
+        private string formatNumber(int n)
+        {
+            var str = n.ToString();
+            if (str.Length == 1)
+            {
+                return string.Format("{0}{1}", @"000", n.ToString());
+            }else if (str.Length == 2)
+            {
+                return string.Format("{0}{1}", @"00", n.ToString());
+            }
+            else if(str.Length == 3)
+            {
+                return string.Format("{0}{1}", @"0", n.ToString());
+            }
+            else
+            {
+                return string.Format("{0}", n.ToString());
             }
         }
 
@@ -311,6 +519,10 @@ namespace DigiProc.Helpers
         public Product item { get; set; }
         public int Quantity { get; set; }
         public string narration { get; set; }
+
+        public string status { get; set; }
+        public decimal? amt { get; set; }
+        public int? LPo_id { get; set; }
     }
 
     public struct CapexLookup
@@ -324,6 +536,17 @@ namespace DigiProc.Helpers
         public int QtyOutstanding { get; set; }
         public string justification { get; set; }
         public string financialYear { get; set; }
+    }
+
+    public struct LocalPurchaseOrderLookup
+    {
+        public int Id { get; set; }
+        public string requisitionNumber { get; set; }
+        public string nameOfVendor { get; set; }
+        public string statusOfLPO { get; set; }
+        public decimal LPOTotalAmount { get; set; }
+        public string LPONumber { get; set; }
+
     }
 
 }

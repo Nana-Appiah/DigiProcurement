@@ -15,6 +15,9 @@ namespace DigiProc.Helpers
         bool AddCommitteeMember();
         bool AddNotifier();
 
+        ProcessFlow GetProcessFlow(int _procurement_type_id);
+        ProcessFlowList GetProcessFlowList(int _processflowID);
+
     }
     public class PFHelper: IPFHelper
     {
@@ -27,6 +30,61 @@ namespace DigiProc.Helpers
         public CommitteeMember oCommitteeMember { get; set; }
         public Position oPosition { get; set; }
         public NotificationList oNotifier { get; set; }
+
+        public ProcessFlow oProcessFlow { get; set; }
+
+        public ProcessFlowList oProcessFlowList { get; set; }
+
+        public ProcessFlow GetProcessFlow(int _procurement_type_id)
+        {
+            ProcessFlow pf = null;
+
+            try
+            {
+                this.oProcessFlow = config.ProcessFlows.Where(p => p.ProcurementTypeId == _procurement_type_id).FirstOrDefault();
+                if (this.oProcessFlow != null)
+                {
+                    pf = new ProcessFlow() {
+                        ProcessFlowID = this.oProcessFlow.ProcessFlowID,
+                        ProcurementTypeId = this.oProcessFlow.ProcurementTypeId,
+                        Limit = this.oProcessFlow.Limit,
+                        ProcessFlowOrder = this.oProcessFlow.ProcessFlowOrder,
+                    }; 
+                }
+
+                return pf;
+            }
+            catch(Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return pf;
+            }
+        }
+
+        public ProcessFlowList GetProcessFlowList(int _processflowID)
+        {
+            ProcessFlowList pfl = null;
+
+            try
+            {
+                this.oProcessFlowList = config.ProcessFlowLists.Where(x => x.ProcessFlowID == _processflowID).FirstOrDefault();
+                if (this.oProcessFlowList != null)
+                {
+                    pfl = new ProcessFlowList() {
+                        ProcessFlowListID = this.oProcessFlowList.ProcessFlowListID,
+                        ProcessFlowID = this.oProcessFlowList.ProcessFlowID,
+                        Flow = this.oProcessFlowList.Flow
+                    };
+                }
+
+                return pfl;
+            }
+            catch(Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return pfl;
+            }
+        }
 
         #endregion
 
@@ -144,5 +202,14 @@ namespace DigiProc.Helpers
 
         #endregion
 
+
+
     }
+
+    public struct GenericLookup
+    {
+        public int Id { get; set; }
+        public string value { get; set; }
+    }
+
 }

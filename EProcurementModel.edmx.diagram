@@ -51,6 +51,8 @@
         <AssociationConnector Association="EProcurementDbModel.FK_ProcessFlow_ProcurementType" />
         <EntityTypeShape EntityType="EProcurementDbModel.ProcessFlowList" Width="1.5" PointX="15.375" PointY="0.75" />
         <EntityTypeShape EntityType="EProcurementDbModel.Capex" Width="2" PointX="11.375" PointY="15.75" />
+        <EntityTypeShape EntityType="EProcurementDbModel.sysdiagram" Width="1.5" PointX="14.375" PointY="15.75" />
+        <AssociationConnector Association="EProcurementDbModel.FK_RequisitionItem_LPO" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

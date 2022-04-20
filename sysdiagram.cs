@@ -15,28 +15,18 @@ namespace DigiProc
 using System;
     using System.Collections.Generic;
     
-public partial class RequisitionItem
+public partial class sysdiagram
 {
 
-    public int RequisitionItemID { get; set; }
+    public string name { get; set; }
 
-    public Nullable<int> RequisitionID { get; set; }
+    public int principal_id { get; set; }
 
-    public Nullable<int> ItemID { get; set; }
+    public int diagram_id { get; set; }
 
-    public Nullable<int> Quantity { get; set; }
+    public Nullable<int> version { get; set; }
 
-    public string Narration { get; set; }
-
-    public Nullable<int> FinApprovalStatus { get; set; }
-
-    public Nullable<decimal> Amt { get; set; }
-
-    public Nullable<int> LPOID { get; set; }
-
-
-
-    public virtual LPO LPO { get; set; }
+    public byte[] definition { get; set; }
 
 }
 

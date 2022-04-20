@@ -90,6 +90,8 @@ public partial class ProcurementDbEntities : DbContext
 
     public virtual DbSet<Capex> Capexes { get; set; }
 
+    public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
+
 }
 
 }

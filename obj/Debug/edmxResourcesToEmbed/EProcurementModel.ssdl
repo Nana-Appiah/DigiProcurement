@@ -116,12 +116,18 @@
     </Key>
     <Property Name="LPOID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="RequisitionNo" Type="varchar" MaxLength="50" />
+    <Property Name="VendorID" Type="int" />
     <Property Name="VAT" Type="numeric" Precision="9" Scale="2" />
     <Property Name="PurchaseOrderDate" Type="date" />
     <Property Name="ExpectedDeliveryDate" Type="date" />
     <Property Name="ShippingAddress" Type="varchar" MaxLength="200" />
     <Property Name="PaymentTerm" Type="varchar" MaxLength="50" />
     <Property Name="OtherTermsAndConditions" Type="varchar" MaxLength="200" />
+    <Property Name="LPOStatusID" Type="int" />
+    <Property Name="TotAmt" Type="numeric" Precision="18" Scale="2" />
+    <Property Name="NetAmt" Type="numeric" Precision="18" Scale="2" />
+    <Property Name="LPONo" Type="varchar" MaxLength="50" />
+    <Property Name="ProcurementTypeId" Type="int" />
   </EntityType>
   <EntityType Name="Module">
     <Key>
@@ -233,6 +239,8 @@
     <Property Name="Quantity" Type="int" />
     <Property Name="Narration" Type="varchar" MaxLength="50" />
     <Property Name="FinApprovalStatus" Type="int" />
+    <Property Name="Amt" Type="numeric" Precision="18" Scale="2" />
+    <Property Name="LPOID" Type="int" />
   </EntityType>
   <EntityType Name="RequisitionStatus">
     <Key>
@@ -256,6 +264,16 @@
     <Property Name="SIUnitID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Metric" Type="varchar" MaxLength="50" />
     <Property Name="Measurement" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
   </EntityType>
   <EntityType Name="UserModule">
     <Key>
@@ -468,6 +486,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_RequisitionItem_LPO">
+    <End Role="LPO" Type="Self.LPO" Multiplicity="0..1" />
+    <End Role="RequisitionItem" Type="Self.RequisitionItem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LPO">
+        <PropertyRef Name="LPOID" />
+      </Principal>
+      <Dependent Role="RequisitionItem">
+        <PropertyRef Name="LPOID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_UserModule_Module">
     <End Role="Module" Type="Self.Module" Multiplicity="0..1" />
     <End Role="UserModule" Type="Self.UserModule" Multiplicity="*" />
@@ -531,6 +561,7 @@
     <EntitySet Name="RequisitionStatus" EntityType="Self.RequisitionStatus" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RequisitionType" EntityType="Self.RequisitionType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SIUnit" EntityType="Self.SIUnit" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserModule" EntityType="Self.UserModule" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Vendor" EntityType="Self.Vendor" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="VendorType" EntityType="Self.VendorType" Schema="dbo" store:Type="Tables" />
@@ -589,6 +620,10 @@
     <AssociationSet Name="FK_Requisition_RequisitionType" Association="Self.FK_Requisition_RequisitionType">
       <End Role="RequisitionType" EntitySet="RequisitionType" />
       <End Role="Requisition" EntitySet="Requisition" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RequisitionItem_LPO" Association="Self.FK_RequisitionItem_LPO">
+      <End Role="LPO" EntitySet="LPO" />
+      <End Role="RequisitionItem" EntitySet="RequisitionItem" />
     </AssociationSet>
     <AssociationSet Name="FK_UserModule_Module" Association="Self.FK_UserModule_Module">
       <End Role="Module" EntitySet="Module" />

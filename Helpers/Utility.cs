@@ -773,6 +773,21 @@ namespace DigiProc.Helpers
             }
         }
 
+        public RequisitionStatu GetRequisitionStatus(int? id)
+        {
+            RequisitionStatu obj = null;
+            try
+            {
+                obj = config.RequisitionStatus.Where(r => r.RequisitionStatusID == id).FirstOrDefault();
+                return obj;
+            }
+            catch (Exception x)
+            {
+                Debug.Print(x.Message);
+                return obj;
+            }
+        }
+
         #endregion
 
         #region Vendor-List
@@ -810,6 +825,56 @@ namespace DigiProc.Helpers
             {
                 Debug.Print(ex.Message);
                 return vendor_list;
+            }
+        }
+
+        public Vendor GetVendor(int? vendorID)
+        {
+            //gets a vendor using vendor id
+            Vendor obj = null;
+
+            try
+            {
+                obj = config.Vendors.Where(v => v.VendorID == vendorID).FirstOrDefault();
+                return obj;
+            }
+            catch(Exception e)
+            {
+                Debug.Print(e.Message);
+                return obj;
+            }
+        }
+
+        #endregion
+
+        #region Procurement-Type
+
+        public List<ProcurementType> GetProcurementTypes()
+        {
+            //method gets procurement types from the data store
+            List<ProcurementType> procurement_types = new List<ProcurementType>();
+            try
+            {
+                var dta = config.ProcurementTypes.ToList();
+                if (dta.Count() > 0)
+                {
+                    foreach(var d in dta)
+                    {
+                        var p = new ProcurementType() { 
+                            ProcurementTypeID = d.ProcurementTypeID,
+                            ProcurementDescription = d.ProcurementDescription
+                        };
+
+                        procurement_types.Add(p);
+                    }
+                }
+
+                return procurement_types;
+            }
+            catch(Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return procurement_types;
             }
         }
 

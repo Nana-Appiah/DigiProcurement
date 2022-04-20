@@ -121,12 +121,18 @@
           </Key>
           <Property Name="LPOID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="RequisitionNo" Type="varchar" MaxLength="50" />
+          <Property Name="VendorID" Type="int" />
           <Property Name="VAT" Type="numeric" Precision="9" Scale="2" />
           <Property Name="PurchaseOrderDate" Type="date" />
           <Property Name="ExpectedDeliveryDate" Type="date" />
           <Property Name="ShippingAddress" Type="varchar" MaxLength="200" />
           <Property Name="PaymentTerm" Type="varchar" MaxLength="50" />
           <Property Name="OtherTermsAndConditions" Type="varchar" MaxLength="200" />
+          <Property Name="LPOStatusID" Type="int" />
+          <Property Name="TotAmt" Type="numeric" Precision="18" Scale="2" />
+          <Property Name="NetAmt" Type="numeric" Precision="18" Scale="2" />
+          <Property Name="LPONo" Type="varchar" MaxLength="50" />
+          <Property Name="ProcurementTypeId" Type="int" />
         </EntityType>
         <EntityType Name="Module">
           <Key>
@@ -238,6 +244,8 @@
           <Property Name="Quantity" Type="int" />
           <Property Name="Narration" Type="varchar" MaxLength="50" />
           <Property Name="FinApprovalStatus" Type="int" />
+          <Property Name="Amt" Type="numeric" Precision="18" Scale="2" />
+          <Property Name="LPOID" Type="int" />
         </EntityType>
         <EntityType Name="RequisitionStatus">
           <Key>
@@ -261,6 +269,16 @@
           <Property Name="SIUnitID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Metric" Type="varchar" MaxLength="50" />
           <Property Name="Measurement" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
         <EntityType Name="UserModule">
           <Key>
@@ -473,6 +491,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_RequisitionItem_LPO">
+          <End Role="LPO" Type="Self.LPO" Multiplicity="0..1" />
+          <End Role="RequisitionItem" Type="Self.RequisitionItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LPO">
+              <PropertyRef Name="LPOID" />
+            </Principal>
+            <Dependent Role="RequisitionItem">
+              <PropertyRef Name="LPOID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_UserModule_Module">
           <End Role="Module" Type="Self.Module" Multiplicity="0..1" />
           <End Role="UserModule" Type="Self.UserModule" Multiplicity="*" />
@@ -536,6 +566,7 @@
           <EntitySet Name="RequisitionStatus" EntityType="Self.RequisitionStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RequisitionType" EntityType="Self.RequisitionType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SIUnit" EntityType="Self.SIUnit" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserModule" EntityType="Self.UserModule" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Vendor" EntityType="Self.Vendor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VendorType" EntityType="Self.VendorType" Schema="dbo" store:Type="Tables" />
@@ -594,6 +625,10 @@
           <AssociationSet Name="FK_Requisition_RequisitionType" Association="Self.FK_Requisition_RequisitionType">
             <End Role="RequisitionType" EntitySet="RequisitionType" />
             <End Role="Requisition" EntitySet="Requisition" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RequisitionItem_LPO" Association="Self.FK_RequisitionItem_LPO">
+            <End Role="LPO" EntitySet="LPO" />
+            <End Role="RequisitionItem" EntitySet="RequisitionItem" />
           </AssociationSet>
           <AssociationSet Name="FK_UserModule_Module" Association="Self.FK_UserModule_Module">
             <End Role="Module" EntitySet="Module" />
@@ -705,6 +740,13 @@
           <Property Name="ShippingAddress" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="PaymentTerm" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="OtherTermsAndConditions" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="LPOStatusID" Type="Int32" />
+          <NavigationProperty Name="RequisitionItems" Relationship="EProcurementDbModel.FK_RequisitionItem_LPO" FromRole="LPO" ToRole="RequisitionItem" />
+          <Property Name="VendorID" Type="Int32" />
+          <Property Name="TotAmt" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="LPONo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="NetAmt" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ProcurementTypeId" Type="Int32" />
         </EntityType>
         <EntityType Name="Module">
           <Key>
@@ -766,6 +808,9 @@
           <Property Name="Quantity" Type="Int32" />
           <Property Name="Narration" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="FinApprovalStatus" Type="Int32" />
+          <Property Name="Amt" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="LPOID" Type="Int32" />
+          <NavigationProperty Name="LPO" Relationship="EProcurementDbModel.FK_RequisitionItem_LPO" FromRole="RequisitionItem" ToRole="LPO" />
         </EntityType>
         <EntityType Name="RequisitionStatu">
           <Key>
@@ -1046,6 +1091,11 @@
           </AssociationSet>
           <EntitySet Name="ProcessFlowLists" EntityType="EProcurementDbModel.ProcessFlowList" />
           <EntitySet Name="Capexes" EntityType="EProcurementDbModel.Capex" />
+          <EntitySet Name="sysdiagrams" EntityType="EProcurementDbModel.sysdiagram" />
+          <AssociationSet Name="FK_RequisitionItem_LPO" Association="EProcurementDbModel.FK_RequisitionItem_LPO">
+            <End Role="LPO" EntitySet="LPOes" />
+            <End Role="RequisitionItem" EntitySet="RequisitionItems" />
+          </AssociationSet>
         </EntityContainer>
         <Association Name="FK_UserModule_Module">
           <End Type="EProcurementDbModel.Module" Role="Module" Multiplicity="0..1" />
@@ -1249,6 +1299,28 @@
           <Property Name="DId" Type="Int32" />
           <Property Name="CapexItemID" Type="Int32" />
         </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK_RequisitionItem_LPO">
+          <End Type="EProcurementDbModel.LPO" Role="LPO" Multiplicity="0..1" />
+          <End Type="EProcurementDbModel.RequisitionItem" Role="RequisitionItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LPO">
+              <PropertyRef Name="LPOID" />
+            </Principal>
+            <Dependent Role="RequisitionItem">
+              <PropertyRef Name="LPOID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1338,6 +1410,12 @@
           <EntitySetMapping Name="LPOes">
             <EntityTypeMapping TypeName="EProcurementDbModel.LPO">
               <MappingFragment StoreEntitySet="LPO">
+                <ScalarProperty Name="ProcurementTypeId" ColumnName="ProcurementTypeId" />
+                <ScalarProperty Name="NetAmt" ColumnName="NetAmt" />
+                <ScalarProperty Name="LPONo" ColumnName="LPONo" />
+                <ScalarProperty Name="TotAmt" ColumnName="TotAmt" />
+                <ScalarProperty Name="VendorID" ColumnName="VendorID" />
+                <ScalarProperty Name="LPOStatusID" ColumnName="LPOStatusID" />
                 <ScalarProperty Name="LPOID" ColumnName="LPOID" />
                 <ScalarProperty Name="RequisitionNo" ColumnName="RequisitionNo" />
                 <ScalarProperty Name="VAT" ColumnName="VAT" />
@@ -1396,6 +1474,8 @@
           <EntitySetMapping Name="RequisitionItems">
             <EntityTypeMapping TypeName="EProcurementDbModel.RequisitionItem">
               <MappingFragment StoreEntitySet="RequisitionItem">
+                <ScalarProperty Name="LPOID" ColumnName="LPOID" />
+                <ScalarProperty Name="Amt" ColumnName="Amt" />
                 <ScalarProperty Name="FinApprovalStatus" ColumnName="FinApprovalStatus" />
                 <ScalarProperty Name="Narration" ColumnName="Narration" />
                 <ScalarProperty Name="RequisitionItemID" ColumnName="RequisitionItemID" />
@@ -1581,6 +1661,17 @@
                 <ScalarProperty Name="EstimatedDeadline" ColumnName="EstimatedDeadline" />
                 <ScalarProperty Name="CapexTypeID" ColumnName="CapexTypeID" />
                 <ScalarProperty Name="CapexID" ColumnName="CapexID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="EProcurementDbModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

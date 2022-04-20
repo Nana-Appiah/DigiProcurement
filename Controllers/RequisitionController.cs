@@ -138,11 +138,11 @@ namespace DigiProc.Controllers
     
     
         [HttpGet]
-        public JsonResult GetRequisitionItemList(int requisitionID)
+        public JsonResult GetRequisitionItemList(int requisitionID, int statusID)
         {
             try
             {
-                var requisition_items = new RequisitionHelper() { }.GetRequisitionItemLookups(requisitionID);
+                var requisition_items = new RequisitionHelper() { }.GetRequisitionItemLookups(requisitionID, statusID);
                 return Json(new { status = true, data = requisition_items },JsonRequestBehavior.AllowGet);
             }
             catch(Exception exc)
@@ -151,6 +151,20 @@ namespace DigiProc.Controllers
             }
         }
     
+        [HttpGet]
+        public JsonResult GetRequisitionItemListUsingLPO(int LocalPONumber)
+        {
+            try
+            {
+                var requisition_items = new RequisitionHelper { }.GetRequisitionItemLookups(LocalPONumber);
+                return Json(new { status = true, data = requisition_items },JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception ex)
+            {
+                return Json(new { status = false, data = $"error: {ex.Message}" },JsonRequestBehavior.AllowGet);
+            }
+        }
+
         [HttpPost]        
         public JsonResult ApproveRequisition(string[] dta)
         {
@@ -175,10 +189,132 @@ namespace DigiProc.Controllers
                         if (bln) { success += 1; } else { failed += 1; }
                     }
 
-                    if (success == dta.Length) { new RequisitionHelper { }.ChangeRequisitionStatus(req_id, 2); }
+                    //if (success == dta.Length) { new RequisitionHelper { }.ChangeRequisitionStatus(req_id, 2); }
                 }
 
                 return Json(new { status = bln, data = $"{success.ToString()} requisition items approved" },JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception ex)
+            {
+                return Json(new { status = false, error = $"error: {ex.Message}" },JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult CreateLPORecord(string rNo, int vID, int LPOStatus,int finStatusId,decimal totAmt, string[] dta)
+        {
+            try
+            {
+                var helper = new RequisitionHelper { };
+                bool blnSuccess = false;
+
+                //update requisition items
+                if (dta.Length > 0)
+                {
+                    int success = 0; int failed = 0;
+
+                    var LPONum = new RequisitionHelper() { }.GetLPOCount(rNo.Replace("REQN", "LPO"));
+                    
+                    var objPurchaseOrder = new LPO() { RequisitionNo = rNo, VendorID = vID, LPOStatusID = LPOStatus, TotAmt = totAmt, LPONo = LPONum };
+                    int _id = helper.SaveLPO(objPurchaseOrder);
+
+                    if (_id > 0)
+                    {
+                        foreach (var d in dta)
+                        {
+                            var str = d.Split(',');
+                            var rq = new RequisitionItem() { RequisitionItemID = int.Parse(str[0]), Amt = decimal.Parse(str[1]),FinApprovalStatus = finStatusId, LPOID = _id };
+
+                            blnSuccess = helper.UpdateRequisitionItem(rq);
+                            if (blnSuccess) { success += 1; } else { failed += 1; }
+                        }
+                    }
+                }
+
+                return Json(new { status = blnSuccess, data = $"Local Purchasing Order record created for {dta.Length.ToString()} items" },JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception ex)
+            {
+                return Json(new { status = false, data = $"error: {ex.Message}" },JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpGet]
+        public JsonResult GetLPOs()
+        {
+            //gets distinct LPOs
+            try
+            {
+                //var POs = new RequisitionHelper { }.GetDistinctLPORequisitionNumbers();
+                var POs = new RequisitionHelper { }.GetLocalPurchaseOrders();
+                return Json(new { status = true, data = POs },JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception ex)
+            {
+                return Json(new { status = false, error = $"error: {ex.Message}" },JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        //public JsonResult CreateLocalPurchasingOrder(int _id, string vat,DateTime pdate, DateTime expdate, string shipping, string payment, string terms)
+        public JsonResult CreateLocalPurchasingOrder(string _value)
+        {
+            try
+            {
+                var obj = new LPO() { };
+
+                var _values = _value.Split(',');
+
+                obj.LPOID = int.Parse(_values[0]);
+                obj.VAT = decimal.Parse(_values[1]);
+                obj.PurchaseOrderDate = DateTime.ParseExact(_values[2],"dd-MM-yyyy", null);
+                obj.ExpectedDeliveryDate = DateTime.ParseExact(_values[3], "dd-MM-yyyy", null);
+                obj.ShippingAddress = _values[4];
+                obj.PaymentTerm = _values[5];
+                obj.OtherTermsAndConditions = _values[6];
+                obj.ProcurementTypeId = int.Parse(_values[8]);
+                obj.LPOStatusID = 6; //LPO Generated
+
+                var bln = new RequisitionHelper { }.SaveLocalPurchaseOrder(obj);
+                return Json(new { status = bln, data = obj },JsonRequestBehavior.AllowGet);  
+            }
+            catch(Exception ex)
+            {
+                return Json(new { status = false, error = $"error: {ex.Message}" },JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpGet]
+        public JsonResult GetProcessFlowDetails(int _procurement_type_id)
+        {
+            //uses procurement type id to fetch threshold amount, and the list of personnel to authorize procurement
+            try
+            {
+                var pfObj = new PFHelper() { }.GetProcessFlow(_procurement_type_id);
+                ProcessFlowList pfl = null;
+                List<GenericLookup> nameList = new List<GenericLookup>();
+
+                if (pfObj != null)
+                {
+                    //get process flow list using processflowid
+                    pfl = new PFHelper() { }.GetProcessFlowList(pfObj.ProcessFlowID);
+                    string[] str = pfl.Flow.Split('|');
+
+                    //iteration
+                    int k = 1;
+                    foreach(var s in str)
+                    {
+                        var postBody = new GenericLookup { 
+                            Id = k,
+                            value = s
+                        };
+
+                        nameList.Add(postBody);
+                    }
+
+                    return Json(new { status = true, data = nameList, limit = pfObj.Limit },JsonRequestBehavior.AllowGet);
+                }
+                else { return Json(new { status = false, data=@"no data" },JsonRequestBehavior.AllowGet); }
             }
             catch(Exception ex)
             {

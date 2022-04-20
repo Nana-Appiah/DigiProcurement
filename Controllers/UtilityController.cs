@@ -219,5 +219,23 @@ namespace DigiProc.Controllers
 
         #endregion
 
+        #region Procurement-Type
+
+        [HttpGet]
+        public JsonResult GetProcurementTypes()
+        {
+            try
+            {
+                var procurement_type_list = new Utility { }.GetProcurementTypes();
+                return Json(new { status = true, data = procurement_type_list }, JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception ex)
+            {
+                return Json(new { status = false, error = $"error = {ex.Message}" },JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        #endregion
+
     }
 }

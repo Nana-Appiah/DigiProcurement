@@ -74,7 +74,7 @@
                                                                         var record = e.getStore().getAt(t);
                                                                         REQUISITION_ID = record.get('Id');
                                                                         lib.returnRequistionDetails('Requisition/GetRequisitionDetails', REQUISITION_ID, $('#rno'), $('#requestee'), $('#dept'), $('#priority'));
-                                                                        lib.getItemGridGivenRequisitionID('Requisition/GetRequisitionItemList', REQUISITION_ID, Ext.getCmp('fnReqItemsGrid'));
+                                                                        lib.getItemGridGivenRequisitionID('Requisition/GetRequisitionItemList', REQUISITION_ID,1, Ext.getCmp('fnReqItemsGrid'));
                                                                     }
                                                                 }
                                                             })

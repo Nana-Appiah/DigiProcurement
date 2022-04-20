@@ -206,15 +206,30 @@ lib.returnItemStore = function (_urlString) {
     return item_store;
 }
 
-lib.getItemGridGivenRequisitionID = function (_URL,_ID, controlRef) {
+lib.getItemGridGivenRequisitionID = function (_URL,_ID,_stat, controlRef) {
     var dta = [];
-    $.getJSON(_URL, { requisitionID: _ID }, function (res) {
+    $.getJSON(_URL, { requisitionID: _ID, statusID: _stat }, function (res) {
         if (res.status.toString() == "true") {
             $.each(res.data, function (i, d) {
                 dta[i] = [d.Id, d.RequisitionId, d.item.ProductCode, d.item.ProductName, d.Quantity, d.narration];
             });
 
+            controlRef.getStore().removeAll();
             controlRef.getStore().loadData(dta);
+        }
+    });
+}
+
+lib.returnItemGridGivenLPONumber = function (_urlString, _ID, _widget) {
+    var dta = [];
+    $.getJSON(_urlString, { LocalPONumber: _ID }, function (res) {
+        if (res.status.toString() == "true") {
+            $.each(res.data, function (i, d) {
+                dta[i] = [d.Id, d.RequisitionId, d.item.ProductCode, d.item.ProductName, d.Quantity, d.narration, d.amt];
+            });
+
+            _widget.getStore().removeAll();
+            _widget.getStore().loadData(dta);
         }
     });
 }
@@ -432,6 +447,19 @@ lib.returnVendorGrid = function (_urlString, _widget) {
     });
 }
 
+lib.returnVendorStore = function (_urlString) {
+    var vendor_store = new Ext.data.Store({
+        autoLoad: true, restful: false,
+        url: _urlString,
+        reader: new Ext.data.JsonReader({ type: 'json', root: 'data' }, [
+            { name: 'VendorID', type: 'int' },
+            { name: 'VendorName', type:'string'}
+        ])
+    });
+
+    return vendor_store;
+}
+
 //Financial Controller
 lib.returnDepartmentStore = function (_urlString) {
     var department_store = new Ext.data.Store({
@@ -451,7 +479,7 @@ lib.returnRequisitionNumbersGrid = function (_urlString,_status,ID, _widget) {
     $.getJSON(_urlString, { departmentID: ID, statusID: _status }, function (r) {
         if (r.status.toString() == "true") {
             $.each(r.data, function (i, d) {
-                req_nos[i] = [d.Id, d.RequisitionNo];
+                req_nos[i] = [d.Id, d.RequisitionNo, d.Requestee, d.priority];
             });
 
             _widget.getStore().removeAll();
@@ -488,5 +516,51 @@ lib.getCapexItemGrid = function (_urlString,_ID, _widget) {
 
         _widget.getStore().removeAll();
         _widget.getStore().loadData(capex_data);
+    });
+}
+
+//Local Purchasing Orders
+lib.returnLocalPurchasingOrderGrid = function (_urlString, _widget) {
+    var purchase_orders = [];
+    $.getJSON(_urlString, {}, function (r) {
+        if (r.status.toString() == "true") {
+            $.each(r.data, function (i, d) {
+                purchase_orders[i] = [d.Id, d.requisitionNumber, d.nameOfVendor, d.LPOTotalAmount, d.LPONumber, d.statusOfLPO];
+            });
+
+            _widget.getStore().removeAll();
+            _widget.getStore().loadData(purchase_orders);
+        }
+    });
+}
+
+lib.returnDistinctLPO = function (_urlString, _widget) {
+    var purchase_orders = [];
+    $.getJSON(_urlString, {}, function (r) {
+        if (r.status.toString() == "true") {
+            $.each(r.data, function (i, d) {
+                purchase_orders[i] = [d.requisitionNumber];
+            });
+
+            _widget.getStore().removeAll();
+            _widget.getStore().loadData(purchase_orders);
+        }
+    });
+}
+
+lib.returnProcessFlowData = function (_urlString, _param, _control, _widget) {
+    var nameList = [];
+
+    $.getJSON(_urlString, { _procurement_type_id: _param }, function (r) {
+        if (r.status.toString() == "true")
+        {
+            $.each(r.data, function (i, d) {
+                nameList[i] = [d.Id, d.value.toString()];
+            });
+
+            _control.setValue(r.limit.toString());
+            _widget.getStore().removeAll();
+            _widget.getStore().loadData(nameList);
+        }
     });
 }
