@@ -361,6 +361,7 @@
     <Content Include="Lib\ext\adapter\yui\ext-yui-adapter.js" />
     <Content Include="Lib\ext\ext-all-debug.js" />
     <Content Include="Lib\ext\ext-all.js" />
+    <Content Include="Lib\ext\FileUploadField.js" />
     <Content Include="Lib\ext\resources\charts.swf" />
     <Content Include="Lib\ext\resources\css\debug.css" />
     <Content Include="Lib\ext\resources\css\ext-all-notheme.css" />
