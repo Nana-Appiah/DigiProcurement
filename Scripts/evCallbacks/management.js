@@ -98,7 +98,7 @@
                                                 ]
                                             },
                                             {
-                                                columnWidth: .6, defaults: { xtype: 'form', frame: true, border: true },
+                                                columnWidth: .5, defaults: { xtype: 'form', frame: true, border: true },
                                                 items: [
                                                     {
                                                         id: 'mgmtRequest', title: 'Results', defaults: { xtype: 'combo', forceSelection: true, typeAhead: true, mode: 'local', allowBlank: false, anchor: '95%' },
@@ -239,10 +239,45 @@
                                                 ]
                                             },
                                             {
-                                                columnWidth: .2, defaults: { xtype: 'form', frame: true, border: true },
+                                                columnWidth: .3, defaults: { xtype: 'form', frame: true, border: true },
                                                 items: [
                                                     {
-                                                        id: '', title: 'Approved Items'
+                                                        id: 'fp', title: 'Approved Items',
+                                                        fileUpload: true, defaults: { xtype:'textfield', allowBlank: false, anchor:'100%' }, layout:'form',
+                                                        items: [
+                                                            { id:'file-name', emptyText:'enter the name of file' },
+                                                            {
+                                                                xtype: 'fileuploadfield', id: 'form-file', emptyText: 'select an image document'
+                                                            }
+                                                        ],
+                                                        buttons: [
+                                                            {
+                                                                id: '', text: 'Save',
+                                                                listeners: {
+                                                                    'click': function (btn) {
+                                                                        var fpfrm = Ext.getCmp('fp').getForm();
+                                                                        if (fpfrm.isValid()) {
+                                                                            fpfrm.submit({
+                                                                                //clientValidation: true,
+                                                                                url: 'Requisition/FileUpload',
+                                                                                method: 'POST',
+                                                                                waitMsg: 'Uploading document...please wait',
+                                                                                success: function (r, a) {
+                                                                                    msg('Success', 'Processed file "' + o.result.file + '" on the server');
+                                                                                },
+                                                                                failure: function (r, a) {
+
+                                                                                }
+                                                                            });
+
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        id:'', title:'Grid'
                                                     }
                                                 ]
                                             }

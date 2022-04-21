@@ -1,5 +1,7 @@
 ﻿Ext.onReady(function () {
 
+    var def_pic = "standard.jpg";
+
     var approvalFrm = Ext.get('approval');
 
     approvalFrm.on('click', function () {
@@ -179,7 +181,19 @@
                                             {
                                                 columnWidth: .8, title: 'Uploaded Docs', defaults: { xtype: 'form', frame: true, border: true, height:450 }, layout: 'fit',
                                                 items: [
-                                                    {}
+                                                    {
+                                                        id: '',
+                                                        items: [
+                                                            {
+                                                                tpl: new Ext.XTemplate(
+                                                                    '<div style="border:1px solid blue;max-width:890px;max-height:100%;">',
+                                                                    '<img id="im" style="width:880px;height:550px;" src="{urlpath}" alt="{alternative}">',
+                                                                    '</div>'
+                                                                ),
+                                                                id: 'wkfpic', compiled: true, data: { filename: 'filedata', alternative: 'preview image', urlpath: def_pic }, autoScroll: true
+                                                            }
+                                                        ]
+                                                    }
                                                 ]
                                             }
                                         ]

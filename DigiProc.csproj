@@ -332,6 +332,7 @@
     <Content Include="images\powered.png" />
     <Content Include="images\reports.jpg" />
     <Content Include="images\s.gif" />
+    <Content Include="images\standard.jpg" />
     <Content Include="images\tabs.gif" />
     <Content Include="images\taskbar\black\item-over.gif" />
     <Content Include="images\taskbar\black\scroll-left.gif" />
@@ -1276,6 +1277,7 @@
     <Content Include="Scripts\evCallbacks\master.js" />
     <Content Include="Scripts\evCallbacks\management.js" />
     <Content Include="Scripts\evCallbacks\rq.js" />
+    <Content Include="Scripts\evCallbacks\standard.jpg" />
     <Content Include="Scripts\jquery-1.8.3.min.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
