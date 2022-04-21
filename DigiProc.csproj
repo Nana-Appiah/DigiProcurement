@@ -1277,7 +1277,6 @@
     <Content Include="Scripts\evCallbacks\master.js" />
     <Content Include="Scripts\evCallbacks\management.js" />
     <Content Include="Scripts\evCallbacks\rq.js" />
-    <Content Include="Scripts\evCallbacks\standard.jpg" />
     <Content Include="Scripts\jquery-1.8.3.min.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

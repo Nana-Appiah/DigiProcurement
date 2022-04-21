@@ -211,9 +211,11 @@ lib.getItemGridGivenRequisitionID = function (_URL,_ID,_stat, controlRef) {
     $.getJSON(_URL, { requisitionID: _ID, statusID: _stat }, function (res) {
         if (res.status.toString() == "true") {
             $.each(res.data, function (i, d) {
-                dta[i] = [d.Id, d.RequisitionId, d.item.ProductCode, d.item.ProductName, d.Quantity, d.narration];
+                //alert(d.ProductCode); alert(d.ProductName);
+                dta[i] = [d.Id, d.RequisitionId, d.ProductCode, d.ProductName, d.Quantity, d.narration];
             });
 
+            console.log(dta);
             controlRef.getStore().removeAll();
             controlRef.getStore().loadData(dta);
         }
@@ -495,6 +497,27 @@ lib.returnRequistionDetails = function (_urlString, _ID, rno, req, d, p) {
             req.val(r.data.Requestee);
             d.val(r.data.nameOfDepartment);
             p.val(r.data.priority);
+        }
+    });
+}
+
+lib.returnRequistionDetails2 = function (_urlString, _ID, rno, req, d, p, _STAT, _widget) {
+    var dta = [];
+    $.getJSON(_urlString, { requisitionID: _ID, statusID: _STAT }, function (r) {
+        if (r.status.toString() == "true")
+        {
+            rno.val(r.data.RequisitionNo);
+            req.val(r.data.Requestee);
+            d.val(r.data.nameOfDepartment);
+            p.val(r.data.priority);
+
+            $.each(r.data.rLookups, function (i, d) {
+                alert(d.ProductCode); alert(d.ProductName); alert(d.Quantity); alert(d.narration);
+                dta[i] = [d.Id, d.RequisitionId, d.ProductCode, d.ProductName, d.Quantity, d.narration];
+            });
+
+            _widget.getStore().removeAll();
+            _widget.getStore().loadData(dta);
         }
     });
 }

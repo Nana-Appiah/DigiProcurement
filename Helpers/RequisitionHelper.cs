@@ -90,6 +90,35 @@ namespace DigiProc.Helpers
             }
         }
 
+        public RequisitionLookup getRequisitionDetails(int _id, int _status)
+        {
+            //gets readonly data for requisitions
+            RequisitionLookup obj = new RequisitionLookup();
+
+            var helper = new Utility() { };
+
+            try
+            {
+                var o = config.Requisitions.Where(r => r.RequisitionID == _id).FirstOrDefault();
+                if (o != null)
+                {
+                    obj.Id = o.RequisitionID;
+                    obj.RequisitionNo = o.RequisitionNo;
+                    obj.Requestee = o.RequestedBy;
+                    obj.nameOfDepartment = helper.getDepartment(o.DepartmentID).Name;
+                    obj.priority = helper.GetPriority(o.PriorityID).PriorityDescription;
+                    obj.rLookups = this.GetRequisitionItemLookups(_id, _status);
+                }
+
+                return obj;
+            }
+            catch (Exception e)
+            {
+                Debug.Print(e.Message);
+                return obj;
+            }
+        }
+
         public List<RequisitionLookup> getRequisitionNumbers(int departmentId, int statusId)
         {
             List<RequisitionLookup> list = new List<RequisitionLookup>();
@@ -158,10 +187,10 @@ namespace DigiProc.Helpers
             }
         }
 
-        public List<RequisitionItemLookup> GetRequisitionItemLookups(int reqId, int statusId)
+        public List<reqItem> GetRequisitionItemLookups(int reqId, int statusId)
         {
             //use requisitionId to fetch requisition items
-            List<RequisitionItemLookup> rqitems = new List<RequisitionItemLookup>();
+            List<reqItem> rqitems = new List<reqItem>();
             try
             {
                 var dta = config.RequisitionItems.Where(rq => rq.RequisitionID == reqId).Where(r => r.FinApprovalStatus == statusId).ToList();
@@ -169,10 +198,13 @@ namespace DigiProc.Helpers
                 {
                     foreach(var d in dta)
                     {
-                        var o = new RequisitionItemLookup() { 
+                        var obj = new Utility { }.GetItem((int)d.ItemID);
+
+                        var o = new reqItem() { 
                             Id = d.RequisitionItemID,
                             RequisitionId = (int) d.RequisitionID,
-                            item = new Utility { }.GetItem((int) d.ItemID),
+                            ProductCode = obj.ProductCode,
+                            ProductName = obj.ProductName,
                             Quantity = (int) d.Quantity,
                             narration = d.Narration
                         };
@@ -510,6 +542,8 @@ namespace DigiProc.Helpers
         public string nameOfDepartment { get; set; }
         public string priority { get; set; }
 
+        public List<reqItem> rLookups { get; set; }
+
     }
 
     public struct RequisitionItemLookup
@@ -546,6 +580,17 @@ namespace DigiProc.Helpers
         public string statusOfLPO { get; set; }
         public decimal LPOTotalAmount { get; set; }
         public string LPONumber { get; set; }
+
+    }
+
+    public struct reqItem
+    {
+        public int Id { get; set; }
+        public int RequisitionId { get; set; }
+        public string ProductCode { get; set; }
+        public string ProductName { get; set; }
+        public int Quantity { get; set; }
+        public string narration { get; set; }
 
     }
 
