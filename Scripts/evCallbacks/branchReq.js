@@ -45,7 +45,7 @@
                                                         ],
                                                         listeners: {
                                                             'render': function () {
-                                                                lib.getPrelimData('/Requisition/GetRequisitionPrelimData',Ext.getCmp('bRNo'), Ext.getCmp('bRequestee'), Ext.getCmp('bComp'), Ext.getCmp('bDept'));
+                                                                lib.getPrelimData('Requisition/GetRequisitionPrelimData',Ext.getCmp('bRNo'), Ext.getCmp('bRequestee'), Ext.getCmp('bComp'), Ext.getCmp('bDept'));
                                                             }
                                                         }
                                                     },

@@ -24,6 +24,8 @@ public partial class Department
 
         this.Requisitions = new HashSet<Requisition>();
 
+        this.Usrs = new HashSet<Usr>();
+
     }
 
 
@@ -38,6 +40,10 @@ public partial class Department
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 
     public virtual ICollection<Requisition> Requisitions { get; set; }
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+
+    public virtual ICollection<Usr> Usrs { get; set; }
 
 }
 

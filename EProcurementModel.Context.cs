@@ -92,6 +92,12 @@ public partial class ProcurementDbEntities : DbContext
 
     public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
 
+    public virtual DbSet<Profile> Profiles { get; set; }
+
+    public virtual DbSet<RequisitionFile> RequisitionFiles { get; set; }
+
+    public virtual DbSet<Usr> Usrs { get; set; }
+
 }
 
 }

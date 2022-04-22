@@ -45,193 +45,220 @@
                             {
                                 id: 'vMaster',
                                 title: 'Vendor Master',
-                                defaults: { xtype: 'panel', frame: true, border: true, height: 320 }, layout: 'form',
+                                defaults: { xtype: 'panel', frame: true, height: 550 }, layout: 'form',
                                 items: [
                                     {
-                                        title: 'Vendor Basic Information', defaults: { xtype: 'form', frame: true, border: true }, layout: 'column',
+                                        title: 'Vendor Basic Information', defaults: { xtype: 'panel', frame: true, height:500 }, layout: 'column',
                                         items: [
                                             {
-                                                columnWidth: .5, title: 'Vendor Details', id: 'vndbasicfrm', defaults: { xtype: 'textfield', anchor: '90%' },
+                                                columnWidth: .5, defaults: { xtype: 'form', frame: true, border: true, autoScroll: true }, layout: 'accordion',
                                                 items: [
                                                     {
-                                                        id: 'vdID', fieldLabel: 'Vendor ID', emptyText: 'Vendor ID',
-                                                        style: { 'font-size': '20px', 'color': 'red', 'text-align': 'center' },
-                                                        listeners: {
-                                                            'render': function () {
-                                                                $.getJSON('/Utility/GenerateVendorNo', {}, function (r) {
-                                                                    $('#vdID').val(r.data.toString());
-                                                                });
-                                                                $('#vdID').attr('readonly', true);
-                                                            }
-                                                        }
-                                                    },
-                                                    {
-                                                        id: 'vdName', fieldLabel: 'Name', emptyText: 'Business Name'
-                                                    },
-                                                    {
-                                                        xtype: 'combo', id: 'vdtype', fieldLabel: 'Vendor Type', forceSelection: true, typeAhead: true, allowBlank: false, mode: 'local',
-                                                        store: lib.LoadVendorTypeStore('Utility/GetVendorTypes'),
-                                                        valueField: 'Id', displayField: 'Description'
-                                                    },
-                                                    {
-                                                        id: 'vdloc', fieldLabel: 'Location', emptyText: 'Location of business'
-                                                    },
-                                                    { id: 'vdTIN', fieldLabel: 'TIN Number', emptyText: 'enter TIN number' },
-                                                    { id: 'vdRNo', fieldLabel: 'Registration No', emptyText: 'enter company registration number' },
-                                                    { id: 'vdInc', xtype: 'datefield', format: 'd-M-Y', fieldLabel: 'Inc. Date', emptyText: 'Date of Incorporation' },
-                                                    {
-                                                        xtype: 'combo', id: 'vbtype', fieldLabel: 'Business Type', emptyText: 'select business type',
-                                                        forceSelection: true, typeAhead: true, allowBlank: false, mode: 'local',
-                                                        store: lib.getBusinessTypeStore('Utility/GetCompanyTypes'),
-                                                        valueField: 'BusinessTypeID', displayField: 'BusinessDescription'
-                                                    }
-                                                ],
-                                                buttons: [
-
-                                                ]
-                                            },
-                                            {
-                                                id: 'vndCommfrm', title: 'Communication Details', columnWidth: .5, defaults: { xtype: 'textfield', anchor: '95%', allowBlank: true },
-                                                items: [
-                                                    { id: 'vcon', fieldLabel: 'Contact Person', emptyText: 'enter name of the contact person' },
-                                                    { id: 'votel', fieldLabel: 'Office Tel', emptyText: 'office telephone' },
-                                                    { id: 'vhtel', fieldLabel: 'Home Tel', emptyText: 'home telephone' },
-                                                    { id: 'vemail', fieldLabel: 'Email Address', emptyText: 'enter email address' },
-                                                    { id: 'vghpost', fieldLabel: 'Ghana Post Addr', emptyText: 'enter GH Post Address' },
-                                                    { id: 'vweb', fieldLabel: 'Website', emptyText: 'enter website URL' },
-                                                    { id: 'vlinkedin', fieldLabel: 'LinkedIn', emptyText: 'enter LinkedIn account' },
-                                                    { id: 'vfb', fieldLabel: 'FaceBook', emptyText: 'enter facebook account' }
-                                                ],
-                                                buttons: [
-                                                    {
-                                                        text: 'Save Vendor Info',
-                                                        listeners: {
-                                                            'click': function (btn) {
-                                                                var vf = Ext.getCmp('vndbasicfrm').getForm();
-                                                                var commfrm = Ext.getCmp('vndCommfrm').getForm();
-                                                                if (vf.isValid() && (commfrm.isValid())) {
-                                                                    $.post('Master/SaveBasicVendorInformation',
-                                                                        {
-                                                                            vID: Ext.fly('vdID').getValue(), vName: Ext.fly('vdName').getValue(), vTypeID: Ext.getCmp('vdtype').getValue(),
-                                                                            location: Ext.fly('vdloc').getValue(), vTIN: Ext.fly('vdTIN').getValue(), regNo: Ext.fly('vdRNo').getValue(),
-                                                                            incDate: Ext.fly('vdInc').getValue(), bTypeID: Ext.getCmp('vbtype').getValue(),
-
-                                                                            vcon: Ext.fly('vcon').getValue(), votel: Ext.fly('votel').getValue(), vhtel: Ext.fly('vhtel').getValue(), vemail: Ext.fly('vemail').getValue(),
-                                                                            vghpost: Ext.fly('vghpost').getValue(), vweb: Ext.fly('vweb').getValue(), vlinkedin: Ext.fly('vlinkedin').getValue(),
-                                                                            fb: Ext.fly('vfb').getValue()
-                                                                        })
-                                                                        .done(function (r) {
-                                                                            if (r.status.toString() == "true") {
-                                                                                $('#btn-vndor-clear').trigger('click');
-                                                                            }
+                                                        title: 'Vendor Details', id: 'vndbasicfrm', defaults: { xtype: 'textfield', anchor: '90%' },
+                                                        items: [
+                                                            {
+                                                                id: 'vdID', fieldLabel: 'Vendor ID', emptyText: 'Vendor ID',
+                                                                style: { 'font-size': '20px', 'color': 'red', 'text-align': 'center' },
+                                                                listeners: {
+                                                                    'render': function () {
+                                                                        $.getJSON('/Utility/GenerateVendorNo', {}, function (r) {
+                                                                            $('#vdID').val(r.data.toString());
                                                                         });
+                                                                        $('#vdID').attr('readonly', true);
+                                                                    }
+                                                                }
+                                                            },
+                                                            {
+                                                                id: 'vdName', fieldLabel: 'Name', emptyText: 'Business Name'
+                                                            },
+                                                            {
+                                                                xtype: 'combo', id: 'vdtype', fieldLabel: 'Vendor Type', forceSelection: true, typeAhead: true, allowBlank: false, mode: 'local',
+                                                                store: lib.LoadVendorTypeStore('Utility/GetVendorTypes'),
+                                                                valueField: 'Id', displayField: 'Description'
+                                                            },
+                                                            {
+                                                                id: 'vdloc', fieldLabel: 'Location', emptyText: 'Location of business'
+                                                            },
+                                                            { id: 'vdTIN', fieldLabel: 'TIN Number', emptyText: 'enter TIN number' },
+                                                            { id: 'vdRNo', fieldLabel: 'Registration No', emptyText: 'enter company registration number' },
+                                                            { id: 'vdInc', xtype: 'datefield', format: 'd-M-Y', fieldLabel: 'Inc. Date', emptyText: 'Date of Incorporation' },
+                                                            
+                                                            {
+                                                                xtype: 'combo', id: 'vbtype', fieldLabel: 'Business Type', emptyText: 'select business type',
+                                                                forceSelection: true, typeAhead: true, allowBlank: false, mode: 'local',
+                                                                store: lib.getBusinessTypeStore('Utility/GetCompanyTypes'),
+                                                                valueField: 'BusinessTypeID', displayField: 'BusinessDescription'
+                                                            },
+                                                            //
+                                                            { id: 'vcon', fieldLabel: 'Contact Person', emptyText: 'enter name of the contact person' },
+                                                            { id: 'votel', fieldLabel: 'Office Tel', emptyText: 'office telephone' },
+                                                            { id: 'vhtel', fieldLabel: 'Home Tel', emptyText: 'home telephone' },
+                                                            { id: 'vemail', fieldLabel: 'Email Address', emptyText: 'enter email address' },
+                                                            { id: 'vghpost', fieldLabel: 'Ghana Post Addr', emptyText: 'enter GH Post Address' },
+                                                            { id: 'vweb', fieldLabel: 'Website', emptyText: 'enter website URL' },
+                                                            { id: 'vlinkedin', fieldLabel: 'LinkedIn', emptyText: 'enter LinkedIn account' },
+                                                            { id: 'vfb', fieldLabel: 'FaceBook', emptyText: 'enter facebook account' }
+                                                        ],
+                                                        buttons: [
+                                                            {
+                                                                text: 'Save Vendor Info',
+                                                                listeners: {
+                                                                    'click': function (btn) {
+                                                                        var vf = Ext.getCmp('vndbasicfrm').getForm();
+                                                                        //var commfrm = Ext.getCmp('vndCommfrm').getForm();
+                                                                        if (vf.isValid()) {
+                                                                            $.post('Master/SaveBasicVendorInformation',
+                                                                                {
+                                                                                    _id: Idx, vID: Ext.fly('vdID').getValue(), vName: Ext.fly('vdName').getValue(), vTypeID: Ext.getCmp('vdtype').getValue(),
+                                                                                    location: Ext.fly('vdloc').getValue(), vTIN: Ext.fly('vdTIN').getValue(), regNo: Ext.fly('vdRNo').getValue(),
+                                                                                    incDate: Ext.fly('vdInc').getValue(), bTypeID: Ext.getCmp('vbtype').getValue(),
+
+                                                                                    vcon: Ext.fly('vcon').getValue(), votel: Ext.fly('votel').getValue(), vhtel: Ext.fly('vhtel').getValue(), vemail: Ext.fly('vemail').getValue(),
+                                                                                    vghpost: Ext.fly('vghpost').getValue(), vweb: Ext.fly('vweb').getValue(), vlinkedin: Ext.fly('vlinkedin').getValue(),
+                                                                                    fb: Ext.fly('vfb').getValue()
+                                                                                })
+                                                                                .done(function (r) {
+                                                                                    if (r.status.toString() == "true") {
+                                                                                        $('#btn-vndor-clear').trigger('click');
+                                                                                        lib.returnVendorGrid('Utility/GetVendors', Ext.getCmp('vListGrid'));
+                                                                                        Idx = 0;
+                                                                                    }
+                                                                                });
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            {
+                                                                id: 'btn-vndor-clear', text: 'Clear',
+                                                                listeners: {
+                                                                    'click': function (btn) {
+                                                                        Ext.getCmp('vndbasicfrm').getForm().reset();
+                                                                        //Ext.getCmp('vndCommfrm').getForm().reset();
+                                                                        $('#vdName').focus();
+                                                                    }
                                                                 }
                                                             }
-                                                        }
+                                                        ]
                                                     },
+                                                    //estimated turnover form
                                                     {
-                                                        id: 'btn-vndor-clear', text: 'Clear',
-                                                        listeners: {
-                                                            'click': function (btn) {
-                                                                Ext.getCmp('vndbasicfrm').getForm().reset();
-                                                                Ext.getCmp('vndCommfrm').getForm().reset();
-                                                                $('#vdName').focus();
+                                                        id: '', title: 'Estimated Sales for Previous Acc Period', defaults: { xtype: 'numberfield', anchor: '95%', allowBlank: true },
+                                                        items: [
+                                                            {
+                                                                id: '', fieldLabel: 'Previous Sales', emptyText: 'sales for previous accounting period'
+                                                            },
+                                                            {
+                                                                id: '', fieldLabel: 'Previous Profilt', emptyText: 'profit for previous accounting period'
                                                             }
-                                                        }
+                                                        ],
+                                                        buttons: [
+                                                            {
+                                                                text: 'Save Estimates Record',
+                                                                listeners: {
+                                                                    'click': function (btn) {
+
+                                                                    }
+                                                                }
+                                                            },
+                                                            {
+                                                                text: 'Clear Estimates Record',
+                                                                hidden: true,
+                                                                listeners: {
+                                                                    'click': function (btn) {
+
+                                                                    }
+                                                                }
+                                                            }
+                                                        ]
+                                                    },
+                                                    //estimated sales form
+                                                    {
+                                                        id: '', title: 'Estimated Sales for Current Acc Period', defaults: { xtype: 'numberfield', anchor: '95%', allowBlank: true },
+                                                        items: [
+                                                            {
+                                                                id: '', fieldLabel: 'Est. Sales', emptyText: 'est. sales for current accounting period'
+                                                            },
+                                                            { id: '', fieldLabel: 'Est. Profilt', emptyText: 'est. profilt for current accounting period' }
+                                                        ]
+                                                    },
+                                                    //Directors form
+                                                    {
+                                                        title: 'Directors', defaults: { xtype: 'textfield', anchor:'95%', allowBlank: true }, layout: 'form',
+                                                        items: [
+                                                            { id: '', fieldLabel: 'First Director', emptyText: 'enter first director' },
+                                                            { id: '', fieldLabel: 'Email', emptyText: 'email of first director' },
+                                                            { id: '', fieldLabel: 'Second Director', emptyText: 'enter second director' },
+                                                            { id: '', fieldLabel: 'Email', emptyText: 'email of second director' }
+                                                        ]
                                                     }
-                                                ]
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        defaults: { xtype: 'tabpanel', tabPosition: 'top', enablScroll: true, frame: true, height: 220 },
-                                        items: [
+                                                ]    
+                                            },
                                             {
-                                                activeTab: 0,
+                                                columnWidth: .5, title: 'Vendor List', defaults: { xtype: 'panel', frame: true, height: 900 },
                                                 items: [
                                                     {
-                                                        title: 'Estimated Turnover', defaults: { xtype: 'form', frame: true, border: true }, layout: 'column',
+                                                        defaults: { xtype: 'form', frame: true, border: true }, layout: 'form',
                                                         items: [
                                                             {
-                                                                columnWidth: .4, id: '', title: 'Estimated Sales for Previous Acc Period', defaults: { xtype: 'numberfield', anchor: '95%', allowBlank: true },
+                                                                id: '',
                                                                 items: [
-                                                                    {
-                                                                        id: '', fieldLabel: 'Previous Sales', emptyText: 'sales for previous accounting period'
-                                                                    },
-                                                                    {
-                                                                        id: '', fieldLabel: 'Previous Profilt', emptyText: 'profit for previous accounting period'
-                                                                    }
-                                                                ]
-                                                            },
-                                                            {
-                                                                columnWidth: .4, id: '', title: 'Estimated Sales for Current Acc Period', defaults: { xtype: 'numberfield', anchor: '95%', allowBlank: true },
-                                                                items: [
-                                                                    {
-                                                                        id: '', fieldLabel: 'Est. Sales', emptyText: 'est. sales for current accounting period'
-                                                                    },
-                                                                    { id: '', fieldLabel: 'Est. Profilt', emptyText: 'est. profilt for current accounting period' }
-                                                                ]
-                                                            },
-                                                            {
-                                                                columnWidth: .2,
-                                                                items: [],
-                                                                buttons: [
-                                                                    {
-                                                                        text: 'Save Estimates Record',
+                                                                    new Ext.grid.GridPanel({
+                                                                        id: 'vListGrid', height: 800, autoScroll: true, autoExpandColumn: 'VendorName',
+                                                                        store: new Ext.data.GroupingStore({
+                                                                            reader: new Ext.data.ArrayReader({}, [
+                                                                                { name: 'VendorID', type: 'int' },
+                                                                                { name: 'VendorNo', type: 'string' },
+                                                                                { name: 'VendorName', type: 'string' },
+                                                                                { name: 'VendorLocation', type: 'string' },
+                                                                                { name: 'ContactPerson', type: 'string' },
+                                                                                { name: 'NameOfOwner', type: 'string' },
+                                                                                { name: 'CompanyContact', type: 'string' },
+                                                                                { name: 'CompanyHomeContact', type: 'string' }
+                                                                            ]),
+                                                                            sortInfo: {
+                                                                                field: 'VendorID',
+                                                                                direction: 'ASC'
+                                                                            },
+                                                                            groupField: 'VendorName'
+                                                                        }),
+                                                                        columns: [
+                                                                            { id: 'VendorID', header: 'ID', width: 25, hidden: true, sortable: true, dataIndex: 'VendorID' },
+                                                                            { id: 'VendorNo', header: 'VendorNo', width: 80, hidden: false, sortable: true, dataIndex: 'VendorNo' },
+                                                                            { id: 'VendorName', header: 'VendorName', width: 350, hidden: false, sortable: true, dataIndex: 'VendorName' },
+                                                                            { id: 'VendorLocation', header: 'VendorLocation', width: 400, hidden: true, sortable: true, dataIndex: 'VendorLocation' },
+                                                                            { id: 'ContactPerson', header: 'ContactPerson', width: 200, hidden: false, sortable: true, dataIndex: 'ContactPerson' },
+                                                                            { id: 'NameOfOwner', header: 'NameOfOwner', width: 200, hidden: false, sortable: true, dataIndex: 'NameOfOwner' },
+                                                                            { id: 'CompanyContact', header: 'CompanyContact', width: 150, hidden: false, sortable: true, dataIndex: 'CompanyContact' },
+                                                                            { id: 'CompanyHomeContact', header: 'CompanyHomeContact', width: 150, hidden: false, sortable: true, dataIndex: 'CompanyHomeContact' }
+                                                                        ],
+                                                                        stripeRows: true,
                                                                         listeners: {
-                                                                            'click': function (btn) {
+                                                                            'render': function () {
+                                                                                lib.returnVendorGrid('Utility/GetVendors', Ext.getCmp('vListGrid'));
+                                                                            },
+                                                                            'afterrender': function () {
+                                                                                setInterval(function () {
+                                                                                    lib.returnVendorGrid('Utility/GetVendors', Ext.getCmp('vListGrid'));
+                                                                                },20000);
+                                                                            },
+                                                                            'rowdblclick': function (e, t) {
+                                                                                var record = e.getStore().getAt(t);
 
+                                                                                Idx = record.get('VendorID');
+                                                                                $('#vdID').val(record.get('VendorNo'));
+                                                                                $('#vdName').val(record.get('VendorName'));
+                                                                                $('#vdloc').val(record.get('vdloc'));
+                                                                                $('#vcon').val(record.get('ContactPerson'));
+                                                                                $('#votel').val(record.get('CompanyContact'));
+                                                                                $('#vhtel').val(record.get('CompanyHomeContact'));
                                                                             }
                                                                         }
-                                                                    },
-                                                                    {
-                                                                        text: 'Clear Estimates Record',
-                                                                        hidden: true,
-                                                                        listeners: {
-                                                                            'click': function (btn) {
-
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                ]
-                                                            }
-                                                        ]
-                                                    },
-                                                    {
-                                                        title: 'Directors', defaults: { xtype: 'form', frame: true, border: true }, layout: 'column',
-                                                        items: [
-                                                            {
-                                                                columnWidth: .4, id: '', title: 'First Director', defaults: { xtype: 'textfield', anchor: '95%', allowBlank: true },
-                                                                items: [
-                                                                    { id: '', fieldLabel: 'First Director', emptyText: 'enter first director' },
-                                                                    { id: '', fieldLabel: 'Email', emptyText: 'email of first director' }
-                                                                ]
-                                                            },
-                                                            {
-                                                                columnWidth: .4, id: '', title: 'Second Director', defaults: { xtype: 'textfield', anchor: '95%', allowBlank: true },
-                                                                items: [
-                                                                    { id: '', fieldLabel: 'Second Director', emptyText: 'enter second director' },
-                                                                    { id: '', fieldLabel: 'Email', emptyText: 'email of second director' }
-                                                                ]
-                                                            },
-                                                            {
-                                                                columnWidth: .2, frame: false, border: false,
-                                                                items: [],
-                                                                buttons: [
-                                                                    {
-                                                                        text: 'Save',
-                                                                        listeners: {
-                                                                            'click': function (btn) {
-
-                                                                            }
-                                                                        }
-                                                                    }
+                                                                    })
                                                                 ]
                                                             }
                                                         ]
                                                     }
                                                 ]
-
                                             }
                                         ]
                                     }

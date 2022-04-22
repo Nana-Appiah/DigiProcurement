@@ -349,5 +349,25 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Profiles">
+      <EntityTypeMapping TypeName="EProcurementDbModel.Profile">
+        <MappingFragment StoreEntitySet="Profile">
+          <ScalarProperty Name="inUse" ColumnName="inUse" />
+          <ScalarProperty Name="profileContent" ColumnName="profileContent" />
+          <ScalarProperty Name="profileName" ColumnName="profileName" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RequisitionFiles">
+      <EntityTypeMapping TypeName="EProcurementDbModel.RequisitionFile">
+        <MappingFragment StoreEntitySet="RequisitionFile">
+          <ScalarProperty Name="RequisitionFileName" ColumnName="RequisitionFileName" />
+          <ScalarProperty Name="RequisitionFileDescription" ColumnName="RequisitionFileDescription" />
+          <ScalarProperty Name="RequisitionID" ColumnName="RequisitionID" />
+          <ScalarProperty Name="RequisitionFileID" ColumnName="RequisitionFileID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

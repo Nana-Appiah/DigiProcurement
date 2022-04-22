@@ -45,7 +45,7 @@
                                                         ],
                                                         listeners: {
                                                             'render': function () {
-                                                                lib.getPrelimData('/Requisition/GetRequisitionPrelimData',Ext.getCmp('bRNo'), Ext.getCmp('bRequestee'), Ext.getCmp('bComp'), Ext.getCmp('bDept'));
+                                                                lib.getPrelimData('Requisition/GetRequisitionPrelimData',Ext.getCmp('bRNo'), Ext.getCmp('bRequestee'), Ext.getCmp('bComp'), Ext.getCmp('bDept'));
                                                             }
                                                         }
                                                     },
@@ -224,7 +224,6 @@
                                                                                 values: dta
                                                                             })
                                                                                 .done(function (res) {
-                                                                                    //alert(res.data.toString());
                                                                                     Ext.MessageBox.alert("REQUISITION REQUEST STATUS", res.data.toString(), this);
                                                                                     Ext.getCmp('xBrRqList').getStore().removeAll();
                                                                                     Ext.getCmp('ufrmBDetails').getForm().reset();

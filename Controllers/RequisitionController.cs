@@ -57,6 +57,22 @@ namespace DigiProc.Controllers
         }
 
         [HttpGet]
+        public JsonResult GetRequisitionDetails2(int requisitionID, int statusID)
+        {
+            try
+            {
+                var _details = new RequisitionHelper() { }.getRequisitionDetails(requisitionID,statusID);
+                //var requisition_items = new RequisitionHelper() { }.GetRequisitionItemLookups(requisitionID, statusID);
+
+                return Json(new { status = true, data = _details /*, items = requisition_items */ }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception x)
+            {
+                return Json(new { status = false, error = $"error: {x.Message}" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpGet]
         public JsonResult GetRequisitionNos(int departmentID, int statusID)
         {
             try
