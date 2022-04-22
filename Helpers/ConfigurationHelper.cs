@@ -11,8 +11,14 @@ namespace DigiProc.Helpers
 {
     public interface IConfigurationHelper
     {
-        bool CreateUserAccount();
-        bool AmendUserProfile();
+        int CreateUserAccount(Usr item);
+        bool AmendUserProfile(Usr item);
+
+        bool CreateUserProfile(Profile item);
+
+        int CreateUserModule(UserModule item);
+
+        
     }
     public class ConfigurationHelper
         :IConfigurationHelper
@@ -24,13 +30,102 @@ namespace DigiProc.Helpers
 
         #endregion
 
-        public bool CreateUserAccount()
+        public int CreateUserAccount(Usr item)
         {
-            return true;
+            //creates user account
+            int _id = 0;
+
+            try
+            {
+                config.Usrs.Add(item);
+                config.SaveChanges();
+                return item.Id;
+            }
+            catch(Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return _id;
+            }
         }
-        public bool AmendUserProfile()
+
+        public int CreateUserModule(UserModule item)
         {
-            return true;
+            //create a user module
+            int _id = 0;
+
+            try
+            {
+                config.UserModules.Add(item);
+                config.SaveChanges();
+
+                return item.UserModuleID;
+            }
+            catch(Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return _id;
+            }
+        }
+
+        public bool DeleteUserModule(Usr item)
+        {
+            //deletes all user modules in the data store
+            try
+            {
+                var module_list = config.UserModules.Where(u => u.UserName == item.usrname).ToList();
+                if (module_list.Count() > 0)
+                {
+                    foreach(var m in module_list)
+                    {
+                        config.UserModules.Remove(m);
+                        config.SaveChanges();
+                    }
+
+                    return true;
+                }
+                else { return false; }
+            }
+            catch(Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return false;
+            }
+        }
+
+        public bool CreateUserProfile(Profile item)
+        {
+            try
+            {
+                config.Profiles.Add(item);
+                config.SaveChanges();
+
+                return true;
+            }
+            catch(Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return false;
+            }
+        }
+
+        public bool AmendUserProfile(Usr item)
+        {
+            try
+            {
+                var obj = config.Usrs.Where(u => u.Id == item.Id).FirstOrDefault();
+                if (obj != null)
+                {
+                    obj.uProfile = item.uProfile;
+                    config.SaveChanges();
+                    return true;
+                }
+                else { return false; }
+            }
+            catch(Exception exc)
+            {
+                Debug.Print(exc.Message);
+                return false;
+            }
         }
 
         #region Getters
@@ -69,6 +164,87 @@ namespace DigiProc.Helpers
             }
         }
 
+        public ProfileManager GetProfile(string strProfile)
+        {
+            //gets profile using name of profile
+            ProfileManager profileManager = new ProfileManager();
+
+            try
+            {
+                var obj = config.Profiles.Where(p => p.profileName == strProfile).FirstOrDefault();
+                if (obj != null)
+                {
+                    profileManager.Id = obj.Id;
+                    profileManager.nameOfProfile = obj.profileName;
+                    profileManager.contentOfProfile = obj.profileContent;
+                    profileManager.profileInUse = obj.inUse == 1 ? @"Yes" : @"No";
+
+                    return profileManager;
+                }
+                else { return profileManager; }
+            }
+            catch(Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return profileManager;
+            }
+        }
+        
+        public Module GetModule(string strModule)
+        {
+            Module module = new Module();
+
+            try
+            {
+                var obj = config.Modules.Where(m => m.SystemName == strModule).FirstOrDefault();
+                if (obj != null)
+                {
+                    module.ModuleID = obj.ModuleID;
+                    module.SystemName = obj.SystemName;
+                    module.PublicName = obj.PublicName;
+                    module.DateAssigned = obj.DateAssigned;
+                }
+
+                return module;
+            }
+            catch(Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return module;
+            }
+        }
+
+        public List<Module> GetModules()
+        {
+            List<Module> app_modules = new List<Module>();
+
+            try
+            {
+                var dta = config.Modules.ToList();
+                if (dta.Count() > 0)
+                {
+                    foreach(var d in dta)
+                    {
+                        var m = new Module() {
+                            ModuleID = d.ModuleID,
+                            SystemName = d.SystemName,
+                            PublicName = d.PublicName,
+                            DateAssigned = d.DateAssigned
+                        };
+
+                        app_modules.Add(m);
+                    }
+                }
+
+                return app_modules;
+            }
+            catch(Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return app_modules;
+            }
+        }
+
         public List<UserManager> GetUsers()
         {
             //gets list of managers in the data store
@@ -81,7 +257,15 @@ namespace DigiProc.Helpers
                 {
                     foreach(var d in _data)
                     {
-                        var obj = new UserManager() { };
+                        var obj = new UserManager() { 
+                            Id = d.Id,
+                            username = d.usrname,
+                            isActive = d.isActive == 1? @"Yes": @"No",
+                            isLogged = d.isLogged == 1? @"Yes": @"No",
+                            nameOfDepartment = new Utility() { }.getDepartment(d.deptId).Name,
+                            PrManager = new ProfileManager { nameOfProfile = d.uProfile }
+                        };
+
                         userManagers.Add(obj);
                     }
                 }
@@ -92,6 +276,33 @@ namespace DigiProc.Helpers
             {
                 Debug.Print(ex.Message);
                 return userManagers;
+            }
+        }
+
+        public UserManager GetUser(string _user)
+        {
+            UserManager userManager = new UserManager();
+
+            try
+            {
+                var obj = config.Usrs.Where(u => u.usrname == _user).FirstOrDefault();
+                if (obj != null)
+                {
+
+                    userManager.Id = obj.Id;
+                    userManager.username = obj.usrname;
+                    userManager.isActive = obj.isActive == 1 ? @"Yes" : @"No";
+                    userManager.isLogged = obj.isLogged == 1 ? @"Yes" : @"No";
+                    userManager.nameOfDepartment = new Utility() { }.getDepartment(obj.deptId).Name;
+                    userManager.PrManager = new ProfileManager { nameOfProfile = obj.uProfile };
+                }
+
+                return userManager;
+            }
+            catch(Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return userManager;
             }
         }
 

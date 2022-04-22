@@ -242,6 +242,7 @@
     <Compile Include="RequisitionType.cs">
       <DependentUpon>EProcurementModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Security\Hashing.cs" />
     <Compile Include="SIUnit.cs">
       <DependentUpon>EProcurementModel.tt</DependentUpon>
     </Compile>

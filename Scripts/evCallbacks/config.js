@@ -1,5 +1,7 @@
 ﻿Ext.onReady(function () {
 
+    var PROFILE_CONTENT = '';
+
     var usr_config = Ext.get('config');
 
     usr_config.on('click', function () {
@@ -50,20 +52,16 @@
                                                     'click': function (btn) {
                                                         var _s = $('#xPwd').val(); var _t = $('#xPwdc').val();
                                                         if (_s.toString() == _t.toString()) {
-                                                            $.post('User/saveUserCredentials',
+                                                            $.post('Security/saveUserCredentials',
                                                                 {
                                                                     usr: Ext.fly('xUsr').getValue(), pwd: Ext.fly('xPwd').getValue(), stat: Ext.fly('xUstat').getValue(),
-                                                                    isAd: Ext.fly('xAd').getValue(), prof: Ext.fly('uprf').getValue(), dept: Ext.fly('xDpt').getValue()
+                                                                    isAd: Ext.fly('xAd').getValue(), prof: Ext.fly('uprf').getValue(), dId: Ext.getCmp('xDpt').getValue()
                                                                 })
                                                                 .done(function (r) {
                                                                     if (r.status.toString()) {
                                                                         //create entries in the usermodule table entity
-                                                                        $.post('Security/createUserModuleEntries', {}, function (xt) {
-                                                                            if (xt.status.toString() == "true") {
-                                                                                Ext.Msg.alert('USER ACCOUNT', 'User account created successfully', this);
-                                                                                $('#btUsrClr').trigger('click');
-                                                                            }
-                                                                        }, "json");
+                                                                        Ext.Msg.alert('USER ACCOUNT CREATION', r.data, this);
+                                                                        $('#btUsrClr').trigger('click');
                                                                     }
                                                             });
                                                         }
@@ -87,7 +85,90 @@
                                     {
                                         id: 'frmUsrAmend', title: 'Amend User Profiles', defaults: { xtype: 'textfield', anchor: '100%' },
                                         items: [
+                                            {
+                                                id: 'amusr', fieldLabel: 'User name',
+                                                listeners: {
+                                                    'blur': function () {
+                                                        
+                                                        $.getJSON('Security/GetCurrentProfileOfUser', { u: Ext.fly('amusr').getValue() }, function (rs) {
+                                                            if (rs.status.toString() == "true") {
+                                                                $('#amprof').val(rs.data.PrManager.nameOfProfile.toString()).attr('readonly', 'readonly');
+                                                                $('#amnprof').val('').focus();
+                                                            }
+                                                        });
+                                                        
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                id: 'amprof', fieldLabel: 'Current profile'
+                                            },
+                                            {
+                                                id: 'amnprof', xtype: 'combo', fieldLabel: 'New Profile', forceSelection: true, typeAhead: true, mode: 'local',
+                                                store: usr.returnUserProfileStore('Security/GetUserProfiles'), valueField: 'Id', displayField: 'nameOfProfile',
+                                                listeners: {
+                                                    'blur': function () {
+                                                        usr.returnApplicationModulesForProfile('Security/GetApplicationModulesForProfile', Ext.fly('amnprof').getValue(), Ext.getCmp('grdamn'));
+                                                    }
+                                                }
+                                            },
+                                            new Ext.grid.GridPanel({
+                                                id: 'grdamn', title: 'MODULES IN SELECTED PROFILE', height: 200, autoScroll: true, autoExpandColumn:'PublicName',
+                                                store: new Ext.data.GroupingStore({
+                                                    reader: new Ext.data.ArrayReader({}, [
+                                                        { name: 'ModuleID', type: 'int' },
+                                                        { name: 'SystemName', type: 'string' },
+                                                        { name: 'PublicName', type: 'string' }
+                                                    ]),
+                                                    sortInfo: {
+                                                        field: "ModuleID",
+                                                        direction: "ASC"
+                                                    },
+                                                    groupField: "PublicName"
+                                                }),
+                                                columns: [
+                                                    { id: 'ModuleID', header: 'ID', width: 60, hidden: true, sortable: true, dataIndex: 'ModuleID' },
+                                                    { id: 'SystemName', header: '', width: 600, hidden: false, sortable: true, dataIndex: 'SystemName' },
+                                                    { id: 'PublicName', header: '', width: 600, hidden: false, sortable: true, dataIndex: 'PublicName' }
+                                                ], stripeRows: true
+                                            })
+                                        ],
+                                        buttons: [
+                                            {
+                                                id: 'amnBtnSv', text: 'Save Amended Profile',
+                                                listeners: {
+                                                    'click': function (btn) {
+                                                        /*
+                                                            change profile name in the usr table
+                                                            delete current profiles in the usrmodule table
+                                                            create new profiles in the usrmodule table
 
+                                                        */
+                                                        var fr = Ext.getCmp('frmUsrAmend').getForm();
+                                                        if (fr.isValid())
+                                                        {
+                                                            $.post('Security/AmendUserProfile',
+                                                                { u: Ext.fly('amusr').getValue(), pro: Ext.fly('amnprof').getValue() })
+                                                                .done(function (res) {
+                                                                    if (res.status.toString() == "true") {
+                                                                        Ext.Msg.alert('AMEND USER PROFILE', res.data.toString(), this);
+                                                                        $('#amnBtnClr').trigger('click');
+                                                                    }
+                                                            });
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                id: 'amnBtnClr', text: 'Clear',
+                                                listeners: {
+                                                    'click': function (btn) {
+                                                        Ext.getCmp('frmUsrAmend').getForm().reset();
+                                                        Ext.getCmp('grdamn').getStore().removeAll();
+                                                        $('#amusr').val('').focus();
+                                                    }
+                                                }
+                                            }
                                         ]
                                     }
                                 ]
@@ -125,9 +206,13 @@
                                                                     { id: 'contentOfProfile', header: '', width: 600, hidden: true, sortable: true, dataIndex: 'contentOfProfile' },
                                                                     { id: 'profileInUse', header: '', width: 600, hidden: true, sortable: true, dataIndex: 'profileInUse' }
                                                                 ], listeners: {
-                                                                    'afterrender': function () {
-                                                                        //getGeneralProfiles(Ext.getCmp('grdPr'));
+                                                                    'render': function () {
                                                                         usr.returnUserProfileGrid('Security/GetUserProfiles', Ext.getCmp('grdPr'));
+                                                                    },
+                                                                    'afterrender': function () {
+                                                                        setInterval(function () {
+                                                                            usr.returnUserProfileGrid('Security/GetUserProfiles', Ext.getCmp('grdPr'));
+                                                                        }, 10000);
                                                                     }
                                                                 }
                                                             })
@@ -145,53 +230,50 @@
                                                                 id: 'frmSUsrProf', title: '', width: '50%', height: 420, 
                                                                 items: [
                                                                     new Ext.grid.GridPanel({
-                                                                        id: 'grdNUsrProf', title: '', height: 200, autoScroll: true,
+                                                                        id: 'grdNUsrProf', title: '', height: 200, autoScroll: true, autoExpandColumn: 'PublicName',
                                                                         store: new Ext.data.GroupingStore({
                                                                             restful: false,
                                                                             reader: new Ext.data.ArrayReader({}, [
-                                                                                { name: 'Id', type: 'int' },
-                                                                                { name: 'module', type: 'string' },
-                                                                                { name: 'describ', type: 'string' }
+                                                                                { name: 'ModuleID', type: 'int' },
+                                                                                { name: 'SystemName', type: 'string' },
+                                                                                { name: 'PublicName', type: 'string' },
+                                                                                { name: 'DateAssigned', type: 'string' }
                                                                             ]),
                                                                             sortInfo: {
-                                                                                field: "Id",
+                                                                                field: "ModuleID",
                                                                                 direction: "ASC"
                                                                             },
-                                                                            groupField: "Id"
+                                                                            groupField: "PublicName"
                                                                         }),
                                                                         columns: [
-                                                                            { id: 'id', header: 'ID', width: 60, hidden: true, sortable: true, dataIndex: 'id' },
-                                                                            { id: 'module', header: 'MODULE', width: 60, hidden: true, sortable: true, dataIndex: 'module' },
-                                                                            { id: 'describ', header: 'MODULES', width: 450, hidden: false, sortable: true, dataIndex: 'describ' }
+                                                                            { id: 'ModuleID', header: 'ID', width: 60, hidden: true, sortable: true, dataIndex: 'ModuleID' },
+                                                                            { id: 'SystemName', header: 'SYSTEM_NAME', width: 60, hidden: true, sortable: true, dataIndex: 'SystemName' },
+                                                                            { id: 'PublicName', header: 'MODULE', width: 450, hidden: false, sortable: true, dataIndex: 'PublicName' },
+                                                                            { id: 'DateAssigned', header: 'DATE_ASSIGNED', width: 450, hidden: true, sortable: true, dataIndex: 'DateAssigned' }
                                                                         ], stripeRows: true,
                                                                         listeners: {
+                                                                            'render': function () {
+                                                                                usr.returnApplicationModuleGrid('Security/GetApplicationModules', Ext.getCmp('grdNUsrProf'));
+                                                                            },
                                                                             'afterrender': function () {
-                                                                                //getActiveProfiles(Ext.getCmp('grdNUsrProf'));
+                                                                                setInterval(function () {
+                                                                                    usr.returnApplicationModuleGrid('Security/GetApplicationModules', Ext.getCmp('grdNUsrProf'));
+                                                                                },10000);
                                                                             },
                                                                             'rowdblclick': function (e, t) {
-                                                                                /*
-                                                                                var pro = e.getStore().getAt(t);
-                                                                                //alert(_obj.get('module'));
-                                                                                $.post('/User/storeUserProfile',
-                                                                                    { id: pro.get('Id'), mod: pro.get('module'), modDescription: pro.get('describ') }, function (usr) {
-                                                                                        if (usr.status.toString() == "true") {
-                                                                                            var x = [];
-                                                                                            $.each(usr.msg, function (i, dt) {
-                                                                                                x[i] = [dt.Id, dt.module, dt.describ];
-                                                                                            });
-                                                                                            //var _st = Ext.getCmp('tUsrMod').getValue();
-                                                                                            var _st = pro.get('module').toString();
-                                                                                            if (Ext.getCmp('tUsrMod').getValue().length < 1) {
-                                                                                                Ext.getCmp('tUsrMod').setValue(_st);
-                                                                                            }
-                                                                                            else {
-                                                                                                Ext.getCmp('tUsrMod').setValue(Ext.fly('tUsrMod').getValue() + ',' + _st);
-                                                                                            }
-                                                                                            Ext.getCmp('grdSUsrProf').getStore().loadData();
+                                                                                var record = e.getStore().getAt(t);
+                                                                                if (PROFILE_CONTENT.length == 0) {
+                                                                                    PROFILE_CONTENT = record.get('SystemName') + ',';
+                                                                                }
+                                                                                else {
+                                                                                    
+                                                                                    if (PROFILE_CONTENT.indexOf(record.get('SystemName')) == -1) {
+                                                                                        PROFILE_CONTENT = PROFILE_CONTENT + record.get('SystemName') + ',';
+                                                                                    }
+                                                                                    
+                                                                                }
 
-                                                                                        }
-                                                                                }, "json");
-                                                                                */
+                                                                                $('#tUsrMod').val(PROFILE_CONTENT);
                                                                             }
                                                                         }
                                                                     })
@@ -205,7 +287,7 @@
                                                             {
                                                                 id: 'fUsrMod', width: '100%',
                                                                 items: [
-                                                                    { xtype: 'textfield', id: 'tUsrMod', anchor: '100%', fieldLabel: 'Module(s)' },
+                                                                    { xtype: 'textfield', id: 'tUsrMod', anchor: '100%', fieldLabel: 'Module(s)', disabled: true },
                                                                     { xtype: 'textfield', id: 'tUsrProf', anchor: '100%', fieldLabel: 'Profile Name' }
                                                                 ],
                                                                 buttons: [
@@ -214,13 +296,9 @@
                                                                         text: 'Clear Profile',
                                                                         listeners: {
                                                                             'click': function (btn) {
-                                                                                /*
-                                                                                $.post('/User/clearUserProfileSession', {}, function (xy) {
-                                                                                    if (xy.status.toString() == "true") {
-                                                                                        Ext.getCmp('fUsrMod').getForm().reset();
-                                                                                    }
-                                                                                }, "json");
-                                                                                */
+                                                                                PROFILE_CONTENT = '';
+                                                                                $('#tUsrMod').val('');
+                                                                                $('#tUsrProf').val('');
                                                                             }
                                                                         }
                                                                     },
@@ -228,15 +306,17 @@
                                                                         id: 'btUsrModSv', text: 'Save Profile',
                                                                         listeners: {
                                                                             'click': function (btn) {
-                                                                                /*
-                                                                                $.post('/User/saveUserProfile', { _profile: Ext.fly('tUsrProf').getValue(), _profContent: Ext.fly('tUsrMod').getValue() }, function (p) {
-                                                                                    if (p.status.toString() == "true") {
-                                                                                        //update the user profile grid
-                                                                                        //update the profile combo box for user creation
-                                                                                        Ext.Msg.alert('USER PROFILE', 'User Profile created successfully', this);
-                                                                                    }
-                                                                                }, "json");
-                                                                                */
+                                                                                var f = Ext.getCmp('fUsrMod').getForm();
+                                                                                if (f.isValid()) {
+                                                                                    $.post('Security/SaveUserProfile',
+                                                                                        { _profile: Ext.fly('tUsrProf').getValue(), _profContent: Ext.fly('tUsrMod').getValue(), _profStatus:1})
+                                                                                        .done(function (r) {
+                                                                                            if (r.status.toString() == "true") {
+                                                                                                usr.returnUserProfileGrid('Security/GetUserProfiles', Ext.getCmp('grdPr'));
+                                                                                                Ext.Msg.alert('USER PROFILE', r.data.profileName + ' created successfully', this);
+                                                                                            }
+                                                                                        });
+                                                                                }
                                                                             }
                                                                         }
                                                                     }
@@ -265,12 +345,12 @@
                                 id: 'grdUList', title: '', height: 130, autoScroll: true,
                                 store: new Ext.data.GroupingStore({
                                     reader: new Ext.data.ArrayReader({}, [
-                                        { name: 'id', type: 'int' },
-                                        { name: 'usrname', type: 'string' },
-                                        { name: 'active', type: 'string' },
-                                        { name: 'logged', type: 'string' },
-                                        { name: 'actdirectory', type: 'string' },
-                                        { name: 'profile', type: 'string' }
+                                        { name: 'Id', type: 'int' },
+                                        { name: 'username', type: 'string' },
+                                        { name: 'isActive', type: 'string' },
+                                        { name: 'isLogged', type: 'string' },
+                                        { name: 'nameOfDepartment', type: 'string' },
+                                        { name: 'nameOfProfile', type: 'string' }
                                     ]),
                                     sortInfo: {
                                         field: "id",
@@ -279,16 +359,21 @@
                                     groupField: "bname"
                                 }),
                                 columns: [
-                                    { id: 'id', header: 'ID', width: 60, hidden: true, sortable: true, dataIndex: 'id' },
-                                    { id: 'usrname', header: 'USERNAME', width: 250, hidden: false, sortable: true, dataIndex: 'usrname' },
-                                    { id: 'active', header: 'ACTIVE', width: 250, hidden: false, sortable: true, dataIndex: 'active' },
-                                    { id: 'logged', header: 'LOGGED', width: 200, hidden: false, sortable: true, dataIndex: 'logged' },
-                                    { id: 'actdirectory', header: 'ACTIVE DIRECTORY', width: 200, hidden: false, sortable: true, dataIndex: 'actdirectory' },
-                                    { id: 'profile', header: 'USER PROFILE', width: 250, hidden: false, sortable: true, dataIndex: 'profile' }
+                                    { id: 'Id', header: 'ID', width: 60, hidden: true, sortable: true, dataIndex: 'Id' },
+                                    { id: 'username', header: 'USERNAME', width: 250, hidden: false, sortable: true, dataIndex: 'username' },
+                                    { id: 'isActive', header: 'ACTIVE', width: 250, hidden: false, sortable: true, dataIndex: 'isActive' },
+                                    { id: 'isLogged', header: 'LOGGED', width: 200, hidden: false, sortable: true, dataIndex: 'isLogged' },
+                                    { id: 'nameOfDepartment', header: 'DEPARTMENT', width: 200, hidden: false, sortable: true, dataIndex: 'nameOfDepartment' },
+                                    { id: 'nameOfProfile', header: 'USER PROFILE', width: 250, hidden: false, sortable: true, dataIndex: 'nameOfProfile' }
                                 ], stripeRows: true,
                                 listeners: {
+                                    'render': function () {
+                                        usr.returnUserListGrid('Security/GetUsers', Ext.getCmp('grdUList'));
+                                    },
                                     'afterrender': function () {
-                                        //setInterval(getUserList(Ext.getCmp('grdUList')), 5000);
+                                        setInterval(function () {
+                                            usr.returnUserListGrid('Security/GetUsers', Ext.getCmp('grdUList'));
+                                        }, 30000);
                                     }
                                 }
                             })
