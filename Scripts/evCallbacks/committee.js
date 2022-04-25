@@ -96,11 +96,11 @@
                                                                 stripeRows: true,
                                                                 listeners: {
                                                                     'render': function () {
-                                                                        lib.returnPositionGrid('Committee/GetPositions',Ext.getCmp('cPosgrid'));
+                                                                        lib.returnPositionGrid('/Committee/GetPositions',Ext.getCmp('cPosgrid'));
                                                                     },
                                                                     'afterrender': function () {
                                                                         setInterval(function () {
-                                                                            lib.returnPositionGrid('Committee/GetPositions',Ext.getCmp('cPosgrid'));
+                                                                            lib.returnPositionGrid('/Committee/GetPositions',Ext.getCmp('cPosgrid'));
                                                                         }, 60000);
                                                                     },
                                                                     'rowdblclick': function (e, t) {
