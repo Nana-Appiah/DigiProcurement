@@ -204,6 +204,15 @@
     <Property Name="ProcurementTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="ProcurementDescription" Type="varchar" MaxLength="200" />
   </EntityType>
+  <EntityType Name="Profile">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="profileName" Type="varchar" MaxLength="50" />
+    <Property Name="profileContent" Type="varchar" MaxLength="500" />
+    <Property Name="inUse" Type="int" />
+  </EntityType>
   <EntityType Name="Requisition">
     <Key>
       <PropertyRef Name="RequisitionID" />
@@ -228,6 +237,15 @@
     <Property Name="LastUpdatedBy" Type="varchar" MaxLength="50" />
     <Property Name="LastUpdatedDate" Type="date" />
     <Property Name="isNotif" Type="int" />
+  </EntityType>
+  <EntityType Name="RequisitionFile">
+    <Key>
+      <PropertyRef Name="RequisitionFileID" />
+    </Key>
+    <Property Name="RequisitionFileID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RequisitionID" Type="int" />
+    <Property Name="RequisitionFileDescription" Type="varchar" MaxLength="200" />
+    <Property Name="RequisitionFileName" Type="binary" MaxLength="50" />
   </EntityType>
   <EntityType Name="RequisitionItem">
     <Key>
@@ -283,6 +301,20 @@
     <Property Name="UserName" Type="varchar" MaxLength="50" />
     <Property Name="ModuleID" Type="int" />
     <Property Name="DateAssigned" Type="date" />
+  </EntityType>
+  <EntityType Name="Usr">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="usrname" Type="varchar" MaxLength="60" />
+    <Property Name="usrpassword" Type="varchar" MaxLength="300" />
+    <Property Name="deptId" Type="int" />
+    <Property Name="isActive" Type="int" />
+    <Property Name="isLogged" Type="int" />
+    <Property Name="isAD" Type="int" />
+    <Property Name="isAdmin" Type="int" />
+    <Property Name="uProfile" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="Vendor">
     <Key>
@@ -510,6 +542,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_Usr_Department">
+    <End Role="Department" Type="Self.Department" Multiplicity="0..1" />
+    <End Role="Usr" Type="Self.Usr" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Department">
+        <PropertyRef Name="DepartmentID" />
+      </Principal>
+      <Dependent Role="Usr">
+        <PropertyRef Name="deptId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Vendor_BusinessType">
     <End Role="BusinessType" Type="Self.BusinessType" Multiplicity="0..1" />
     <End Role="Vendor" Type="Self.Vendor" Multiplicity="*" />
@@ -556,13 +600,16 @@
     <EntitySet Name="ProcessFlow" EntityType="Self.ProcessFlow" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ProcessFlowList" EntityType="Self.ProcessFlowList" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ProcurementType" EntityType="Self.ProcurementType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Profile" EntityType="Self.Profile" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Requisition" EntityType="Self.Requisition" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RequisitionFile" EntityType="Self.RequisitionFile" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RequisitionItem" EntityType="Self.RequisitionItem" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RequisitionStatus" EntityType="Self.RequisitionStatus" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RequisitionType" EntityType="Self.RequisitionType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SIUnit" EntityType="Self.SIUnit" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserModule" EntityType="Self.UserModule" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Usr" EntityType="Self.Usr" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Vendor" EntityType="Self.Vendor" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="VendorType" EntityType="Self.VendorType" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_CommitteeMember_Committee" Association="Self.FK_CommitteeMember_Committee">
@@ -628,6 +675,10 @@
     <AssociationSet Name="FK_UserModule_Module" Association="Self.FK_UserModule_Module">
       <End Role="Module" EntitySet="Module" />
       <End Role="UserModule" EntitySet="UserModule" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Usr_Department" Association="Self.FK_Usr_Department">
+      <End Role="Department" EntitySet="Department" />
+      <End Role="Usr" EntitySet="Usr" />
     </AssociationSet>
     <AssociationSet Name="FK_Vendor_BusinessType" Association="Self.FK_Vendor_BusinessType">
       <End Role="BusinessType" EntitySet="BusinessType" />

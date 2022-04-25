@@ -53,6 +53,10 @@
         <EntityTypeShape EntityType="EProcurementDbModel.Capex" Width="2" PointX="11.375" PointY="15.75" />
         <EntityTypeShape EntityType="EProcurementDbModel.sysdiagram" Width="1.5" PointX="14.375" PointY="15.75" />
         <AssociationConnector Association="EProcurementDbModel.FK_RequisitionItem_LPO" />
+        <EntityTypeShape EntityType="EProcurementDbModel.Profile" Width="1.5" PointX="16.375" PointY="3.75" />
+        <EntityTypeShape EntityType="EProcurementDbModel.RequisitionFile" Width="1.5" PointX="16.375" PointY="15.75" />
+        <EntityTypeShape EntityType="EProcurementDbModel.Usr" Width="1.5" PointX="16.625" PointY="18.375" />
+        <AssociationConnector Association="EProcurementDbModel.FK_Usr_Department" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

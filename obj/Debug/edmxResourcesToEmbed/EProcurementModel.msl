@@ -349,5 +349,40 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Profiles">
+      <EntityTypeMapping TypeName="EProcurementDbModel.Profile">
+        <MappingFragment StoreEntitySet="Profile">
+          <ScalarProperty Name="inUse" ColumnName="inUse" />
+          <ScalarProperty Name="profileContent" ColumnName="profileContent" />
+          <ScalarProperty Name="profileName" ColumnName="profileName" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RequisitionFiles">
+      <EntityTypeMapping TypeName="EProcurementDbModel.RequisitionFile">
+        <MappingFragment StoreEntitySet="RequisitionFile">
+          <ScalarProperty Name="RequisitionFileName" ColumnName="RequisitionFileName" />
+          <ScalarProperty Name="RequisitionFileDescription" ColumnName="RequisitionFileDescription" />
+          <ScalarProperty Name="RequisitionID" ColumnName="RequisitionID" />
+          <ScalarProperty Name="RequisitionFileID" ColumnName="RequisitionFileID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Usrs">
+      <EntityTypeMapping TypeName="EProcurementDbModel.Usr">
+        <MappingFragment StoreEntitySet="Usr">
+          <ScalarProperty Name="uProfile" ColumnName="uProfile" />
+          <ScalarProperty Name="isAdmin" ColumnName="isAdmin" />
+          <ScalarProperty Name="isAD" ColumnName="isAD" />
+          <ScalarProperty Name="isLogged" ColumnName="isLogged" />
+          <ScalarProperty Name="isActive" ColumnName="isActive" />
+          <ScalarProperty Name="deptId" ColumnName="deptId" />
+          <ScalarProperty Name="usrpassword" ColumnName="usrpassword" />
+          <ScalarProperty Name="usrname" ColumnName="usrname" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

@@ -449,6 +449,13 @@
       <End Role="LPO" EntitySet="LPOes" />
       <End Role="RequisitionItem" EntitySet="RequisitionItems" />
     </AssociationSet>
+    <EntitySet Name="Profiles" EntityType="EProcurementDbModel.Profile" />
+    <EntitySet Name="RequisitionFiles" EntityType="EProcurementDbModel.RequisitionFile" />
+    <EntitySet Name="Usrs" EntityType="EProcurementDbModel.Usr" />
+    <AssociationSet Name="FK_Usr_Department" Association="EProcurementDbModel.FK_Usr_Department">
+      <End Role="Department" EntitySet="Departments" />
+      <End Role="Usr" EntitySet="Usrs" />
+    </AssociationSet>
   </EntityContainer>
   <Association Name="FK_UserModule_Module">
     <End Type="EProcurementDbModel.Module" Role="Module" Multiplicity="0..1" />
@@ -529,6 +536,7 @@
     <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
     <Property Name="Head" Type="Int32" />
     <NavigationProperty Name="Requisitions" Relationship="EProcurementDbModel.FK_Requisition_Department" FromRole="Department" ToRole="Requisition" />
+    <NavigationProperty Name="Usrs" Relationship="EProcurementDbModel.FK_Usr_Department" FromRole="Department" ToRole="Usr" />
   </EntityType>
   <Association Name="FK_Requisition_Company">
     <End Type="EProcurementDbModel.Company" Role="Company" Multiplicity="0..1" />
@@ -671,6 +679,51 @@
       </Principal>
       <Dependent Role="RequisitionItem">
         <PropertyRef Name="LPOID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Profile">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="profileName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="profileContent" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="inUse" Type="Int32" />
+  </EntityType>
+  <EntityType Name="RequisitionFile">
+    <Key>
+      <PropertyRef Name="RequisitionFileID" />
+    </Key>
+    <Property Name="RequisitionFileID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RequisitionID" Type="Int32" />
+    <Property Name="RequisitionFileDescription" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="RequisitionFileName" Type="Binary" MaxLength="50" FixedLength="true" />
+  </EntityType>
+  <EntityType Name="Usr">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="usrname" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+    <Property Name="usrpassword" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+    <Property Name="deptId" Type="Int32" />
+    <Property Name="isActive" Type="Int32" />
+    <Property Name="isLogged" Type="Int32" />
+    <Property Name="isAD" Type="Int32" />
+    <Property Name="isAdmin" Type="Int32" />
+    <Property Name="uProfile" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Department" Relationship="EProcurementDbModel.FK_Usr_Department" FromRole="Usr" ToRole="Department" />
+  </EntityType>
+  <Association Name="FK_Usr_Department">
+    <End Type="EProcurementDbModel.Department" Role="Department" Multiplicity="0..1" />
+    <End Type="EProcurementDbModel.Usr" Role="Usr" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Department">
+        <PropertyRef Name="DepartmentID" />
+      </Principal>
+      <Dependent Role="Usr">
+        <PropertyRef Name="deptId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
