@@ -16,7 +16,7 @@ namespace DigiProc
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Desktop", id = UrlParameter.Optional }
+                defaults: new { controller = "Security", action = "IDChallenge", id = UrlParameter.Optional }
             );
         }
     }

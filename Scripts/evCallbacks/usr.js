@@ -71,3 +71,19 @@ usr.returnApplicationModulesForProfile = function (_urlString, _PROFILE, _widget
         }
     });
 }
+
+usr.returnAuthenticationStatus = function (_urlString, usr, pass, DIV) {
+    //authenticates user credentials
+    $.getJSON(_urlString, { usrname: usr, pwd: pass }, function (result) {
+        if (msg.status.toString() == "true") {
+            DIV.empty().append('<b style="font-size:15px;color:green;">Login success. Redirecting...</b>').fadeIn('slow').fadeOut('slow');
+            window.location = "Home/Desktop";
+        }
+        else if (msg.msg.toString() == "Incorrect login credentials") {
+            DIV.empty().append('<b style="font-size:15px;color:red;">Incorrect login credentials.Please try again</b>').fadeIn('slow').fadeOut('slow');
+        }
+        else if (msg.msg.toString() == "User account is de-activated") {
+            DIV.empty().append('<b style="font-size:12px;color:red;">User account is de-activated.Please contact Admin</b>').fadeIn('slow').fadeOut('slow');
+        }
+    });
+}

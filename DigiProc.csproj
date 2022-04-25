@@ -271,13 +271,16 @@
     <Compile Include="Views\User\UserController.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\balloon.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\desktop.css" />
     <Content Include="Content\htmleditorplugins.css" />
+    <Content Include="Content\reset.css" />
     <Content Include="Content\RowEditor.css" />
+    <Content Include="Content\structure.css" />
     <Content Include="EProcurementModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>EProcurementModel.edmx</DependentUpon>
@@ -339,6 +342,7 @@
     <Content Include="images\member.gif" />
     <Content Include="images\member.png" />
     <Content Include="images\PASL.jpg" />
+    <Content Include="images\PASL_Logo.jpg" />
     <Content Include="images\pdf_48.png" />
     <Content Include="images\powered.gif" />
     <Content Include="images\powered.png" />
@@ -1244,6 +1248,7 @@
     <Content Include="Lib\ext\resources\images\yourtheme\window\top-bottom.png" />
     <Content Include="Scripts\App.js" />
     <Content Include="Scripts\applicationparts.js" />
+    <Content Include="Scripts\balloon.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Lib\ext\resources\images\access\form\clear-trigger.psd" />
@@ -1329,6 +1334,8 @@
     <Content Include="Views\Shared\Desktop.Master" />
     <Content Include="Views\Shared\Desktop.cshtml" />
     <Content Include="Views\Home\Desktop.cshtml" />
+    <Content Include="Views\Shared\Login.cshtml" />
+    <Content Include="Views\Security\IDChallenge.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

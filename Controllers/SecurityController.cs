@@ -13,6 +13,11 @@ namespace DigiProc.Controllers
 {
     public class SecurityController : Controller
     {
+        public ActionResult IDChallenge()
+        {
+            return View();
+        }
+
         #region User-Getters
 
         [HttpGet]
@@ -240,6 +245,39 @@ namespace DigiProc.Controllers
                 }
 
                 return Json(new { status = true, data = $"User account {usr} created successfully with {success.ToString()} modules added" },JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception ex)
+            {
+                return Json(new { status = false, error = $"error: {ex.Message}" },JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult Login(string usrname, string pwd)
+        {
+            try
+            {
+                ConfigurationHelper Cfg = new ConfigurationHelper();
+                var objUser = Cfg.GetUser(usrname, Security.Hashing.CreateHash(pwd));
+
+                if (objUser.isActive == @"Yes")
+                {
+                    var _session = new UserSession()
+                    {
+                        userDepartment = new Department { Name = objUser.nameOfDepartment },
+                        userName = objUser.username,
+                        userProfile = objUser.PrManager.nameOfProfile,
+                        moduleString = objUser.PrManager.contentOfProfile
+                    };
+
+                    Session["userSession"] = _session;
+
+                    return Json(new { status = true, data = objUser },JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { status = false },JsonRequestBehavior.AllowGet);
+                }
             }
             catch(Exception ex)
             {

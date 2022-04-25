@@ -19,11 +19,10 @@ namespace DigiProc.Controllers
             try
             {
                 UserSession session = (UserSession)Session["userSession"];
-
+              
                 var obj = new Utility();
                 var usModules = obj.getUserModules(session.userName);
                 return Json(usModules, JsonRequestBehavior.AllowGet);
-                //return Json(new { status = true, data = usModules }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception errmsg) { Debug.Print(errmsg.Message); return Json(new { error = errmsg }); }
         }

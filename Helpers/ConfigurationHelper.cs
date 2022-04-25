@@ -279,6 +279,33 @@ namespace DigiProc.Helpers
             }
         }
 
+        public UserManager GetUser(string _user, string _pwd)
+        {
+            UserManager userManager = new UserManager();
+
+            try
+            {
+                var obj = config.Usrs.Where(u => u.usrname == _user).Where(p => p.usrpassword == _pwd).FirstOrDefault();
+                if (obj != null)
+                {
+
+                    userManager.Id = obj.Id;
+                    userManager.username = obj.usrname;
+                    userManager.isActive = obj.isActive == 1 ? @"Yes" : @"No";
+                    userManager.isLogged = obj.isLogged == 1 ? @"Yes" : @"No";
+                    userManager.nameOfDepartment = new Utility() { }.getDepartment(obj.deptId).Name;
+                    userManager.PrManager = new ProfileManager { nameOfProfile = obj.uProfile };
+                }
+
+                return userManager;
+            }
+            catch (Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return userManager;
+            }
+        }
+
         public UserManager GetUser(string _user)
         {
             UserManager userManager = new UserManager();

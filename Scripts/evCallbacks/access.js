@@ -1,6 +1,7 @@
 ﻿var access = access || {};
 
 access.GetAssignedModules = function (URL, icons) {
+    alert('loading...');
     var _data;
     var icons_count = icons.length;
     $.getJSON(URL, {}, function (res) {

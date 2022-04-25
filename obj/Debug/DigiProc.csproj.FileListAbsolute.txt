@@ -325,7 +325,7 @@ G:\Dev_Repository\Projects\Nana\Apps\eProc\obj\Debug\DigiProc.pdb
 \\vmware-host\Shared Folders\Documents 2\Projects\DigiProc\bin\Newtonsoft.Json.xml
 \\vmware-host\Shared Folders\Documents 2\Projects\DigiProc\bin\Antlr3.Runtime.pdb
 \\vmware-host\Shared Folders\Documents 2\Projects\DigiProc\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-\\vmware-host\Shared Folders\Documents 2\Projects\DigiProc\obj\Debug\DigiProc.csprojAssemblyReference.cache
 \\vmware-host\Shared Folders\Documents 2\Projects\DigiProc\obj\Debug\DigiProc.csproj.CopyComplete
 \\vmware-host\Shared Folders\Documents 2\Projects\DigiProc\obj\Debug\DigiProc.dll
 \\vmware-host\Shared Folders\Documents 2\Projects\DigiProc\obj\Debug\DigiProc.pdb
+\\vmware-host\Shared Folders\Documents 2\Projects\DigiProc\obj\Debug\DigiProc.csprojAssemblyReference.cache
