@@ -268,7 +268,7 @@
     <Compile Include="Views\Shared\Desktop.Master.designer.cs">
       <DependentUpon>Desktop.Master</DependentUpon>
     </Compile>
-    <Compile Include="Views\User\UserController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\balloon.css" />
@@ -1333,9 +1333,9 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Desktop.Master" />
     <Content Include="Views\Shared\Desktop.cshtml" />
-    <Content Include="Views\Home\Desktop.cshtml" />
+    <Content Include="Views\Home\Main.cshtml" />
     <Content Include="Views\Shared\Login.cshtml" />
-    <Content Include="Views\Security\IDChallenge.cshtml" />
+    <Content Include="Views\User\IDChallenge.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1346,6 +1346,7 @@
     <Folder Include="Views\Master\" />
     <Folder Include="Views\ProcessFlow\" />
     <Folder Include="Views\Requisition\" />
+    <Folder Include="Views\Security\" />
     <Folder Include="Views\Utility\" />
   </ItemGroup>
   <ItemGroup>

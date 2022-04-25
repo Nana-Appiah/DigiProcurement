@@ -51,7 +51,7 @@
                                                                             { _id: recordId, cposition: Ext.fly('cpos').getValue() }).done(function (res) {
                                                                                 if (res.status.toString() == "true") {
                                                                                         $('#cPos-btn-clear').trigger('click');
-                                                                                        lib.returnPositionGrid('Committee/GetPositions', Ext.getCmp('cPosgrid'));
+                                                                                        lib.returnPositionGrid('/Committee/GetPositions', Ext.getCmp('cPosgrid'));
                                                                                         recordId = 0;
                                                                                     }
                                                                          });
@@ -140,7 +140,7 @@
                                                                 handler: function (btn) {
                                                                     var f = Ext.getCmp('cComFrm').getForm();
                                                                     if (f.isValid()) {
-                                                                        $.post('Committee/AddCommittee',
+                                                                        $.post('/Committee/AddCommittee',
                                                                             { _id: recordId, cName: Ext.fly('cCom-name').getValue(), cDescrib: Ext.fly('cCom-describ').getValue() })
                                                                             .done(function (r) {
                                                                                 if (r.status.toString() == "true") {
@@ -193,11 +193,11 @@
                                                                 stripeRows: true,
                                                                 listeners: {
                                                                     'render': function () {
-                                                                        lib.returnCommitteeGrid('Committee/GetCommitteeList', Ext.getCmp('cComgrid'));
+                                                                        lib.returnCommitteeGrid('/Committee/GetCommitteeList', Ext.getCmp('cComgrid'));
                                                                     },
                                                                     'afterrender': function () {
                                                                         setInterval(function () {
-                                                                            lib.returnCommitteeGrid('Committee/GetCommitteeList', Ext.getCmp('cComgrid'));
+                                                                            lib.returnCommitteeGrid('/Committee/GetCommitteeList', Ext.getCmp('cComgrid'));
                                                                         },60000);
                                                                     },
                                                                     'rowdblclick': function (e,t) {
@@ -257,7 +257,7 @@
                                                                                     Ext.getCmp('cbomempos').getValue() + ',' +  Ext.getCmp('cbomemcom').getValue() + ',' +
                                                                                     Ext.fly('cbomemact').getValue()];
 
-                                                                        $.post('Committee/AddCommitteeMember', { parameters: dataParameter }).done(function (r) {
+                                                                        $.post('/Committee/AddCommitteeMember', { parameters: dataParameter }).done(function (r) {
                                                                             if (r.status.toString() == "true") {
                                                                                 lib.returnCommitteeMembershipGrid('Committee/GetCommitteeMembers', Ext.getCmp('cMemgrid'), Ext.getCmp('cbomem-com').getValue());
                                                                                 $('#cMembtnclear').trigger('click');
@@ -288,7 +288,7 @@
                                                         defaults: { xtype: 'combo', forceSelection: true, typeAhead: true, allowBlank: false, mode: 'local' },layout:'fit',
                                                         items: [
                                                             {
-                                                                id: '', store: lib.getCommitteeStore('Committee/GetCommitteeList'), valueField: 'CommitteeID', displayField:'CommitteeName'
+                                                                id: '', store: lib.getCommitteeStore('/Committee/GetCommitteeList'), valueField: 'CommitteeID', displayField:'CommitteeName'
                                                             }
                                                         ]
                                                     },
@@ -327,11 +327,11 @@
                                                                 stripeRows: true,
                                                                 listeners: {
                                                                     'render': function () {
-                                                                        lib.returnCommitteeMembershipGrid('Committee/GetCommitteeMembers', Ext.getCmp('cMemgrid'), 0);
+                                                                        lib.returnCommitteeMembershipGrid('/Committee/GetCommitteeMembers', Ext.getCmp('cMemgrid'), 0);
                                                                     },
                                                                     'afterrender': function () {
                                                                         setInterval(function () {
-                                                                            lib.returnCommitteeMembershipGrid('Committee/GetCommitteeMembers', Ext.getCmp('cMemgrid'), 0);
+                                                                            lib.returnCommitteeMembershipGrid('/Committee/GetCommitteeMembers', Ext.getCmp('cMemgrid'), 0);
                                                                         },10000);
                                                                     },
                                                                     'rowdblclick': function (e,t) {
@@ -382,7 +382,7 @@
                                                                         if (ptf.isValid()) {
                                                                             var f = Ext.getCmp('proctypefrm').getForm();
                                                                             if (f.isValid()) {
-                                                                                $.post('Committee/SaveProcurementType',
+                                                                                $.post('/Committee/SaveProcurementType',
                                                                                     { _id: recordId, procDescrib: Ext.fly('proctype').getValue() })
                                                                                     .done(function (r) {
                                                                                         if (r.status.toString() == "true") {
@@ -430,11 +430,11 @@
                                                                 stripeRows: true,
                                                                 listeners: {
                                                                     'render': function () {
-                                                                        lib.returnProcurementTypeGrid('Committee/GetProcurementTypes', Ext.getCmp('cProcTypegrid'));
+                                                                        lib.returnProcurementTypeGrid('/Committee/GetProcurementTypes', Ext.getCmp('cProcTypegrid'));
                                                                     },
                                                                     'afterrender': function () {
                                                                         setInterval(function () {
-                                                                            lib.returnProcurementTypeGrid('Committee/GetProcurementTypes', Ext.getCmp('cProcTypegrid'));
+                                                                            lib.returnProcurementTypeGrid('/Committee/GetProcurementTypes', Ext.getCmp('cProcTypegrid'));
                                                                         },10000);
                                                                     },
                                                                     'rowdblclick': function (e, t) {
@@ -456,7 +456,7 @@
                                                         items: [
                                                             {
                                                                 id: 'pfproctype', fieldLabel: 'Proc. Type', emptyText: 'Procurement Type',
-                                                                store: lib.returnProcurementTypeStore('Committee/GetProcurementTypes'), valueField: 'ProcurementTypeID', displayField: 'ProcurementDescription'
+                                                                store: lib.returnProcurementTypeStore('/Committee/GetProcurementTypes'), valueField: 'ProcurementTypeID', displayField: 'ProcurementDescription'
                                                             },
                                                             { id: 'pflimit', fieldLabel: 'Limit', xtype: 'numberfield' },
                                                             { id: 'pforder', fieldLabel: 'Order', xtype: 'numberfield' },
@@ -469,14 +469,14 @@
                                                                     'click': function (btn) {
                                                                         var f = Ext.getCmp('pffrm').getForm();
                                                                         if (f.isValid()) {
-                                                                            $.post('Committee/SaveProcessFlow',
+                                                                            $.post('/Committee/SaveProcessFlow',
                                                                                 {
                                                                                     _id: recordId, ptypeId: Ext.getCmp('pfproctype').getValue(),
                                                                                     limit: Ext.fly('pflimit').getValue(), _order: Ext.fly('pforder').getValue()
                                                                                 })
                                                                                 .done(function (r) {
                                                                                     if (r.status.toString() == "true") {
-                                                                                        lib.returnProcessFlowGrid('Committee/GetProcessFlows', Ext.getCmp('cPFgrid'));
+                                                                                        lib.returnProcessFlowGrid('/Committee/GetProcessFlows', Ext.getCmp('cPFgrid'));
                                                                                         $('#pffrm-btn-clear').trigger('click');
                                                                                         recordId = 0;
                                                                                     }
@@ -523,11 +523,11 @@
                                                                 stripeRows: true,
                                                                 listeners: {
                                                                     'render': function () {
-                                                                        lib.returnProcessFlowGrid('Committee/GetProcessFlows', Ext.getCmp('cPFgrid'));
+                                                                        lib.returnProcessFlowGrid('/Committee/GetProcessFlows', Ext.getCmp('cPFgrid'));
                                                                     },
                                                                     'afterrender': function () {
                                                                         setInterval(function () {
-                                                                            lib.returnProcessFlowGrid('Committee/GetProcessFlows', Ext.getCmp('cPFgrid'));
+                                                                            lib.returnProcessFlowGrid('/Committee/GetProcessFlows', Ext.getCmp('cPFgrid'));
                                                                         },15000);
                                                                     },
                                                                     'rowdblclick': function (e, t) {
@@ -538,7 +538,7 @@
                                                                         $('#pflimit').val(record.get('limit'));
                                                                         $('#pforder').val(record.get('order'));
 
-                                                                        lib.returnPflowList('Committee/GetProcessFlowList', recordId, $('#pfList'));
+                                                                        lib.returnPflowList('/Committee/GetProcessFlowList', recordId, $('#pfList'));
                                                                     }
                                                                 }
 
@@ -570,7 +570,7 @@
                                                                     'click': function (btn) {
                                                                         var f = Ext.getCmp('ngfrm').getForm();
                                                                         if (f.isValid()) {
-                                                                            $.post('Committee/SaveNotificationGroup',
+                                                                            $.post('/Committee/SaveNotificationGroup',
                                                                                 {
                                                                                     _id: recordId, gname: Ext.fly('ngname').getValue(),
                                                                                     gemails: Ext.fly('ngemail').getValue(), gdescrib: Ext.fly('ngdescrib').getValue()
@@ -578,7 +578,7 @@
                                                                                 done(function (r) {
                                                                                     if (r.status.toString() == "true") {
                                                                                         $('#ng-btn-clear').trigger('click');
-                                                                                        lib.returnNotificationGroupGrid('Committee/GetNotificationGroups', Ext.getCmp('cNGgrid'));
+                                                                                        lib.returnNotificationGroupGrid('/Committee/GetNotificationGroups', Ext.getCmp('cNGgrid'));
                                                                                         recordId = 0;
                                                                                     }
                                                                             })
@@ -624,11 +624,11 @@
                                                                 stripeRows: true,
                                                                 listeners: {
                                                                     'render': function () {
-                                                                        lib.returnNotificationGroupGrid('Committee/GetNotificationGroups', Ext.getCmp('cNGgrid'));
+                                                                        lib.returnNotificationGroupGrid('/Committee/GetNotificationGroups', Ext.getCmp('cNGgrid'));
                                                                     },
                                                                     'afterrender': function () {
                                                                         setInterval(function () {
-                                                                            lib.returnNotificationGroupGrid('Committee/GetNotificationGroups', Ext.getCmp('cNGgrid'));
+                                                                            lib.returnNotificationGroupGrid('/Committee/GetNotificationGroups', Ext.getCmp('cNGgrid'));
                                                                         },15000);
                                                                     },
                                                                     'rowdblclick': function (e, t) {
@@ -653,11 +653,11 @@
                                                         defaults: { xtype: 'combo', forceSelection: true, typeAhead: true, anchor: '95%', mode: 'local', allowBlank: false },
                                                         items: [
                                                             {
-                                                                id: 'notifpflow', fieldLabel: 'ProcessFlow', store: lib.returnProcessFlowStore('Committee/GetProcessFlows'),
+                                                                id: 'notifpflow', fieldLabel: 'ProcessFlow', store: lib.returnProcessFlowStore('/Committee/GetProcessFlows'),
                                                                 valueField: 'Id', displayField: 'nameOfProcurement'
                                                             },
                                                             {
-                                                                id: 'notifgroup', fieldLabel: 'Group', store: lib.returnNotificationStore('Committee/GetNotificationGroups'),
+                                                                id: 'notifgroup', fieldLabel: 'Group', store: lib.returnNotificationStore('/Committee/GetNotificationGroups'),
                                                                 valueField: 'NotificationGroupID', displayField:'NotificationGroupName'
                                                             }
                                                         ],
@@ -668,7 +668,7 @@
                                                                     'click': function (btn) {
                                                                         var frm = Ext.getCmp('notiflistfrm').getForm();
                                                                         if (frm.isValid()) {
-                                                                            $.post('Committee/SavePFNotificationList',
+                                                                            $.post('/Committee/SavePFNotificationList',
                                                                                 { _id: recordId, pfId: Ext.getCmp('notifpflow').getValue(), groupId: Ext.getCmp('notifgroup').getValue() })
                                                                                 .done(function (r) {
                                                                                 if (r.status.toString() == "true") {
@@ -717,11 +717,11 @@
                                                                 stripeRows: true,
                                                                 listeners: {
                                                                     'render': function () {
-                                                                        lib.returnPFNotificationGrid('Committee/GetPFNotificationList', Ext.getCmp('cPFNotifgrid'));
+                                                                        lib.returnPFNotificationGrid('/Committee/GetPFNotificationList', Ext.getCmp('cPFNotifgrid'));
                                                                     },
                                                                     'afterrender': function () {
                                                                         setInterval(function () {
-                                                                            lib.returnPFNotificationGrid('Committee/GetPFNotificationList', Ext.getCmp('cPFNotifgrid'));
+                                                                            lib.returnPFNotificationGrid('/Committee/GetPFNotificationList', Ext.getCmp('cPFNotifgrid'));
                                                                         },15000);
                                                                     },
                                                                     'rowdblclick': function (e, t) {

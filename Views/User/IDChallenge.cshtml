@@ -32,15 +32,14 @@
         $(document).ready(function () {
             $('.btnLogin').click(function (evnt) {
                 evnt.preventDefault();
-                //window.location = "/Home/Main";
-                //usr.returnAuthenticationStatus('Security/Login', $('#usr').val(), $('#pwd').val(), $('div#dvstat'));
-
-                $.post('Home/Login',
+                
+                $.post("@Url.Action("Login","User")",
                     { usrname: $('#usr').val(), pwd: $('#pwd').val() })
                     .done(function (msg) {
                         if (msg.status.toString() == "true") {
                             $('div#dvstat').empty().append('<b style="font-size:15px;color:green;">Login success. Redirecting...</b>').fadeIn('slow').fadeOut('slow');
-                            window.location = "Home/Desktop";
+                            //window.location = "Home/Main";
+                            window.location = "@Url.Action("Main","Home")";
                         }
                         else if (msg.msg.toString() == "Incorrect login credentials") {
                             $('div#dvstat').empty().append('<b style="font-size:15px;color:red;">Incorrect login credentials.Please try again</b>').fadeIn('slow').fadeOut('slow');

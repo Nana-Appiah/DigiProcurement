@@ -108,7 +108,7 @@
         Ext.QuickTips.init(); //enable tooltips
         Ext.chart.Chart.CHART_URL = '~/images/charts.swf';
 
-        access.GetAssignedModules('GetAssignedModules', $('.dl dt'));
+        access.GetAssignedModules("@Url.Action("GetAssignedModules","Utility")", $('.dl dt'));
         
         $('#x-desktop').zoom = '90%';
 
