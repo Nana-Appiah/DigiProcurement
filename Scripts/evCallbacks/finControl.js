@@ -39,10 +39,10 @@
                                                         id: 'fnSearchFrm', title: 'Search', defaults: { xtype: 'combo', forceSelection: true, typeAhead: true, mode: 'local', allowBlank: false, anchor: '95%' }, layout: 'fit',
                                                         items: [
                                                             {
-                                                                id: 'fnDept', store: lib.returnDepartmentStore('Utility/GetDepartments'), valueField: 'DepartmentID', displayField: 'Name',
+                                                                id: 'fnDept', store: lib.returnDepartmentStore('/Utility/GetDepartments'), valueField: 'DepartmentID', displayField: 'Name',
                                                                 listeners: {
                                                                     'select': function () {
-                                                                        lib.returnRequisitionNumbersGrid('Requisition/GetRequisitionNos', 1, Ext.getCmp('fnDept').getValue(), Ext.getCmp('fnReqGrid'));
+                                                                        lib.returnRequisitionNumbersGrid('/Requisition/GetRequisitionNos', 1, Ext.getCmp('fnDept').getValue(), Ext.getCmp('fnReqGrid'));
                                                                     }
                                                                 }
                                                             }
@@ -73,7 +73,7 @@
                                                                     'rowdblclick': function (e, t) {
                                                                         var record = e.getStore().getAt(t);
                                                                         REQUISITION_ID = record.get('Id');
-                                                                        lib.returnRequistionDetails('Requisition/GetRequisitionDetails', REQUISITION_ID, $('#rno'), $('#requestee'), $('#dept'), $('#priority'));
+                                                                        lib.returnRequistionDetails('/Requisition/GetRequisitionDetails', REQUISITION_ID, $('#rno'), $('#requestee'), $('#dept'), $('#priority'));
                                                                         //lib.getItemGridGivenRequisitionID('Requisition/GetRequisitionItemList', REQUISITION_ID, 1, Ext.getCmp('fnReqItemsGrid'));
                                                                         
                                                                         //lib.returnRequistionDetails2('Requisition/GetRequisitionDetails2', REQUISITION_ID, $('#rno'), $('#requestee'), $('#dept'), $('#priority'), _STAT_ID, Ext.getCmp('fnReqItemsGrid'));
@@ -84,11 +84,11 @@
                                                         ],
                                                         buttons: [
                                                             {
-                                                                id: 'req-btn-get', text: 'Get Requisition Items',
+                                                                id: 'req-btn-get', text: 'Get Requisition Items',hidden:true,
                                                                 listeners: {
                                                                     'click': function (btn) {
                                                                         var _STAT_ID = 1;
-                                                                        lib.getItemGridGivenRequisitionID('Requisition/GetRequisitionItemList', REQUISITION_ID, _STAT_ID, Ext.getCmp('fnReqItemsGrid'));
+                                                                        lib.getItemGridGivenRequisitionID('/Requisition/GetRequisitionItemList', REQUISITION_ID, _STAT_ID, Ext.getCmp('fnReqItemsGrid'));
                                                                     }
                                                                 }
                                                             }
@@ -187,7 +187,7 @@
 
                                                                         //console.log(APPROVED_REQUISITIONS);
                                                                         //APPROVED_REQUISITIONS = dta;
-                                                                        $.post('Requisition/ApproveRequisition', { dta: APPROVED_REQUISITIONS })
+                                                                        $.post('/Requisition/ApproveRequisition', { dta: APPROVED_REQUISITIONS })
                                                                             .done(function (r) {
                                                                                 if (r.status.toString() == "true") {
                                                                                     Ext.MessageBox.alert("Financial Approval", r.data, this);
@@ -229,7 +229,7 @@
                                                                         id: '', title: 'Search',
                                                                         defaults: { xtype: 'combo', forceSelection: true, typeAhead: true, allowBlank: false, mode:'local' }, layout: 'fit',
                                                                         items: [
-                                                                            { id: '', valueField: 'Id', displayField: 'ProductName', store: lib.returnItemStore('Utility/GetItemList') }
+                                                                            { id: '', valueField: 'Id', displayField: 'ProductName', store: lib.returnItemStore('/Utility/GetItemList') }
                                                                         ]
                                                                     },
                                                                     {
@@ -262,10 +262,10 @@
                                                         defaults: { xtype: 'combo', forceSelection: true, typeAhead: true, mode: 'local', allowBlank: false }, layout: 'fit',
                                                         items: [
                                                             {
-                                                                id: 'capexdept', store: lib.returnDepartmentStore('Utility/GetDepartments'), valueField: 'DepartmentID', displayField: 'Name',
+                                                                id: 'capexdept', store: lib.returnDepartmentStore('/Utility/GetDepartments'), valueField: 'DepartmentID', displayField: 'Name',
                                                                 listeners: {
                                                                     'select': function () {
-                                                                        lib.getCapexItemGrid('Capex/GetCapexData', Ext.getCmp('capexdept').getValue(), Ext.getCmp('capexGridAppr'));
+                                                                        lib.getCapexItemGrid('/Capex/GetCapexData', Ext.getCmp('capexdept').getValue(), Ext.getCmp('capexGridAppr'));
                                                                     }
                                                                 }
                                                             }

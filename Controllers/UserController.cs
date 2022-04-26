@@ -41,7 +41,8 @@ namespace DigiProc.Views.User
                         userName = objUser.username,
                         userProfile = objUser.PrManager.nameOfProfile,
                         moduleString = objUser.PrManager.contentOfProfile,
-                        modules = usModules
+                        modules = usModules,
+                        approverTag = objUser.userTag
                     };
 
                     Session["userSession"] = _session;

@@ -61,6 +61,34 @@ namespace DigiProc.Helpers
             }
         }
 
+        public ProcessFlow GetProcessFlow(string _process_flow_id)
+        {
+            ProcessFlow pf = null;
+            int _id = int.Parse(_process_flow_id);
+
+            try
+            {
+                this.oProcessFlow = config.ProcessFlows.Where(p => p.ProcessFlowID == _id).FirstOrDefault();
+                if (this.oProcessFlow != null)
+                {
+                    pf = new ProcessFlow()
+                    {
+                        ProcessFlowID = this.oProcessFlow.ProcessFlowID,
+                        ProcurementTypeId = this.oProcessFlow.ProcurementTypeId,
+                        Limit = this.oProcessFlow.Limit,
+                        ProcessFlowOrder = this.oProcessFlow.ProcessFlowOrder,
+                    };
+                }
+
+                return pf;
+            }
+            catch (Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return pf;
+            }
+        }
+
         public ProcessFlowList GetProcessFlowList(int _processflowID)
         {
             ProcessFlowList pfl = null;
@@ -83,6 +111,42 @@ namespace DigiProc.Helpers
             {
                 Debug.Print(ex.Message);
                 return pfl;
+            }
+        }
+
+        public List<ProcessFlowList> GetProcessFlowList(string systemUserTag)
+        {
+            //using the tag of the system user to get associated processflow
+
+            List<ProcessFlowList> pflList = null;
+
+            try
+            {
+                var dta = config.ProcessFlowLists.Where(x => x.Flow.Contains(systemUserTag)).ToList();
+                if (dta.Count() > 0)
+                {
+                    pflList = new List<ProcessFlowList>();
+
+                    foreach(var d in dta)
+                    {
+                        var pfl = new ProcessFlowList()
+                        {
+                            ProcessFlowListID = d.ProcessFlowListID,
+                            ProcessFlowID = d.ProcessFlowID,
+                            Flow =  d.Flow
+                        };
+
+                        pflList.Add(pfl);
+                    }
+
+                }
+
+                return pflList;
+            }
+            catch (Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return pflList;
             }
         }
 

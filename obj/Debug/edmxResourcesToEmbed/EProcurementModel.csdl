@@ -714,6 +714,7 @@
     <Property Name="isAdmin" Type="Int32" />
     <Property Name="uProfile" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="Department" Relationship="EProcurementDbModel.FK_Usr_Department" FromRole="Usr" ToRole="Department" />
+    <Property Name="tag" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
   </EntityType>
   <Association Name="FK_Usr_Department">
     <End Type="EProcurementDbModel.Department" Role="Department" Multiplicity="0..1" />

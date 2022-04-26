@@ -214,8 +214,7 @@ lib.getItemGridGivenRequisitionID = function (_URL,_ID,_stat, controlRef) {
                 //alert(d.ProductCode); alert(d.ProductName);
                 dta[i] = [d.Id, d.RequisitionId, d.ProductCode, d.ProductName, d.Quantity, d.narration];
             });
-
-            console.log(dta);
+            
             controlRef.getStore().removeAll();
             controlRef.getStore().loadData(dta);
         }
@@ -275,6 +274,19 @@ lib.returnPositionGrid = function (urlString, _widget) {
             _widget.getStore().loadData(pos);
         }
     });
+}
+
+lib.returnPositionStore = function (urlString) {
+    var position_store = new Ext.data.Store({
+        autoLoad: true, restful: false,
+        url: urlString,
+        reader: new Ext.data.JsonReader({ type: 'json', root: 'data' }, [
+            { name: 'PositionID', type: 'int' },
+            { name: 'Designation', type: 'string' }
+        ])
+    });
+
+    return position_store;
 }
 
 lib.returnCommitteeGrid = function (url, _widget) {
@@ -556,6 +568,22 @@ lib.returnLocalPurchasingOrderGrid = function (_urlString, _widget) {
         }
     });
 }
+
+lib.returnLocalPurchasingOrderApprovalGrid = function (_urlString, _widget) {
+    var purchase_orders = [];
+    $.getJSON(_urlString, {}, function (r) {
+        if (r.status.toString() == "true") {
+            $.each(r.data, function (i, d) {
+                purchase_orders[i] = [d.Id, d.requisitionNumber, d.nameOfVendor, d.LPOTotalAmount, d.LPONumber, d.statusOfLPO, d.PurchaseDate, d.ExpectedDate,d.ShippingAddress, d.PaymentTerm];
+            });
+
+            _widget.getStore().removeAll();
+            _widget.getStore().loadData(purchase_orders);
+        }
+    });
+}
+
+
 
 lib.returnDistinctLPO = function (_urlString, _widget) {
     var purchase_orders = [];

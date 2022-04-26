@@ -199,7 +199,7 @@ namespace DigiProc.Controllers
 
         #endregion
 
-        public JsonResult saveUserCredentials(string usr, string pwd, string stat, string isAd, string prof, int dId)
+        public JsonResult saveUserCredentials(string usr, string pwd, string stat, string isAd, string prof, int dId, string tg)
         {
             try
             {
@@ -215,7 +215,8 @@ namespace DigiProc.Controllers
                     isLogged = 0,
                     isAD = isAd == @"YES"? 1: 0,
                     isAdmin = 0,
-                    uProfile = prof
+                    uProfile = prof,
+                    tag = tg
                 };
 
                 int recordId = cfg.CreateUserAccount(objUser);

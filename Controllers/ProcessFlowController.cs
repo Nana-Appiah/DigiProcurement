@@ -112,5 +112,53 @@ namespace DigiProc.Controllers
 
         #endregion
 
+        [HttpGet]
+        public JsonResult GetLPOsToApprove()
+        {
+            //using the tag of the system user, get the appropriate LPOs for him/her to approve
+            try
+            {
+                var session = (UserSession)Session["userSession"];
+                var Cfg = new PFHelper();
+                var rCfg = new RequisitionHelper();
+
+                List<ProcessFlow> opf = new List<ProcessFlow>();
+                List<LocalPurchaseOrderLookup> results = new List<LocalPurchaseOrderLookup>();
+
+                var process_flow_list = Cfg.GetProcessFlowList(session.approverTag);
+
+                if (process_flow_list.Count() > 0)
+                {
+                    foreach(var pf in process_flow_list)
+                    {
+                        var obj = Cfg.GetProcessFlow(pf.ProcessFlowID.ToString());
+                        if (obj != null)
+                        {
+                            opf.Add(obj);
+                        }
+                    }
+
+                    //iterate over opf list variable to get the list of LPOs
+                    foreach(var op in opf)
+                    {
+                        var x = rCfg.GetLocalPurchaseOrders(op.ProcurementTypeId);
+                        if (x.Count() > 0)
+                        {
+                            foreach(var xo in x)
+                            {
+                                results.Add(xo);
+                            }
+                        }
+                    }
+                }
+
+                return Json(new { status = true, data = results },JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception ex)
+            {
+                return Json(new { status = false, error = $"error: {ex.Message}" },JsonRequestBehavior.AllowGet);
+            }
+        }
+
     }
 }

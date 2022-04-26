@@ -235,11 +235,11 @@
                                                             { xtype: 'textfield', fieldLabel: 'Other name', emptyText: 'enter other names', allowBlank: true, id: 'cmemoname' },
                                                             { xtype:'textfield', fieldLabel:'Email', emptyText:'enter email address', allowBlank: false, id:'cmememail'},
                                                             {
-                                                                id: 'cbomempos', fieldLabel: 'Position', store: lib.getPositionStore('Committee/GetPositions'),
+                                                                id: 'cbomempos', fieldLabel: 'Position', store: lib.getPositionStore('/Committee/GetPositions'),
                                                                 valueField: 'PositionID', displayField: 'Designation', emptyText: 'select position'
                                                             },
                                                             {
-                                                                id: 'cbomemcom', fieldLabel: 'Committee', store: lib.getCommitteeStore('Committee/GetCommitteeList'),
+                                                                id: 'cbomemcom', fieldLabel: 'Committee', store: lib.getCommitteeStore('/Committee/GetCommitteeList'),
                                                                 valueField: 'CommitteeID', displayField: 'CommitteeName', emptyText: 'select commission'
                                                             },
                                                             {id:'cbomemact', fieldLabel:'Active', store: ['Active','Inactive']}
@@ -259,7 +259,7 @@
 
                                                                         $.post('/Committee/AddCommitteeMember', { parameters: dataParameter }).done(function (r) {
                                                                             if (r.status.toString() == "true") {
-                                                                                lib.returnCommitteeMembershipGrid('Committee/GetCommitteeMembers', Ext.getCmp('cMemgrid'), Ext.getCmp('cbomem-com').getValue());
+                                                                                lib.returnCommitteeMembershipGrid('/Committee/GetCommitteeMembers', Ext.getCmp('cMemgrid'), Ext.getCmp('cbomem-com').getValue());
                                                                                 $('#cMembtnclear').trigger('click');
                                                                                 recordId = 0;
                                                                             }
@@ -386,7 +386,7 @@
                                                                                     { _id: recordId, procDescrib: Ext.fly('proctype').getValue() })
                                                                                     .done(function (r) {
                                                                                         if (r.status.toString() == "true") {
-                                                                                            lib.returnProcurementTypeGrid('Committee/GetProcurementTypes', Ext.getCmp('cProcTypegrid'));
+                                                                                            lib.returnProcurementTypeGrid('/Committee/GetProcurementTypes', Ext.getCmp('cProcTypegrid'));
                                                                                             $('#proctypefrm-btn-clear').trigger('click');
                                                                                             recordId = 0;
                                                                                         }
@@ -672,7 +672,7 @@
                                                                                 { _id: recordId, pfId: Ext.getCmp('notifpflow').getValue(), groupId: Ext.getCmp('notifgroup').getValue() })
                                                                                 .done(function (r) {
                                                                                 if (r.status.toString() == "true") {
-                                                                                    lib.returnPFNotificationGrid('Committee/GetPFNotificationList', Ext.getCmp('cPFNotifgrid'));
+                                                                                    lib.returnPFNotificationGrid('/Committee/GetPFNotificationList', Ext.getCmp('cPFNotifgrid'));
                                                                                     $('#notiflistfrm-btn-clear').trigger('click');
                                                                                     recordId = 0;
                                                                                 }

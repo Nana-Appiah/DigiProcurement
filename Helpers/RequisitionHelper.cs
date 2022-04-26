@@ -150,6 +150,23 @@ namespace DigiProc.Helpers
             }
         }
 
+        public bool ChangeRequisitionStatus(string requisitionNo, int _statusID)
+        {
+            //change the requisition status using requisition and status id 
+            try
+            {
+                var obj = config.Requisitions.Where(r => r.RequisitionNo == requisitionNo).FirstOrDefault();
+                obj.RequisitionStatusID = _statusID;
+
+                config.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return false;
+            }
+        }
         public bool ChangeRequisitionStatus(int _requisitionID, int _statusID)
         {
             //change the requisition status using requisition and status id 
@@ -390,6 +407,46 @@ namespace DigiProc.Helpers
             }
         }
 
+        public List<LocalPurchaseOrderLookup> GetLocalPurchaseOrders(int? _procurementTypeID)
+        {
+            //get all local purchase orders using the procurementTypeID
+            List<LocalPurchaseOrderLookup> purchase_orders = new List<LocalPurchaseOrderLookup>();
+
+            try
+            {
+                var dta = config.LPOes.Where(x => x.ProcurementTypeId == _procurementTypeID).ToList();
+                if (dta.Count() > 0)
+                {
+                    foreach (var d in dta)
+                    {
+                        var obj = new LocalPurchaseOrderLookup()
+                        {
+                            Id = d.LPOID,
+                            requisitionNumber = d.RequisitionNo,
+                            nameOfVendor = new Utility() { }.GetVendor(d.VendorID).VendorName,
+                            statusOfLPO = new Utility() { }.GetRequisitionStatus(d.LPOStatusID).RequisitionStatusDesc,
+                            LPOTotalAmount = (decimal)d.TotAmt,
+                            LPONumber = d.LPONo,
+
+                            PurchaseDate = d.PurchaseOrderDate,
+                            ExpectedDate = d.ExpectedDeliveryDate,
+                            ShippingAddress = d.ShippingAddress,
+                            PaymentTerm = d.PaymentTerm
+                        };
+
+                        purchase_orders.Add(obj);
+                    }
+                }
+
+                return purchase_orders;
+            }
+            catch (Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return purchase_orders;
+            }
+        }
+
         public List<LocalPurchaseOrderLookup> GetDistinctLPORequisitionNumbers()
         {
             List<LocalPurchaseOrderLookup> retString = new List<LocalPurchaseOrderLookup>();
@@ -581,6 +638,11 @@ namespace DigiProc.Helpers
         public decimal LPOTotalAmount { get; set; }
         public string LPONumber { get; set; }
 
+        public DateTime? PurchaseDate { get; set; }
+        public DateTime? ExpectedDate { get; set; }
+        public string ShippingAddress { get; set; }
+        public string PaymentTerm { get; set; }
+        
     }
 
     public struct reqItem

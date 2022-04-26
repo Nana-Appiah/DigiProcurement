@@ -315,6 +315,7 @@
     <Property Name="isAD" Type="int" />
     <Property Name="isAdmin" Type="int" />
     <Property Name="uProfile" Type="varchar" MaxLength="50" />
+    <Property Name="tag" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="Vendor">
     <Key>

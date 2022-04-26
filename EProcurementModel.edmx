@@ -320,6 +320,7 @@
           <Property Name="isAD" Type="int" />
           <Property Name="isAdmin" Type="int" />
           <Property Name="uProfile" Type="varchar" MaxLength="50" />
+          <Property Name="tag" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Vendor">
           <Key>
@@ -1412,6 +1413,7 @@
           <Property Name="isAdmin" Type="Int32" />
           <Property Name="uProfile" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Department" Relationship="EProcurementDbModel.FK_Usr_Department" FromRole="Usr" ToRole="Department" />
+          <Property Name="tag" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FK_Usr_Department">
           <End Type="EProcurementDbModel.Department" Role="Department" Multiplicity="0..1" />
@@ -1802,6 +1804,7 @@
           <EntitySetMapping Name="Usrs">
             <EntityTypeMapping TypeName="EProcurementDbModel.Usr">
               <MappingFragment StoreEntitySet="Usr">
+                <ScalarProperty Name="tag" ColumnName="tag" />
                 <ScalarProperty Name="uProfile" ColumnName="uProfile" />
                 <ScalarProperty Name="isAdmin" ColumnName="isAdmin" />
                 <ScalarProperty Name="isAD" ColumnName="isAD" />
