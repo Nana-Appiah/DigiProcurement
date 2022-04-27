@@ -209,7 +209,7 @@ namespace DigiProc.Controllers
 
                 var objUser = new Usr() {
                     usrname = usr,
-                    usrpassword = Security.Hashing.CreateHash(pwd),
+                    usrpassword = Security.Hashing.CreateMD5Hash(pwd),
                     deptId = dId,
                     isActive = stat == @"ACTIVE" ? 1:0,
                     isLogged = 0,

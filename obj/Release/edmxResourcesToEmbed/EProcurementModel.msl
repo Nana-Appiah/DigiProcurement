@@ -372,6 +372,10 @@
     <EntitySetMapping Name="Usrs">
       <EntityTypeMapping TypeName="EProcurementDbModel.Usr">
         <MappingFragment StoreEntitySet="Usr">
+          <ScalarProperty Name="othernames" ColumnName="othernames" />
+          <ScalarProperty Name="firstname" ColumnName="firstname" />
+          <ScalarProperty Name="surname" ColumnName="surname" />
+          <ScalarProperty Name="tag" ColumnName="tag" />
           <ScalarProperty Name="uProfile" ColumnName="uProfile" />
           <ScalarProperty Name="isAdmin" ColumnName="isAdmin" />
           <ScalarProperty Name="isAD" ColumnName="isAD" />
@@ -381,6 +385,19 @@
           <ScalarProperty Name="usrpassword" ColumnName="usrpassword" />
           <ScalarProperty Name="usrname" ColumnName="usrname" />
           <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LPOApprovals">
+      <EntityTypeMapping TypeName="EProcurementDbModel.LPOApproval">
+        <MappingFragment StoreEntitySet="LPOApproval">
+          <ScalarProperty Name="PersonName" ColumnName="PersonName" />
+          <ScalarProperty Name="ApprovalComments" ColumnName="ApprovalComments" />
+          <ScalarProperty Name="ApprovalStatus" ColumnName="ApprovalStatus" />
+          <ScalarProperty Name="ApprovalDate" ColumnName="ApprovalDate" />
+          <ScalarProperty Name="PersonTag" ColumnName="PersonTag" />
+          <ScalarProperty Name="LPO_ID" ColumnName="LPO_ID" />
+          <ScalarProperty Name="ApprovalID" ColumnName="ApprovalID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

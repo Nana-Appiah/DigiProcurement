@@ -18,6 +18,10 @@ namespace DigiProc.Views.User
             return View();
         }
 
+        public ActionResult Authenticate()
+        {
+            return View();
+        }
         public ActionResult IDChallenge()
         {
             return View();
@@ -30,7 +34,7 @@ namespace DigiProc.Views.User
             {
                 usrname = usrname.Replace(@"panafricansl.com", string.Empty);
                 ConfigurationHelper Cfg = new ConfigurationHelper();
-                var objUser = Cfg.GetUser(usrname, Security.Hashing.CreateHash(pwd));
+                var objUser = Cfg.GetUser(usrname, Security.Hashing.CreateMD5Hash(pwd));
 
                 if (objUser.isActive == @"Yes")
                 {

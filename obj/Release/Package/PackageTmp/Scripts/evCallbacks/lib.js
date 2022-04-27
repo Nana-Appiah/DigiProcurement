@@ -214,8 +214,7 @@ lib.getItemGridGivenRequisitionID = function (_URL,_ID,_stat, controlRef) {
                 //alert(d.ProductCode); alert(d.ProductName);
                 dta[i] = [d.Id, d.RequisitionId, d.ProductCode, d.ProductName, d.Quantity, d.narration];
             });
-
-            console.log(dta);
+            
             controlRef.getStore().removeAll();
             controlRef.getStore().loadData(dta);
         }
@@ -275,6 +274,19 @@ lib.returnPositionGrid = function (urlString, _widget) {
             _widget.getStore().loadData(pos);
         }
     });
+}
+
+lib.returnPositionStore = function (urlString) {
+    var position_store = new Ext.data.Store({
+        autoLoad: true, restful: false,
+        url: urlString,
+        reader: new Ext.data.JsonReader({ type: 'json', root: 'data' }, [
+            { name: 'PositionID', type: 'int' },
+            { name: 'Designation', type: 'string' }
+        ])
+    });
+
+    return position_store;
 }
 
 lib.returnCommitteeGrid = function (url, _widget) {
@@ -557,6 +569,22 @@ lib.returnLocalPurchasingOrderGrid = function (_urlString, _widget) {
     });
 }
 
+lib.returnLocalPurchasingOrderApprovalGrid = function (_urlString, _widget) {
+    var purchase_orders = [];
+    $.getJSON(_urlString, {}, function (r) {
+        if (r.status.toString() == "true") {
+            $.each(r.data, function (i, d) {
+                purchase_orders[i] = [d.Id, d.requisitionNumber, d.nameOfVendor, d.LPOTotalAmount, d.LPONumber, d.statusOfLPO, d.PurchaseDate, d.ExpectedDate, d.ShippingAddress, d.PaymentTerm];
+            });
+
+            _widget.getStore().removeAll();
+            _widget.getStore().loadData(purchase_orders);
+        }
+    });
+}
+
+
+
 lib.returnDistinctLPO = function (_urlString, _widget) {
     var purchase_orders = [];
     $.getJSON(_urlString, {}, function (r) {
@@ -584,6 +612,42 @@ lib.returnProcessFlowData = function (_urlString, _param, _control, _widget) {
             _control.setValue(r.limit.toString());
             _widget.getStore().removeAll();
             _widget.getStore().loadData(nameList);
+        }
+    });
+}
+
+lib.mssqlToJsDate = function (sqlDate) {
+    //sqlDate in SQL DATETIME format ("yyyy-mm-dd hh:mm:ss.ms")
+    var sqlDateArr1 = sqlDate.split("-");
+    //format of sqlDateArr1[] = ['yyyy','mm','dd hh:mm:ms']
+    var sYear = sqlDateArr1[0];
+    var sMonth = (Number(sqlDateArr1[1]) - 1).toString();
+    var sqlDateArr2 = sqlDateArr1[2].split(" ");
+    //format of sqlDateArr2[] = ['dd', 'hh:mm:ss.ms']
+    var sDay = sqlDateArr2[0];
+    var sqlDateArr3 = sqlDateArr2[1].split(":");
+    //format of sqlDateArr3[] = ['hh','mm','ss.ms']
+    var sHour = sqlDateArr3[0];
+    var sMinute = sqlDateArr3[1];
+    var sqlDateArr4 = sqlDateArr3[2].split(".");
+    //format of sqlDateArr4[] = ['ss','ms']
+    var sSecond = sqlDateArr4[0];
+    var sMillisecond = sqlDateArr4[1];
+
+    return new Date(sYear, sMonth, sDay , sHour, sMinute, sSecond, sMillisecond);
+}
+
+lib.returnApprovalHistoryGrid = function (urlString,_ID, _widget) {
+    var approvals = [];
+
+    $.getJSON(urlString, { LPO_ID: _ID }, function (r) {
+        if (r.status.toString() == "true") {
+            $.each(r.data, function (i, d) {
+                approvals[i] = [d.Id, d.LPO, d.PersonTag, d.ApprovalDate, d.ApprovalStatus, d.ApprovalComments];
+            });
+
+            _widget.getStore().removeAll();
+            _widget.getStore().loadData(approvals);
         }
     });
 }

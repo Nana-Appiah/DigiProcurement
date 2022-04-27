@@ -29,12 +29,15 @@
                                     {
                                         id: 'frmUsrD', title: 'Create User Account', defaults: { xtype: 'textfield', anchor: '90%', allowBlank: false },
                                         items: [
+                                            { id: 'xsname', fieldLabel: 'Surname', emptyText: 'enter surname' },
+                                            { id: 'xfname', fieldLabel: 'First name', emptyText: 'enter first name' },
+                                            { id: 'xonames', fieldLabel: 'Other names', emptyText: 'enter other names', allowBlank: true },
                                             { id: 'xUsr', fieldLabel: 'Username' },
                                             { id: 'xPwd', fieldLabel: 'Password', inputType: 'password' },
                                             { id: 'xPwdc', fieldLabel: 'Confirm', inputType: 'password' },
                                             {
                                                 xtype: 'combo', id: 'xDpt', fieldLabel: 'Department', forceSelection: true, typeAhead: true, allowBlank: true, mode: 'local',
-                                                store: lib.returnDepartmentStore('Utility/GetDepartments'), valueField: 'DepartmentID', displayField: 'Name'
+                                                store: lib.returnDepartmentStore('/Utility/GetDepartments'), valueField: 'DepartmentID', displayField: 'Name'
                                             },
                                             {
                                                 xtype: 'combo', id: 'xUstat', fieldLabel: 'User status', forceSelection: true, typeAhead: true, mode: 'local', store: ['ACTIVE', 'INACTIVE']
@@ -42,31 +45,42 @@
                                             { xtype: 'combo', id: 'xAd', fieldLabel: 'AD status', forceSelection: true, typeAhead: true, mode: 'local', store: ['NO'] },
                                             {
                                                 xtype: 'combo', id: 'uprf', fieldLabel: 'Profile', forceSelection: true, typeAhead: true, mode: 'local',
-                                                store: usr.returnUserProfileStore('Security/GetUserProfiles'), valueField: 'Id', displayField: 'nameOfProfile'
+                                                store: usr.returnUserProfileStore('/Security/GetUserProfiles'), valueField: 'Id', displayField: 'nameOfProfile'
                                             },
+                                            {
+                                                xtype: 'combo', id: 'utag', fieldLabel: 'Tag', forceSelection: true, typeAhead: true, allowBlank: true, mode: 'local',
+                                                store: lib.returnPositionStore('/Committee/GetPositions'),valueField: 'PositionID', displayField:'Designation'
+                                            }
                                         ],
                                         buttons: [
                                             {
                                                 id: 'btUsrD', text: 'Save User Account',
                                                 listeners: {
                                                     'click': function (btn) {
-                                                        var _s = $('#xPwd').val(); var _t = $('#xPwdc').val();
-                                                        if (_s.toString() == _t.toString()) {
-                                                            $.post('Security/saveUserCredentials',
-                                                                {
-                                                                    usr: Ext.fly('xUsr').getValue(), pwd: Ext.fly('xPwd').getValue(), stat: Ext.fly('xUstat').getValue(),
-                                                                    isAd: Ext.fly('xAd').getValue(), prof: Ext.fly('uprf').getValue(), dId: Ext.getCmp('xDpt').getValue()
-                                                                })
-                                                                .done(function (r) {
-                                                                    if (r.status.toString()) {
-                                                                        //create entries in the usermodule table entity
-                                                                        Ext.Msg.alert('USER ACCOUNT CREATION', r.data, this);
-                                                                        $('#btUsrClr').trigger('click');
-                                                                    }
-                                                            });
-                                                        }
-                                                        else {
-                                                            Ext.Msg.alert('INCORRECT PASSWORD', 'The Passwords entered are not the same', this);
+                                                       // var bioFrm = Ext.getCmp('frmUsrBio').getForm();
+                                                        var usrFrm = Ext.getCmp('frmUsrD').getForm();
+
+                                                        if (usrFrm.isValid()) {
+                                                            var _s = $('#xPwd').val(); var _t = $('#xPwdc').val();
+                                                            if (_s.toString() == _t.toString()) {
+                                                                $.post('/Security/saveUserCredentials',
+                                                                    {
+                                                                        usr: Ext.fly('xUsr').getValue(), pwd: Ext.fly('xPwd').getValue(), stat: Ext.fly('xUstat').getValue(),
+                                                                        isAd: Ext.fly('xAd').getValue(), prof: Ext.fly('uprf').getValue(), dId: Ext.getCmp('xDpt').getValue(),
+                                                                        tg: Ext.fly('utag').getValue(), sname: Ext.fly('xsname').getValue(), fname: Ext.fly('xfname').getValue(),
+                                                                        onames: Ext.fly('xonames').getValue()
+                                                                    })
+                                                                    .done(function (r) {
+                                                                        if (r.status.toString()) {
+                                                                            //create entries in the usermodule table entity
+                                                                            Ext.Msg.alert('USER ACCOUNT CREATION', r.data, this);
+                                                                            $('#btUsrClr').trigger('click');
+                                                                        }
+                                                                    });
+                                                            }
+                                                            else {
+                                                                Ext.Msg.alert('INCORRECT PASSWORD', 'The Passwords entered are not the same', this);
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -90,7 +104,7 @@
                                                 listeners: {
                                                     'blur': function () {
                                                         
-                                                        $.getJSON('Security/GetCurrentProfileOfUser', { u: Ext.fly('amusr').getValue() }, function (rs) {
+                                                        $.getJSON('/Security/GetCurrentProfileOfUser', { u: Ext.fly('amusr').getValue() }, function (rs) {
                                                             if (rs.status.toString() == "true") {
                                                                 $('#amprof').val(rs.data.PrManager.nameOfProfile.toString()).attr('readonly', 'readonly');
                                                                 $('#amnprof').val('').focus();
@@ -105,10 +119,10 @@
                                             },
                                             {
                                                 id: 'amnprof', xtype: 'combo', fieldLabel: 'New Profile', forceSelection: true, typeAhead: true, mode: 'local',
-                                                store: usr.returnUserProfileStore('Security/GetUserProfiles'), valueField: 'Id', displayField: 'nameOfProfile',
+                                                store: usr.returnUserProfileStore('/Security/GetUserProfiles'), valueField: 'Id', displayField: 'nameOfProfile',
                                                 listeners: {
                                                     'blur': function () {
-                                                        usr.returnApplicationModulesForProfile('Security/GetApplicationModulesForProfile', Ext.fly('amnprof').getValue(), Ext.getCmp('grdamn'));
+                                                        usr.returnApplicationModulesForProfile('/Security/GetApplicationModulesForProfile', Ext.fly('amnprof').getValue(), Ext.getCmp('grdamn'));
                                                     }
                                                 }
                                             },
@@ -147,7 +161,7 @@
                                                         var fr = Ext.getCmp('frmUsrAmend').getForm();
                                                         if (fr.isValid())
                                                         {
-                                                            $.post('Security/AmendUserProfile',
+                                                            $.post('/Security/AmendUserProfile',
                                                                 { u: Ext.fly('amusr').getValue(), pro: Ext.fly('amnprof').getValue() })
                                                                 .done(function (res) {
                                                                     if (res.status.toString() == "true") {
@@ -207,11 +221,11 @@
                                                                     { id: 'profileInUse', header: '', width: 600, hidden: true, sortable: true, dataIndex: 'profileInUse' }
                                                                 ], listeners: {
                                                                     'render': function () {
-                                                                        usr.returnUserProfileGrid('Security/GetUserProfiles', Ext.getCmp('grdPr'));
+                                                                        usr.returnUserProfileGrid('/Security/GetUserProfiles', Ext.getCmp('grdPr'));
                                                                     },
                                                                     'afterrender': function () {
                                                                         setInterval(function () {
-                                                                            usr.returnUserProfileGrid('Security/GetUserProfiles', Ext.getCmp('grdPr'));
+                                                                            usr.returnUserProfileGrid('/Security/GetUserProfiles', Ext.getCmp('grdPr'));
                                                                         }, 10000);
                                                                     }
                                                                 }
@@ -253,11 +267,11 @@
                                                                         ], stripeRows: true,
                                                                         listeners: {
                                                                             'render': function () {
-                                                                                usr.returnApplicationModuleGrid('Security/GetApplicationModules', Ext.getCmp('grdNUsrProf'));
+                                                                                usr.returnApplicationModuleGrid('/Security/GetApplicationModules', Ext.getCmp('grdNUsrProf'));
                                                                             },
                                                                             'afterrender': function () {
                                                                                 setInterval(function () {
-                                                                                    usr.returnApplicationModuleGrid('Security/GetApplicationModules', Ext.getCmp('grdNUsrProf'));
+                                                                                    usr.returnApplicationModuleGrid('/Security/GetApplicationModules', Ext.getCmp('grdNUsrProf'));
                                                                                 },10000);
                                                                             },
                                                                             'rowdblclick': function (e, t) {
@@ -308,11 +322,11 @@
                                                                             'click': function (btn) {
                                                                                 var f = Ext.getCmp('fUsrMod').getForm();
                                                                                 if (f.isValid()) {
-                                                                                    $.post('Security/SaveUserProfile',
+                                                                                    $.post('/Security/SaveUserProfile',
                                                                                         { _profile: Ext.fly('tUsrProf').getValue(), _profContent: Ext.fly('tUsrMod').getValue(), _profStatus:1})
                                                                                         .done(function (r) {
                                                                                             if (r.status.toString() == "true") {
-                                                                                                usr.returnUserProfileGrid('Security/GetUserProfiles', Ext.getCmp('grdPr'));
+                                                                                                usr.returnUserProfileGrid('/Security/GetUserProfiles', Ext.getCmp('grdPr'));
                                                                                                 Ext.Msg.alert('USER PROFILE', r.data.profileName + ' created successfully', this);
                                                                                             }
                                                                                         });
@@ -356,7 +370,7 @@
                                         field: "id",
                                         direction: "ASC"
                                     },
-                                    groupField: "bname"
+                                    groupField: "nameOfDepartment"
                                 }),
                                 columns: [
                                     { id: 'Id', header: 'ID', width: 60, hidden: true, sortable: true, dataIndex: 'Id' },
@@ -368,11 +382,11 @@
                                 ], stripeRows: true,
                                 listeners: {
                                     'render': function () {
-                                        usr.returnUserListGrid('Security/GetUsers', Ext.getCmp('grdUList'));
+                                        usr.returnUserListGrid('/Security/GetUsers', Ext.getCmp('grdUList'));
                                     },
                                     'afterrender': function () {
                                         setInterval(function () {
-                                            usr.returnUserListGrid('Security/GetUsers', Ext.getCmp('grdUList'));
+                                            usr.returnUserListGrid('/Security/GetUsers', Ext.getCmp('grdUList'));
                                         }, 30000);
                                     }
                                 }

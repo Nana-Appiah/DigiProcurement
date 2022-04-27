@@ -1,6 +1,4 @@
-﻿@{
-    Layout = "~/Views/Shared/Login.cshtml";
-}
+﻿<!DOCTYPE html>
 
 
 <marquee behavior="right" direction="right" scrollamount="25">
@@ -32,7 +30,7 @@
         $(document).ready(function () {
             $('.btnLogin').click(function (evnt) {
                 evnt.preventDefault();
-                
+
                 $.post("@Url.Action("Login","User")",
                     { usrname: $('#usr').val(), pwd: $('#pwd').val() })
                     .done(function (msg) {

@@ -274,6 +274,7 @@
     <Compile Include="Controllers\UserController.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\awesome.css" />
     <Content Include="Content\balloon.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -281,6 +282,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\desktop.css" />
     <Content Include="Content\htmleditorplugins.css" />
+    <Content Include="Content\login.css" />
     <Content Include="Content\reset.css" />
     <Content Include="Content\RowEditor.css" />
     <Content Include="Content\structure.css" />
@@ -1338,7 +1340,9 @@
     <Content Include="Views\Shared\Desktop.cshtml" />
     <Content Include="Views\Home\Main.cshtml" />
     <Content Include="Views\Shared\Login.cshtml" />
-    <Content Include="Views\User\IDChallenge.cshtml" />
+    <Content Include="Views\Home\IDChallenge.cshtml" />
+    <Content Include="Views\User\Authenticate.cshtml" />
+    <Content Include="Views\User\Archive.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

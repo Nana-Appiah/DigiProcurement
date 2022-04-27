@@ -36,6 +36,10 @@ namespace DigiProc.Controllers
             return View("Desktop");
         }
 
+        public ActionResult IDChallenge()
+        {
+            return View();
+        }
         public ActionResult Logout()
         {
             Session.Clear();
