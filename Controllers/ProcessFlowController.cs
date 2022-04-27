@@ -191,8 +191,8 @@ namespace DigiProc.Controllers
                     PersonTag = session.approverTag,
                     ApprovalDate = DateTime.Now,
                     ApprovalStatus = _status == @"Approve"? 1: 0,
-                    ApprovalComments = _comments
-                    //bioName comes here
+                    ApprovalComments = _comments,
+                    PersonName = session.bioName
                 };
 
                 bool bln = Cfg.SaveLPOApproval(obj);

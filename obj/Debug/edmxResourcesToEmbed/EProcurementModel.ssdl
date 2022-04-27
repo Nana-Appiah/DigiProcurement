@@ -136,6 +136,7 @@
     <Property Name="ApprovalID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="LPO_ID" Type="int" />
     <Property Name="PersonTag" Type="varchar" MaxLength="50" />
+    <Property Name="PersonName" Type="varchar(max)" />
     <Property Name="ApprovalDate" Type="date" />
     <Property Name="ApprovalStatus" Type="int" />
     <Property Name="ApprovalComments" Type="varchar(max)" />

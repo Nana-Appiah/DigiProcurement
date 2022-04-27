@@ -391,6 +391,7 @@
     <EntitySetMapping Name="LPOApprovals">
       <EntityTypeMapping TypeName="EProcurementDbModel.LPOApproval">
         <MappingFragment StoreEntitySet="LPOApproval">
+          <ScalarProperty Name="PersonName" ColumnName="PersonName" />
           <ScalarProperty Name="ApprovalComments" ColumnName="ApprovalComments" />
           <ScalarProperty Name="ApprovalStatus" ColumnName="ApprovalStatus" />
           <ScalarProperty Name="ApprovalDate" ColumnName="ApprovalDate" />
