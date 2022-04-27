@@ -73,7 +73,7 @@
                                                         stripeRows: true,
                                                         listeners: {
                                                             'render': function () {
-                                                                lib.getItemGrid('Utility/GetItemList', Ext.getCmp('capexGrid'));
+                                                                lib.getItemGrid('/Utility/GetItemList', Ext.getCmp('capexGrid'));
                                                             }
                                                         }
                                                     })
@@ -107,7 +107,7 @@
                                                                     }
 
                                                                     console.log(CAPEX_LIST);
-                                                                    $.post('Capex/PostCapexData', { _data: CAPEX_LIST })
+                                                                    $.post('/Capex/PostCapexData', { _data: CAPEX_LIST })
                                                                         .done(function (r) {
                                                                             if (r.status.toString() == "true") {
                                                                                 Ext.MessageBox.alert("CAPEX", r.data, this);
@@ -124,7 +124,7 @@
                                                         listeners: {
                                                             'click': function (btn) {
                                                                 //Ext.getCmp('capexGrid').getStore().removeAll();
-                                                                lib.getItemGrid('Utility/GetItemList', Ext.getCmp('capexGrid'));
+                                                                lib.getItemGrid('/Utility/GetItemList', Ext.getCmp('capexGrid'));
                                                             }
                                                         }
                                                     }

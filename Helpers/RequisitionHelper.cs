@@ -150,6 +150,23 @@ namespace DigiProc.Helpers
             }
         }
 
+        public bool ChangeRequisitionStatus(string requisitionNo, int _statusID)
+        {
+            //change the requisition status using requisition and status id 
+            try
+            {
+                var obj = config.Requisitions.Where(r => r.RequisitionNo == requisitionNo).FirstOrDefault();
+                obj.RequisitionStatusID = _statusID;
+
+                config.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return false;
+            }
+        }
         public bool ChangeRequisitionStatus(int _requisitionID, int _statusID)
         {
             //change the requisition status using requisition and status id 
@@ -355,6 +372,32 @@ namespace DigiProc.Helpers
             }
         }
 
+        public LocalPurchaseOrderLookup GetLocalPurchaseOrder(int? param)
+        {
+            LocalPurchaseOrderLookup purchase_order = new LocalPurchaseOrderLookup();
+
+            try
+            {
+                var obj = config.LPOes.Where(x => x.LPOID == param).FirstOrDefault();
+                if (obj != null)
+                {
+                    purchase_order.Id = obj.LPOID;
+                    purchase_order.LPONumber = obj.LPONo;
+                    purchase_order.requisitionNumber = obj.RequisitionNo;
+                    purchase_order.nameOfVendor = new Utility { }.GetVendor(obj.VendorID).VendorName;
+                    purchase_order.statusOfLPO = new Utility() { }.GetRequisitionStatus(obj.LPOStatusID).RequisitionStatusDesc;
+                    purchase_order.LPOTotalAmount = (decimal)obj.TotAmt;
+                }
+
+                return purchase_order;
+            }
+            catch(Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return purchase_order;
+            }
+        }
+
         public List<LocalPurchaseOrderLookup> GetLocalPurchaseOrders()
         {
             //get all local purchase orders
@@ -384,6 +427,46 @@ namespace DigiProc.Helpers
                 return purchase_orders;
             }
             catch(Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return purchase_orders;
+            }
+        }
+
+        public List<LocalPurchaseOrderLookup> GetLocalPurchaseOrders(int? _procurementTypeID)
+        {
+            //get all local purchase orders using the procurementTypeID
+            List<LocalPurchaseOrderLookup> purchase_orders = new List<LocalPurchaseOrderLookup>();
+
+            try
+            {
+                var dta = config.LPOes.Where(x => x.ProcurementTypeId == _procurementTypeID).ToList();
+                if (dta.Count() > 0)
+                {
+                    foreach (var d in dta)
+                    {
+                        var obj = new LocalPurchaseOrderLookup()
+                        {
+                            Id = d.LPOID,
+                            requisitionNumber = d.RequisitionNo,
+                            nameOfVendor = new Utility() { }.GetVendor(d.VendorID).VendorName,
+                            statusOfLPO = new Utility() { }.GetRequisitionStatus(d.LPOStatusID).RequisitionStatusDesc,
+                            LPOTotalAmount = (decimal)d.TotAmt,
+                            LPONumber = d.LPONo,
+
+                            PurchaseDate = d.PurchaseOrderDate,
+                            ExpectedDate = d.ExpectedDeliveryDate,
+                            ShippingAddress = d.ShippingAddress,
+                            PaymentTerm = d.PaymentTerm
+                        };
+
+                        purchase_orders.Add(obj);
+                    }
+                }
+
+                return purchase_orders;
+            }
+            catch (Exception ex)
             {
                 Debug.Print(ex.Message);
                 return purchase_orders;
@@ -532,6 +615,101 @@ namespace DigiProc.Helpers
 
         #endregion
 
+        #region LPO-Approval
+
+        public List<LPOApprovalLookup> GetLPOApprovalLookups()
+        {
+            List<LPOApprovalLookup> results = new List<LPOApprovalLookup>();
+
+            try
+            {
+                var dta = config.LPOApprovals.ToList();
+                if (dta.Count() > 0)
+                {
+                    foreach(var d in dta)
+                    {
+                        var o = new LPOApprovalLookup() {
+                            Id = d.ApprovalID,
+                            LPO = new RequisitionHelper() { }.GetLocalPurchaseOrder(d.LPO_ID).LPONumber,
+                            PersonTag = d.PersonTag,
+                            ApprovalDate = Convert.ToDateTime(d.ApprovalDate).ToString("dd-mm-yyyy"),
+                            ApprovalStatus = d.ApprovalStatus == 1? "Approved": "Rejected",
+                            ApprovalComments = d.ApprovalComments
+                        };
+                    }
+                }
+
+                return results;
+            }
+            catch(Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return results;
+            }
+        }
+
+        public List<LPOApprovalLookup> GetLPOApprovalLookups(int _LPOID)
+        {
+            List<LPOApprovalLookup> results = new List<LPOApprovalLookup>();
+
+            try
+            {
+                var dta = config.LPOApprovals.Where(x => x.LPO_ID == _LPOID).ToList();
+                if (dta.Count() > 0)
+                {
+                    foreach (var d in dta)
+                    {
+                        var o = new LPOApprovalLookup()
+                        {
+                            Id = d.ApprovalID,
+                            LPO = new RequisitionHelper() { }.GetLocalPurchaseOrder(d.LPO_ID).LPONumber,
+                            PersonTag = d.PersonTag,
+                            ApprovalDate = Convert.ToDateTime(d.ApprovalDate).ToString("dd-mm-yyyy"),
+                            ApprovalStatus = d.ApprovalStatus == 1 ? "Approved" : "Rejected",
+                            ApprovalComments = d.ApprovalComments
+                        };
+
+                        results.Add(o);
+                    }
+                }
+
+                return results;
+            }
+            catch (Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return results;
+            }
+        }
+
+        public bool SaveLPOApproval(LPOApproval item)
+        {
+            try
+            {
+                config.LPOApprovals.Add(item);
+                config.SaveChanges();
+
+                return true;
+            }
+            catch(Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return false;
+            }
+        }
+
+        #endregion
+
+    }
+
+    public struct LPOApprovalLookup
+    {
+        public int Id { get; set; }
+        public string LPO { get; set; }
+        public string PersonTag { get; set; }
+        public string ApprovalDate { get; set; }
+        public string ApprovalStatus { get; set; }
+        public string ApprovalComments { get; set; }
     }
 
     public struct RequisitionLookup
@@ -581,6 +759,11 @@ namespace DigiProc.Helpers
         public decimal LPOTotalAmount { get; set; }
         public string LPONumber { get; set; }
 
+        public DateTime? PurchaseDate { get; set; }
+        public DateTime? ExpectedDate { get; set; }
+        public string ShippingAddress { get; set; }
+        public string PaymentTerm { get; set; }
+        
     }
 
     public struct reqItem

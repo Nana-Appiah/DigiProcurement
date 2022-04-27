@@ -47,7 +47,7 @@
                                                                     var f = Ext.getCmp('cPosFrm').getForm();
                                                                     if (f.isValid()) {
                                                                         
-                                                                        $.post('Committee/AddPosition',
+                                                                        $.post('/Committee/AddPosition',
                                                                             { _id: recordId, cposition: Ext.fly('cpos').getValue() }).done(function (res) {
                                                                                 if (res.status.toString() == "true") {
                                                                                         $('#cPos-btn-clear').trigger('click');
@@ -259,7 +259,7 @@
 
                                                                         $.post('/Committee/AddCommitteeMember', { parameters: dataParameter }).done(function (r) {
                                                                             if (r.status.toString() == "true") {
-                                                                                lib.returnCommitteeMembershipGrid('Committee/GetCommitteeMembers', Ext.getCmp('cMemgrid'), Ext.getCmp('cbomem-com').getValue());
+                                                                                lib.returnCommitteeMembershipGrid('/Committee/GetCommitteeMembers', Ext.getCmp('cMemgrid'), Ext.getCmp('cbomem-com').getValue());
                                                                                 $('#cMembtnclear').trigger('click');
                                                                                 recordId = 0;
                                                                             }
@@ -386,7 +386,7 @@
                                                                                     { _id: recordId, procDescrib: Ext.fly('proctype').getValue() })
                                                                                     .done(function (r) {
                                                                                         if (r.status.toString() == "true") {
-                                                                                            lib.returnProcurementTypeGrid('Committee/GetProcurementTypes', Ext.getCmp('cProcTypegrid'));
+                                                                                            lib.returnProcurementTypeGrid('/Committee/GetProcurementTypes', Ext.getCmp('cProcTypegrid'));
                                                                                             $('#proctypefrm-btn-clear').trigger('click');
                                                                                             recordId = 0;
                                                                                         }
@@ -672,7 +672,7 @@
                                                                                 { _id: recordId, pfId: Ext.getCmp('notifpflow').getValue(), groupId: Ext.getCmp('notifgroup').getValue() })
                                                                                 .done(function (r) {
                                                                                 if (r.status.toString() == "true") {
-                                                                                    lib.returnPFNotificationGrid('Committee/GetPFNotificationList', Ext.getCmp('cPFNotifgrid'));
+                                                                                    lib.returnPFNotificationGrid('/Committee/GetPFNotificationList', Ext.getCmp('cPFNotifgrid'));
                                                                                     $('#notiflistfrm-btn-clear').trigger('click');
                                                                                     recordId = 0;
                                                                                 }

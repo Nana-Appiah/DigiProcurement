@@ -28,6 +28,7 @@ namespace DigiProc.Views.User
         {
             try
             {
+                usrname = usrname.Replace(@"panafricansl.com", string.Empty);
                 ConfigurationHelper Cfg = new ConfigurationHelper();
                 var objUser = Cfg.GetUser(usrname, Security.Hashing.CreateHash(pwd));
 
@@ -41,7 +42,9 @@ namespace DigiProc.Views.User
                         userName = objUser.username,
                         userProfile = objUser.PrManager.nameOfProfile,
                         moduleString = objUser.PrManager.contentOfProfile,
-                        modules = usModules
+                        modules = usModules,
+                        approverTag = objUser.userTag,
+                        bioName = string.Format("{0} {1} {2}",objUser.sname,objUser.fname,objUser.onames)
                     };
 
                     Session["userSession"] = _session;

@@ -195,16 +195,26 @@ namespace DigiProc.Controllers
                 int req_id = 0;
 
                 if (dta.Length > 0)
-                {                    
+                {
+                    RequisitionHelper Cfg = new RequisitionHelper();
+
                     foreach (var d in dta)
                     {
                         var str = d.Split(',');
                         req_id = int.Parse(str[1]);
 
                         var obj = new RequisitionItem() { RequisitionItemID = int.Parse(str[0]) };
-                        bln = new RequisitionHelper() { }.ApproveRequisitionItem(obj.RequisitionItemID, 2);
+                        bln = Cfg.ApproveRequisitionItem(obj.RequisitionItemID, 2);
+
+
 
                         if (bln) { success += 1; } else { failed += 1; }
+                    }
+
+                    if (success == dta.Length)
+                    {
+                        //amend the status of the requisition to approved
+                        Cfg.ChangeRequisitionStatus(req_id, 2);  //2 = financial approval
                     }
 
                     //if (success == dta.Length) { new RequisitionHelper { }.ChangeRequisitionStatus(req_id, 2); }
@@ -246,6 +256,10 @@ namespace DigiProc.Controllers
                             blnSuccess = helper.UpdateRequisitionItem(rq);
                             if (blnSuccess) { success += 1; } else { failed += 1; }
                         }
+                    }
+
+                    if (success == dta.Length) {
+                        new RequisitionHelper() { }.ChangeRequisitionStatus(rNo, LPOStatus);
                     }
                 }
 
@@ -291,7 +305,7 @@ namespace DigiProc.Controllers
                 obj.PaymentTerm = _values[5];
                 obj.OtherTermsAndConditions = _values[6];
                 obj.ProcurementTypeId = int.Parse(_values[8]);
-                obj.LPOStatusID = 6; //LPO Generated
+                obj.LPOStatusID = 4; //4=LPO Generated
 
                 var bln = new RequisitionHelper { }.SaveLocalPurchaseOrder(obj);
                 return Json(new { status = bln, data = obj },JsonRequestBehavior.AllowGet);  

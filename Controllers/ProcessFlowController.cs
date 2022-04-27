@@ -112,5 +112,101 @@ namespace DigiProc.Controllers
 
         #endregion
 
+        [HttpGet]
+        public JsonResult GetLPOsToApprove()
+        {
+            //using the tag of the system user, get the appropriate LPOs for him/her to approve
+            try
+            {
+                var session = (UserSession)Session["userSession"];
+                var Cfg = new PFHelper();
+                var rCfg = new RequisitionHelper();
+
+                List<ProcessFlow> opf = new List<ProcessFlow>();
+                List<LocalPurchaseOrderLookup> results = new List<LocalPurchaseOrderLookup>();
+
+                var process_flow_list = Cfg.GetProcessFlowList(session.approverTag);
+
+                if (process_flow_list.Count() > 0)
+                {
+                    foreach(var pf in process_flow_list)
+                    {
+                        var obj = Cfg.GetProcessFlow(pf.ProcessFlowID.ToString());
+                        if (obj != null)
+                        {
+                            opf.Add(obj);
+                        }
+                    }
+
+                    //iterate over opf list variable to get the list of LPOs
+                    foreach(var op in opf)
+                    {
+                        var x = rCfg.GetLocalPurchaseOrders(op.ProcurementTypeId);
+                        if (x.Count() > 0)
+                        {
+                            foreach(var xo in x)
+                            {
+                                results.Add(xo);
+                            }
+                        }
+                    }
+                }
+
+                return Json(new { status = true, data = results },JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception ex)
+            {
+                return Json(new { status = false, error = $"error: {ex.Message}" },JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpGet]
+        public JsonResult GetLPOApprovalHistory(int LPO_ID)
+        {
+            //gets the records of approvals for a specific LPO
+            try
+            {
+                var Cfg = new RequisitionHelper();
+                var approvalHistory = Cfg.GetLPOApprovalLookups(LPO_ID);
+
+                return Json(new { status = true, data = approvalHistory },JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception ex)
+            {
+                return Json(new { status = false, error = $"error: {ex.Message}" },JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult SaveApprovalActivity(int _ID, string _status, string _comments)
+        {
+            try
+            {
+                var session = (UserSession)Session["userSession"];
+                var Cfg = new RequisitionHelper();
+
+                var obj = new LPOApproval() 
+                { 
+                    LPO_ID = _ID,
+                    PersonTag = session.approverTag,
+                    ApprovalDate = DateTime.Now,
+                    ApprovalStatus = _status == @"Approve"? 1: 0,
+                    ApprovalComments = _comments,
+                    PersonName = session.bioName
+                };
+
+                bool bln = Cfg.SaveLPOApproval(obj);
+                if (bln)
+                {
+                    return Json(new { status = bln, data = $"{obj.PersonTag} has voted to {_status} procurement." }, JsonRequestBehavior.AllowGet);
+                }
+                else { return Json(new { status = false, data = @"Approval could not be saved.Please contact the Administrator" },JsonRequestBehavior.AllowGet); }
+            }
+            catch(Exception x)
+            {
+                return Json(new { status = false, error = $"error: {x.Message}" },JsonRequestBehavior.AllowGet);
+            }
+        }
+
     }
 }

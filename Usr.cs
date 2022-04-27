@@ -36,6 +36,14 @@ public partial class Usr
 
     public string uProfile { get; set; }
 
+    public string tag { get; set; }
+
+    public string surname { get; set; }
+
+    public string firstname { get; set; }
+
+    public string othernames { get; set; }
+
 
 
     public virtual Department Department { get; set; }
