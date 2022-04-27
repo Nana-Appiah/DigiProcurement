@@ -38,7 +38,8 @@ namespace DigiProc.Controllers
 
         public ActionResult Logout()
         {
-            return Json(true);
+            Session.Clear();
+            return Json(new { status = true, data = $"logging out..." },JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Main()
