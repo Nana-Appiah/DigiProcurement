@@ -990,6 +990,7 @@ namespace DigiProc.Helpers
         public List<userModule> modules { get; set; }
 
         public string approverTag { get; set; }
+        public string bioName { get; set; }
     }
 
     #endregion

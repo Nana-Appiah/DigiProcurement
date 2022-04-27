@@ -1,6 +1,7 @@
 ﻿Ext.onReady(function () {
 
     var def_pic = "standard.jpg";
+    var LPO_ID = 0;
 
     var approvalFrm = Ext.get('approval');
 
@@ -87,6 +88,8 @@
                                                                     },
                                                                     'rowdblclick': function (e, t) {
                                                                         var rec = e.getStore().getAt(t);
+
+                                                                        LPO_ID = rec.get('Id');
                                                                         $('#vd').val(rec.get('nameOfVendor'));
                                                                         $('#pd').val(rec.get('PurchaseDate'));
                                                                         $('#dd').val(rec.get('ExpectedDate'));
@@ -94,6 +97,9 @@
                                                                         $('#sha').val(rec.get('ShippingAddress'));
                                                                         $('#pt').val(rec.get('PaymentTerm'));
                                                                         $('#rq').val(rec.get('requisitionNumber'));
+
+                                                                        //get approval history
+                                                                        lib.returnApprovalHistoryGrid('/ProcessFlow/GetLPOApprovalHistory', LPO_ID, Ext.getCmp('procApprovalGrid'));
                                                                     }
                                                                 }
                                                             })
@@ -132,55 +138,77 @@
                                                                 id: '',
                                                                 items: [
                                                                     new Ext.grid.GridPanel({
-                                                                        id: 'procApprovalGrid', height: 200, autoScroll: true, autoExpandColumn: 'Person',
+                                                                        id: 'procApprovalGrid', height: 200, autoScroll: true, autoExpandColumn: 'PersonTag',
                                                                         store: new Ext.data.GroupingStore({
                                                                             reader: new Ext.data.ArrayReader({}, [
                                                                                 { name: 'Id', type: 'int' },
-                                                                                { name: 'Person', type: 'string' },
-                                                                                { name: 'Date', type: 'string' },
-                                                                                { name: 'Status', type: 'string' },
-                                                                                { name: 'Comments', type: 'string' }
+                                                                                { name: 'LPO', type: 'string' },
+                                                                                { name: 'PersonTag', type: 'string' },
+                                                                                { name: 'ApprovalDate', type: 'string' },
+                                                                                { name: 'ApprovalStatus', type: 'string' },
+                                                                                { name: 'ApprovalComments', type: 'string' }
                                                                             ]),
                                                                             sortInfo: {
                                                                                 field: 'Id',
                                                                                 direction: 'ASC'
                                                                             },
-                                                                            groupField: 'Person'
+                                                                            groupField: 'PersonTag'
                                                                         }),
                                                                         columns: [
                                                                             { id: 'Id', header: 'ID', width: 25, hidden: true, sortable: true, dataIndex: 'Id' },
-                                                                            { id: 'Person', header: 'Person', width: 150, hidden: false, sortable: true, dataIndex: 'Person' },
-                                                                            { id: 'Date', header: 'Date', width: 150, hidden: true, sortable: true, dataIndex: 'Date' },
-                                                                            { id: 'Status', header: 'Status', width: 150, hidden: true, sortable: true, dataIndex: 'Status' },
-                                                                            { id: 'Comments', header: 'Comments', width: 150, hidden: true, sortable: true, dataIndex: 'Comments' }
+                                                                            { id: 'LPO', header: 'LPO', width: 150, hidden: false, sortable: true, dataIndex: 'LPO' },
+                                                                            { id: 'PersonTag', header: 'Person', width: 150, hidden: false, sortable: true, dataIndex: 'PersonTag' },
+                                                                            { id: 'ApprovalDate', header: 'Date', width: 150, hidden: true, sortable: true, dataIndex: 'ApprovalDate' },
+                                                                            { id: 'ApprovalStatus', header: 'Status', width: 150, hidden: true, sortable: true, dataIndex: 'ApprovalStatus' },
+                                                                            { id: 'ApprovalComments', header: 'Comments', width: 150, hidden: true, sortable: true, dataIndex: 'ApprovalComments' }
                                                                         ],
-                                                                        stripeRows: true
+                                                                        stripeRows: true,
+                                                                        listeners: {
+                                                                            'rowdblclick': function (e, t) {
+                                                                                var record = e.getStore().getAt(t);
+                                                                                $('#hist_comments').val(record.get('ApprovalComments'));
+                                                                            }
+                                                                        }
                                                                     })
                                                                 ]
                                                             },
                                                             {
                                                                 id: '', defaults: { xtype: 'textarea', disabled: true }, layout: 'fit',
                                                                 items: [
-                                                                    { id: '' }
+                                                                    { id: 'hist_comments' }
                                                                 ]
                                                             },
                                                             {
-                                                                defaults: { xtype: 'combo', forceSelection: true, typeAhead: true, mode: 'local', store: ['Approve', 'Reject'] }, layout: 'fit',
+                                                                id:'frmstatus',defaults: { xtype: 'combo', forceSelection: true, typeAhead: true, mode: 'local', store: ['Approve', 'Reject'] }, layout: 'fit',
                                                                 items: [
-                                                                    {id:''}
+                                                                    {id:'cboapprstatus'}
                                                                 ]
                                                             },
                                                             {
-                                                                id: '', title: 'Comments', defaults: { xtype: 'textarea' }, layout: 'fit',
+                                                                id: 'frmcomments', title: 'Comments', defaults: { xtype: 'textarea' }, layout: 'fit',
                                                                 items: [
-                                                                    { id: '' }
+                                                                    { id: 'current_comments' }
                                                                 ],
                                                                 buttons: [
                                                                     {
-                                                                        id: '', text: 'Approve Procurement',
+                                                                        id: 'btn-procurement-approve', text: 'Approve Procurement',
                                                                         listeners: {
                                                                             'click': function (btn) {
+                                                                                var statusFrm = Ext.getCmp('frmstatus').getForm();
+                                                                                var commentsFrm = Ext.getCmp('frmcomments').getForm();
 
+                                                                                if (statusFrm.isValid() && (commentsFrm.isValid())) {
+                                                                                    $.post('/ProcessFlow/SaveApprovalActivity',
+                                                                                        {
+                                                                                            _ID: LPO_ID, _status: Ext.fly('cboapprstatus').getValue(),
+                                                                                            _comments: Ext.fly('current_comments').getValue()
+                                                                                        })
+                                                                                        .done(function (r) {
+                                                                                            if (r.status.toString() == "true") {
+                                                                                                Ext.Msg.alert('PROCUREMENT APPROVAL', r.data, this);
+                                                                                            }
+                                                                                    });
+                                                                                }
                                                                             }
                                                                         }
                                                                     }

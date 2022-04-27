@@ -296,6 +296,10 @@ namespace DigiProc.Helpers
                     userManager.nameOfDepartment = new Utility() { }.getDepartment(obj.deptId).Name;
                     userManager.PrManager = new ProfileManager { nameOfProfile = obj.uProfile };
                     userManager.userTag = obj.tag;
+
+                    userManager.sname = obj.surname;
+                    userManager.fname = obj.firstname;
+                    userManager.onames = obj.othernames;
                 }
 
                 return userManager;
@@ -356,6 +360,9 @@ namespace DigiProc.Helpers
         public ProfileManager PrManager { get; set; }
 
         public string userTag { get; set; }
+        public string sname { get; set; }
+        public string fname { get; set; }
+        public string onames { get; set; }
     }
 
 }

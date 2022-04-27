@@ -456,6 +456,7 @@
       <End Role="Department" EntitySet="Departments" />
       <End Role="Usr" EntitySet="Usrs" />
     </AssociationSet>
+    <EntitySet Name="LPOApprovals" EntityType="EProcurementDbModel.LPOApproval" />
   </EntityContainer>
   <Association Name="FK_UserModule_Module">
     <End Type="EProcurementDbModel.Module" Role="Module" Multiplicity="0..1" />
@@ -715,6 +716,9 @@
     <Property Name="uProfile" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="Department" Relationship="EProcurementDbModel.FK_Usr_Department" FromRole="Usr" ToRole="Department" />
     <Property Name="tag" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="surname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="firstname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="othernames" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
   </EntityType>
   <Association Name="FK_Usr_Department">
     <End Type="EProcurementDbModel.Department" Role="Department" Multiplicity="0..1" />
@@ -728,4 +732,15 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <EntityType Name="LPOApproval">
+    <Key>
+      <PropertyRef Name="ApprovalID" />
+    </Key>
+    <Property Name="ApprovalID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="LPO_ID" Type="Int32" />
+    <Property Name="PersonTag" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ApprovalDate" Type="DateTime" Precision="0" />
+    <Property Name="ApprovalStatus" Type="Int32" />
+    <Property Name="ApprovalComments" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+  </EntityType>
 </Schema>

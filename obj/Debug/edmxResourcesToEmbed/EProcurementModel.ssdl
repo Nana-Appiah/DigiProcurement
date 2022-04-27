@@ -129,6 +129,17 @@
     <Property Name="LPONo" Type="varchar" MaxLength="50" />
     <Property Name="ProcurementTypeId" Type="int" />
   </EntityType>
+  <EntityType Name="LPOApproval">
+    <Key>
+      <PropertyRef Name="ApprovalID" />
+    </Key>
+    <Property Name="ApprovalID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="LPO_ID" Type="int" />
+    <Property Name="PersonTag" Type="varchar" MaxLength="50" />
+    <Property Name="ApprovalDate" Type="date" />
+    <Property Name="ApprovalStatus" Type="int" />
+    <Property Name="ApprovalComments" Type="varchar(max)" />
+  </EntityType>
   <EntityType Name="Module">
     <Key>
       <PropertyRef Name="ModuleID" />
@@ -307,6 +318,9 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="surname" Type="varchar" MaxLength="50" />
+    <Property Name="firstname" Type="varchar" MaxLength="50" />
+    <Property Name="othernames" Type="varchar" MaxLength="200" />
     <Property Name="usrname" Type="varchar" MaxLength="60" />
     <Property Name="usrpassword" Type="varchar" MaxLength="300" />
     <Property Name="deptId" Type="int" />
@@ -592,6 +606,7 @@
     <EntitySet Name="ItemCategory" EntityType="Self.ItemCategory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Logger" EntityType="Self.Logger" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="LPO" EntityType="Self.LPO" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LPOApproval" EntityType="Self.LPOApproval" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Module" EntityType="Self.Module" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="NotificationGroup" EntityType="Self.NotificationGroup" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="NotificationList" EntityType="Self.NotificationList" Schema="dbo" store:Type="Tables" />

@@ -29,6 +29,9 @@
                                     {
                                         id: 'frmUsrD', title: 'Create User Account', defaults: { xtype: 'textfield', anchor: '90%', allowBlank: false },
                                         items: [
+                                            { id: 'xsname', fieldLabel: 'Surname', emptyText: 'enter surname' },
+                                            { id: 'xfname', fieldLabel: 'First name', emptyText: 'enter first name' },
+                                            { id: 'xonames', fieldLabel: 'Other names', emptyText: 'enter other names', allowBlank: true },
                                             { id: 'xUsr', fieldLabel: 'Username' },
                                             { id: 'xPwd', fieldLabel: 'Password', inputType: 'password' },
                                             { id: 'xPwdc', fieldLabel: 'Confirm', inputType: 'password' },
@@ -54,24 +57,30 @@
                                                 id: 'btUsrD', text: 'Save User Account',
                                                 listeners: {
                                                     'click': function (btn) {
-                                                        var _s = $('#xPwd').val(); var _t = $('#xPwdc').val();
-                                                        if (_s.toString() == _t.toString()) {
-                                                            $.post('/Security/saveUserCredentials',
-                                                                {
-                                                                    usr: Ext.fly('xUsr').getValue(), pwd: Ext.fly('xPwd').getValue(), stat: Ext.fly('xUstat').getValue(),
-                                                                    isAd: Ext.fly('xAd').getValue(), prof: Ext.fly('uprf').getValue(), dId: Ext.getCmp('xDpt').getValue(),
-                                                                    tg: Ext.fly('utag').getValue()
-                                                                })
-                                                                .done(function (r) {
-                                                                    if (r.status.toString()) {
-                                                                        //create entries in the usermodule table entity
-                                                                        Ext.Msg.alert('USER ACCOUNT CREATION', r.data, this);
-                                                                        $('#btUsrClr').trigger('click');
-                                                                    }
-                                                            });
-                                                        }
-                                                        else {
-                                                            Ext.Msg.alert('INCORRECT PASSWORD', 'The Passwords entered are not the same', this);
+                                                       // var bioFrm = Ext.getCmp('frmUsrBio').getForm();
+                                                        var usrFrm = Ext.getCmp('frmUsrD').getForm();
+
+                                                        if (usrFrm.isValid()) {
+                                                            var _s = $('#xPwd').val(); var _t = $('#xPwdc').val();
+                                                            if (_s.toString() == _t.toString()) {
+                                                                $.post('/Security/saveUserCredentials',
+                                                                    {
+                                                                        usr: Ext.fly('xUsr').getValue(), pwd: Ext.fly('xPwd').getValue(), stat: Ext.fly('xUstat').getValue(),
+                                                                        isAd: Ext.fly('xAd').getValue(), prof: Ext.fly('uprf').getValue(), dId: Ext.getCmp('xDpt').getValue(),
+                                                                        tg: Ext.fly('utag').getValue(), sname: Ext.fly('xsname').getValue(), fname: Ext.fly('xfname').getValue(),
+                                                                        onames: Ext.fly('xonames').getValue()
+                                                                    })
+                                                                    .done(function (r) {
+                                                                        if (r.status.toString()) {
+                                                                            //create entries in the usermodule table entity
+                                                                            Ext.Msg.alert('USER ACCOUNT CREATION', r.data, this);
+                                                                            $('#btUsrClr').trigger('click');
+                                                                        }
+                                                                    });
+                                                            }
+                                                            else {
+                                                                Ext.Msg.alert('INCORRECT PASSWORD', 'The Passwords entered are not the same', this);
+                                                            }
                                                         }
                                                     }
                                                 }

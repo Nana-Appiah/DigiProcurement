@@ -574,7 +574,7 @@ lib.returnLocalPurchasingOrderApprovalGrid = function (_urlString, _widget) {
     $.getJSON(_urlString, {}, function (r) {
         if (r.status.toString() == "true") {
             $.each(r.data, function (i, d) {
-                purchase_orders[i] = [d.Id, d.requisitionNumber, d.nameOfVendor, d.LPOTotalAmount, d.LPONumber, d.statusOfLPO, d.PurchaseDate, d.ExpectedDate,d.ShippingAddress, d.PaymentTerm];
+                purchase_orders[i] = [d.Id, d.requisitionNumber, d.nameOfVendor, d.LPOTotalAmount, d.LPONumber, d.statusOfLPO, d.PurchaseDate, d.ExpectedDate, d.ShippingAddress, d.PaymentTerm];
             });
 
             _widget.getStore().removeAll();
@@ -612,6 +612,42 @@ lib.returnProcessFlowData = function (_urlString, _param, _control, _widget) {
             _control.setValue(r.limit.toString());
             _widget.getStore().removeAll();
             _widget.getStore().loadData(nameList);
+        }
+    });
+}
+
+lib.mssqlToJsDate = function (sqlDate) {
+    //sqlDate in SQL DATETIME format ("yyyy-mm-dd hh:mm:ss.ms")
+    var sqlDateArr1 = sqlDate.split("-");
+    //format of sqlDateArr1[] = ['yyyy','mm','dd hh:mm:ms']
+    var sYear = sqlDateArr1[0];
+    var sMonth = (Number(sqlDateArr1[1]) - 1).toString();
+    var sqlDateArr2 = sqlDateArr1[2].split(" ");
+    //format of sqlDateArr2[] = ['dd', 'hh:mm:ss.ms']
+    var sDay = sqlDateArr2[0];
+    var sqlDateArr3 = sqlDateArr2[1].split(":");
+    //format of sqlDateArr3[] = ['hh','mm','ss.ms']
+    var sHour = sqlDateArr3[0];
+    var sMinute = sqlDateArr3[1];
+    var sqlDateArr4 = sqlDateArr3[2].split(".");
+    //format of sqlDateArr4[] = ['ss','ms']
+    var sSecond = sqlDateArr4[0];
+    var sMillisecond = sqlDateArr4[1];
+
+    return new Date(sYear, sMonth, sDay , sHour, sMinute, sSecond, sMillisecond);
+}
+
+lib.returnApprovalHistoryGrid = function (urlString,_ID, _widget) {
+    var approvals = [];
+
+    $.getJSON(urlString, { LPO_ID: _ID }, function (r) {
+        if (r.status.toString() == "true") {
+            $.each(r.data, function (i, d) {
+                approvals[i] = [d.Id, d.LPO, d.PersonTag, d.ApprovalDate, d.ApprovalStatus, d.ApprovalComments];
+            });
+
+            _widget.getStore().removeAll();
+            _widget.getStore().loadData(approvals);
         }
     });
 }

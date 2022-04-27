@@ -196,6 +196,9 @@
     <Compile Include="LPO.cs">
       <DependentUpon>EProcurementModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="LPOApproval.cs">
+      <DependentUpon>EProcurementModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Module.cs">
       <DependentUpon>EProcurementModel.tt</DependentUpon>
     </Compile>

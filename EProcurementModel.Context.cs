@@ -98,6 +98,8 @@ public partial class ProcurementDbEntities : DbContext
 
     public virtual DbSet<Usr> Usrs { get; set; }
 
+    public virtual DbSet<LPOApproval> LPOApprovals { get; set; }
+
 }
 
 }

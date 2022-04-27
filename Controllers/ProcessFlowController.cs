@@ -160,5 +160,53 @@ namespace DigiProc.Controllers
             }
         }
 
+        [HttpGet]
+        public JsonResult GetLPOApprovalHistory(int LPO_ID)
+        {
+            //gets the records of approvals for a specific LPO
+            try
+            {
+                var Cfg = new RequisitionHelper();
+                var approvalHistory = Cfg.GetLPOApprovalLookups(LPO_ID);
+
+                return Json(new { status = true, data = approvalHistory },JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception ex)
+            {
+                return Json(new { status = false, error = $"error: {ex.Message}" },JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult SaveApprovalActivity(int _ID, string _status, string _comments)
+        {
+            try
+            {
+                var session = (UserSession)Session["userSession"];
+                var Cfg = new RequisitionHelper();
+
+                var obj = new LPOApproval() 
+                { 
+                    LPO_ID = _ID,
+                    PersonTag = session.approverTag,
+                    ApprovalDate = DateTime.Now,
+                    ApprovalStatus = _status == @"Approve"? 1: 0,
+                    ApprovalComments = _comments
+                    //bioName comes here
+                };
+
+                bool bln = Cfg.SaveLPOApproval(obj);
+                if (bln)
+                {
+                    return Json(new { status = bln, data = $"{obj.PersonTag} has voted to {_status} procurement." }, JsonRequestBehavior.AllowGet);
+                }
+                else { return Json(new { status = false, data = @"Approval could not be saved.Please contact the Administrator" },JsonRequestBehavior.AllowGet); }
+            }
+            catch(Exception x)
+            {
+                return Json(new { status = false, error = $"error: {x.Message}" },JsonRequestBehavior.AllowGet);
+            }
+        }
+
     }
 }

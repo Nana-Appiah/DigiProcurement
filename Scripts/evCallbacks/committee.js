@@ -47,7 +47,7 @@
                                                                     var f = Ext.getCmp('cPosFrm').getForm();
                                                                     if (f.isValid()) {
                                                                         
-                                                                        $.post('Committee/AddPosition',
+                                                                        $.post('/Committee/AddPosition',
                                                                             { _id: recordId, cposition: Ext.fly('cpos').getValue() }).done(function (res) {
                                                                                 if (res.status.toString() == "true") {
                                                                                         $('#cPos-btn-clear').trigger('click');
