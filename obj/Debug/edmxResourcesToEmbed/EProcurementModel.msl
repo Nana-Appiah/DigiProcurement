@@ -401,5 +401,13 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Cfgs">
+      <EntityTypeMapping TypeName="EProcurementDbModel.Cfg">
+        <MappingFragment StoreEntitySet="Cfg">
+          <ScalarProperty Name="C_capex_flag" ColumnName="_capex_flag" />
+          <ScalarProperty Name="cfid" ColumnName="cfid" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

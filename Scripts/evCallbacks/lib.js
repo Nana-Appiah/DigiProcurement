@@ -545,7 +545,7 @@ lib.getCapexItemGrid = function (_urlString,_ID, _widget) {
     $.getJSON(_urlString, { departmentID: _ID }, function (r) {
         if (r.status.toString() == "true") {
             $.each(r.data, function (i, d) {
-                capex_data[i] = [d.Id, d.itemName, d.capexCategory, d.QtyRequested, d.QtySupplied, d.QtyOutstanding, d.justification, d.financialYear];
+                capex_data[i] = [d.Id, d.itemName, d.capexCategory, d.QtyRequested, d.QtySupplied, d.QtyOutstanding, d.justification, d.financialYear, d.nameOfDepartment];
             });
         }
 

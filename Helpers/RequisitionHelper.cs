@@ -580,11 +580,21 @@ namespace DigiProc.Helpers
         public List<CapexLookup> GetDepartmentCapexRecords(int dId)
         {
             //gets capex records for selected department
+            //modified to fetch department too
+
             List<CapexLookup> records = new List<CapexLookup>();
+            List<Capex> data = null;
 
             try
             {
-                var data = config.Capexes.Where(c => c.DId == dId).ToList();
+                if (dId == 0) 
+                {
+                    data = config.Capexes.ToList();
+                } else 
+                {
+                    data = config.Capexes.Where(c => c.DId == dId).ToList();
+                }
+                
                 if (data.Count() > 0)
                 {
                     foreach(var d in data)
@@ -598,7 +608,9 @@ namespace DigiProc.Helpers
                             QtyOutstanding = (int) d.QuantityOutstanding,
                             justification = d.Justification,
                             capexCategory = new Utility() { }.getItemCategory((int) d.CapexTypeID).nameOfCategory,
-                            financialYear = new Utility() { }.getActiveFinancialYear().FinancialYr
+                            financialYear = new Utility() { }.getActiveFinancialYear().FinancialYr,
+
+                            nameOfDepartment = new Utility() { }.getDepartment(d.DId).Name
                         };
                         records.Add(o);
                     }
@@ -610,6 +622,51 @@ namespace DigiProc.Helpers
             {
                 Debug.Print(ex.Message);
                 return records;
+            }
+        }
+
+        public bool GetStatusOfCAPEX()
+        {
+            //gets status of branch CAPEX
+            bool bln = false;
+            try
+            {
+                var obj = config.Cfgs.FirstOrDefault(); 
+                if (obj != null)
+                {
+                    bln = obj.C_capex_flag == 1 ? true : false;
+                }
+
+                return bln;
+            }
+            catch(Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return bln;
+            }
+        }
+
+        public bool SetStatusOfCAPEX(int? _nFlag)
+        {
+            //sets status of branch CAPEX
+            bool bln = false;
+
+            try
+            {
+                var obj = config.Cfgs.FirstOrDefault();
+                if (obj != null)
+                {
+                    obj.C_capex_flag = _nFlag;
+                    config.SaveChanges();
+                    bln = true;
+                }
+
+                return bln;
+            }
+            catch(Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return bln;
             }
         }
 
@@ -748,6 +805,8 @@ namespace DigiProc.Helpers
         public int QtyOutstanding { get; set; }
         public string justification { get; set; }
         public string financialYear { get; set; }
+
+        public string nameOfDepartment { get; set; }
     }
 
     public struct LocalPurchaseOrderLookup
@@ -775,6 +834,12 @@ namespace DigiProc.Helpers
         public int Quantity { get; set; }
         public string narration { get; set; }
 
+    }
+
+    public struct ConfigLookup
+    {
+        public int Id { get; set; }
+        public int capexFlag { get;set; }
     }
 
 }

@@ -4,6 +4,8 @@
     var gridEditor = lib.returnEditorControl();
     var APPROVED_REQUISITIONS = [];
 
+    var CLOSED_CAPEX_STATUS_ID = 0;
+
     var finC = Ext.get('finControl');
 
     finC.on('click', function () {
@@ -258,7 +260,7 @@
                                                 defaults: { xtype: 'form', frame: true, border: true },layout:'form',
                                                 items: [
                                                     {
-                                                        id: '', title: 'Search',
+                                                        id: 'capexDeptSearchFrm', title: 'Search',
                                                         defaults: { xtype: 'combo', forceSelection: true, typeAhead: true, mode: 'local', allowBlank: false }, layout: 'fit',
                                                         items: [
                                                             {
@@ -272,7 +274,7 @@
                                                         ]
                                                     },
                                                     {
-                                                        id: '', title: 'Results', height: 500,
+                                                        id: '', title: 'Results', height: 490,
                                                         items: [
                                                             new Ext.grid.GridPanel({
                                                                 id: 'capexGridAppr', height: 450, autoScroll: true, autoExpandColumn: 'itemName',
@@ -286,7 +288,8 @@
                                                                         { name: 'QtySupplied', type: 'int' },
                                                                         { name: 'QtyOutstanding', type: 'string' },
                                                                         { name: 'justification', type: 'string' },
-                                                                        { name: 'financialYear', type:'string'}
+                                                                        { name: 'financialYear', type: 'string' },
+                                                                        { name: 'nameOfDepartment', type:'string'}
                                                                     ]),
                                                                     sortInfo: {
                                                                         field: 'Id',
@@ -310,15 +313,96 @@
                                                                     },                                                                   
                                                                     {
                                                                         id: 'financialYear', header: 'Deadline', width: 120, hidden: false, sortable: false, dataIndex: 'financialYear'
+                                                                    },
+                                                                    {
+                                                                        id: 'nameOfDepartment', header: 'Department', width: 200, hidden: false, sortable: false, dataIndex: 'nameOfDepartment'
                                                                     }
                                                                 ],
                                                                 stripeRows: true
                                                             })
+                                                        ],
+                                                        buttons: [
+                                                            {
+                                                                id: '', text: 'Fetch All',
+                                                                listeners: {
+                                                                    'click': function (btn) {
+                                                                        //fetch all. dppartmentID parameter = 0
+                                                                        var nDepartmentID = 0;
+                                                                        lib.getCapexItemGrid('/Capex/GetCapexData', nDepartmentID, Ext.getCmp('capexGridAppr'));
+                                                                    }
+                                                                }
+                                                            },
+                                                            {
+                                                                id: '', text: 'Clear',
+                                                                listeners: {
+                                                                    'click': function (btn) {
+                                                                        Ext.getCmp('capexGridAppr').getStore().removeAll();
+                                                                        Ext.getCmp('capexDeptSearchFrm').getForm().reset();
+                                                                    }
+                                                                }
+                                                            },
+                                                            {
+                                                                id: '', text: 'Print Csv',
+                                                                listeners: {
+                                                                    'click': function (btn) {
+
+
+                                                                    }
+                                                                }
+                                                            }
                                                         ]
                                                     }
                                                 ]
                                             }
                                         ]
+                                    }
+                                ]
+                            },
+                            {
+                                title: 'Capex Status', defaults: { xtype: 'panel', frame: true, border: true  },
+                                items: [
+                                    {
+                                        defaults: { xtype: 'button', anchor: '90%' },layout:'column',
+                                        items: [
+                                            { id:'capexstatus', xtype: 'textfield', disabled: true },
+                                            {
+                                                xtype: 'button',id:'capex-btn-status',
+                                                listeners: {
+                                                    'click': function (btn) {
+                                                        $.post('/Capex/PostCapexStatus',
+                                                            { capexstatusId: CLOSED_CAPEX_STATUS_ID })
+                                                            .done(function (r) {
+                                                                if (r.status.toString() == "true") {
+                                                                    Ext.getCmp('capex-btn-status').setText(r.data.toString());
+                                                                    if (CLOSED_CAPEX_STATUS_ID == 1)
+                                                                    {
+                                                                        CLOSED_CAPEX_STATUS_ID = 0;
+                                                                    }
+                                                                    else { CLOSED_CAPEX_STATUS_ID = 1; }
+                                                                }
+                                                        });
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        listeners: {
+                                            'render': function () {
+                                                //get status of CAPEX upon rendering
+                                                $.getJSON('/Capex/GetCapexStatus', {}, function (r) {
+                                                    if (r.status.toString() == "true") {
+                                                        $('#capexstatus').val(r.data.toString());
+                                                        if (r.data.toString() == 'OPENED') {
+                                                            Ext.getCmp('capex-btn-status').setText('CLICK TO CLOSE CAPEX');
+                                                            CLOSED_CAPEX_STATUS_ID = 1;
+                                                        }
+                                                        else {
+                                                            Ext.getCmp('capex-btn-status').setText('CLICK TO OPEN CAPEX');
+                                                            CLOSED_CAPEX_STATUS_ID = 0;
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                        }
                                     }
                                 ]
                             }

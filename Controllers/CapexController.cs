@@ -66,5 +66,42 @@ namespace DigiProc.Controllers
             }
         }
 
+        [HttpGet]
+        public JsonResult GetCapexStatus()
+        {
+            //method is for getting the status of CAPEX branch inputs
+            try
+            {
+                var Cfg = new RequisitionHelper();
+                bool bn = Cfg.GetStatusOfCAPEX();
+                var status = bn == true ? @"OPENED" : @"CLOSED";
+
+                return Json(new { status = bn, data = status },JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception ex)
+            {
+                return Json(new { status = false, error = $"error: {ex.Message}" },JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult PostCapexStatus(int capexstatusId)
+        {
+            //statusId used to close or open CAPEX
+            string strStatus = capexstatusId == 1 ? "CLICK TO OPEN CAPEX" : "CLICK TO CLOSE CAPEX";
+            try
+            {
+
+                var Cfg = new RequisitionHelper();
+                bool bln = Cfg.SetStatusOfCAPEX(capexstatusId);
+
+                return Json(new {status = bln, data = strStatus },JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception ex)
+            {
+                return Json(new { status = false, error = $"error: {ex.Message}" },JsonRequestBehavior.AllowGet);
+            }
+        }
+
     }
 }
