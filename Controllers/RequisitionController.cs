@@ -7,7 +7,7 @@ using System.Web.Mvc;
 using DigiProc;
 using DigiProc.Helpers;
 using System.Diagnostics;
-
+using System.Configuration;
 using System.IO;
 
 namespace DigiProc.Controllers
@@ -358,6 +358,7 @@ namespace DigiProc.Controllers
         public ActionResult fUpload()
         {
             bool bln;
+            string networkPath = ConfigurationManager.AppSettings["sharedF"].ToString();
 
             try
             {
@@ -379,7 +380,8 @@ namespace DigiProc.Controllers
                     //write stream to file
                     try
                     {
-                        var fpath = Path.Combine(Server.MapPath("~/uploads"), postedFile.FileName);
+                        //var fpath = Path.Combine(Server.MapPath("~/uploads"), postedFile.FileName);
+                        var fpath = Path.Combine(networkPath, postedFile.FileName);
                         using (var writer = new BinaryWriter(System.IO.File.OpenWrite(fpath)))
                         {
                             writer.Write(obj.RequisitionFileName);
@@ -485,7 +487,8 @@ namespace DigiProc.Controllers
             //method gets the list of uploaded documents for a requisition
             try
             {
-                var rootPath = Server.MapPath("~/uploads");
+                //var rootPath = Server.MapPath("~/uploads");
+                var rootPath = ConfigurationManager.AppSettings["sharedF"].ToString();
                 var Cfg = new RequisitionHelper() { };
                 var uploaded_documents = Cfg.GetRequisitionDocuments(rqID,rootPath);
 

@@ -7,14 +7,13 @@
 
     var LPO_ID = 0;
     var LPO_No = '';
+    var def_pic = "../../images/standard.jpg";
 
     var mgmt = Ext.get('management');
 
     mgmt.on('click', function () {
 
         var req = Ext.getCmp('mgmtWdow');
-
-        
 
         if (!req) {
             req = new Ext.Window({
@@ -252,7 +251,7 @@
                                                         id: 'fp', title: 'Approved Items',
                                                         fileUpload: true, defaults: { xtype:'textfield', allowBlank: false, anchor:'100%' }, layout:'form',
                                                         items: [
-                                                            { id:'file-name', emptyText:'enter the name of file' },
+                                                            //{ id:'file-name', emptyText:'enter the name of file' },
                                                             {
                                                                 xtype: 'fileuploadfield', id: 'form-file', emptyText: 'select an image document'
                                                             }
@@ -308,7 +307,7 @@
                                                                     { id: 'requisitionId', header: 'ReqNo', width: 150, hidden: true, sortable: true, dataIndex: 'requisitionId' },
                                                                     { id: 'fileDescription', header: 'File', width: 150, hidden: false, sortable: true, dataIndex: 'fileDescription' },
                                                                     { id: 'file', header: 'File', width: 150, hidden: true, sortable: true, dataIndex: 'file' },
-                                                                    { id: 'filepath', header: 'FilePath', width: 150, hidden: false, sortable: true, dataIndex: 'filepath' }
+                                                                    { id: 'filepath', header: 'FilePath', width: 150, hidden: true, sortable: true, dataIndex: 'filepath' }
                                                                 ],
                                                                 stripeRows: true,
                                                                 listeners: {
@@ -323,39 +322,36 @@
                                                                         
                                                                     },
                                                                     'rowdblclick': function (e, t) {
-                                                                        var fileReader = new FileReader();
+                                                                        
                                                                         var rec = e.getStore().getAt(t);
-                                                                        //var img = window.atob('data:image/png;base64,' + rec.get('file'));
+                                                                        
+                                                                        
+                                                                        var img = 'http://localhost/uploads/' + rec.get('fileDescription');
+                                                                        console.log('file path is ' + img);
 
-                                                                        var myTpl = new Ext.XTemplate(
-                                                                            '<div style="max-width:380px;max-height:100%;">',
-                                                                            '<img id="{id}" style="width:370px;height:450px;border:5px solid red;" src="{urlPath} alt="{alternative}">',
-                                                                            '</div>'
-                                                                        );
-                                                                        myTpl.compile();
-                                                                        alert(rec.get('filepath'));
-                                                                        var generatedHTML = myTpl.append({
-                                                                            id: rec.get('Id'),
-                                                                            urlPath: 'file:///' +  rec.get('filepath'), //'../../uploads/' + rec.get('fileDescription'), // rec.get('filepath'),
-                                                                            alternative: rec.get('filepath')
-                                                                        });
+                                                                        window.open(img,'_blank','width=700,height=650');
 
-                                                                        var img = window.atob(rec.get('file'));
-                                                                        new Ext.Window({
-                                                                            id: rec.get('Id'),
-                                                                            title: rec.get('fileDescription'),
-                                                                            width: 400,
-                                                                            height: 500,
-                                                                            defaults: { xtype: 'panel', border: true },
-                                                                            items: [
-                                                                                {
-                                                                                    items: [
-                                                                                        myTpl
-                                                                                    ]
-                                                                                }
-                                                                            ]
+                                                                        //new Ext.Window({
+                                                                        //    id: rec.get('Id'),
+                                                                        //    title: rec.get('fileDescription'),
+                                                                        //    width: 400,
+                                                                        //    height: 500,
+                                                                        //    defaults: { xtype: 'panel', border: true },
+                                                                        //    items: [
+                                                                        //        {
+                                                                        //            items: [
+                                                                        //                {
+                                                                        //                    tpl: new Ext.XTemplate(
+                                                                        //                        '<div id="dv" style="display:flex;justify-content: center;align-items: center;overflow: hidden">',
+                                                                        //                        '<img id="{id}" style="flex-shrink:0;min-width:100%;min-height:100%;border:5px solid red;" src="{source}" alt="{alternative}" />',
+                                                                        //                        '</div>'
+                                                                        //                    ), compiled: true, data: { id:rec.get('Id'), source:img.src, alternative:'red dot' }
+                                                                        //                }
+                                                                        //            ]
+                                                                        //        }
+                                                                        //    ]
 
-                                                                        }).show();
+                                                                        //}).show();
                                                                     }
                                                                 }
                                                             })
