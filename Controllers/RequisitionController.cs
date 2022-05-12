@@ -354,30 +354,142 @@ namespace DigiProc.Controllers
             }
         }
 
+        [HttpPost] 
+        public ActionResult fUpload()
+        {
+            bool bln;
+
+            try
+            {
+                if (Session["PotentialReqID"] != null)
+                {
+                    HttpPostedFileBase postedFile = Request.Files[0];
+
+                    var Cfg = new RequisitionHelper() { };
+
+                    var obj = new RequisitionFile()
+                    {
+                        RequisitionID = (int)Session["PotentialReqID"],
+                        RequisitionFileDescription = Request.Files[0].FileName
+                    };
+
+                    obj.RequisitionFileName = new byte[postedFile.ContentLength];
+                    postedFile.InputStream.Read(obj.RequisitionFileName, 0, postedFile.ContentLength);
+
+                    //write stream to file
+                    try
+                    {
+                        var fpath = Path.Combine(Server.MapPath("~/uploads"), postedFile.FileName);
+                        using (var writer = new BinaryWriter(System.IO.File.OpenWrite(fpath)))
+                        {
+                            writer.Write(obj.RequisitionFileName);
+                        }
+
+                        bln = Cfg.SaveRequisitionFileUpload(obj);
+                        return Json(new { status = bln }, JsonRequestBehavior.AllowGet);
+                    }
+                    catch (Exception x) {
+                        return Json(new { status = false, error = $"error: {x.Message}" },JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    return Json(new { status = false, data = $"Please select a requisition to upload documents for" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { status = false, data = $"Please select a requisition to upload documents for" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         [HttpPost]
-        public ActionResult FileUpload()
+        public ActionResult FileUpload(string data)
         {
             try
             {
-                int i = Request.Files.Count;
-                HttpPostedFileBase postedFile = Request.Files[0];
-                Stream input = postedFile.InputStream;
-                byte[] inputByte;
-
-                byte[] buffer = new byte[16 * 1024];
-                using (MemoryStream ms = new MemoryStream())
+                if (Session["PotentialReqID"] != null)
                 {
-                    int read;
-                    while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
+                    int i = Request.Files.Count;
+                    HttpPostedFileBase postedFile = Request.Files[0];
+                    Stream input = postedFile.InputStream;
+                    byte[] inputByte;
+
+                    byte[] buffer = new byte[16 * 1024];
+                    using (MemoryStream ms = new MemoryStream())
                     {
-                        ms.Write(buffer, 0, read);
+                        
+                        int read;
+                        while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
+                        {
+                            ms.Write(buffer, 0, read);
+                        }
+
+                        inputByte = ms.ToArray();
                     }
 
-                    inputByte = ms.ToArray();
 
-                    return Json(true);
+                    //create requisition file object 
+                    var Cfg = new RequisitionHelper() { };
+
+                    var obj = new RequisitionFile()
+                    {
+                        RequisitionID = (int)Session["PotentialReqID"],
+                        RequisitionFileDescription = Request.Files[0].FileName,
+                        //RequisitionFileName = inputByte
+                        RequisitionFileName = inputByte
+                    };
+
+                    bool bln = Cfg.SaveRequisitionFileUpload(obj);
+                    return Json(new { status = bln }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { status = false, data = $"Please select a requisition to upload documents for" },JsonRequestBehavior.AllowGet);
                 }
 
+            }
+            catch(Exception ex)
+            {
+                return Json(new { status = false, error = $"error: {ex.Message}" },JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult StorePotentialRequisitonUploadID(int rqID)
+        {
+            //method stores a requisition id that can have a potential upload in the session object
+            try
+            {
+                var session = (UserSession)Session["userSession"];
+                if (Session["PotentialReqID"] != null) 
+                {
+                    Session.Remove("PotentialReqID");
+                    session.potentialRequisitionfileID = 0;
+                }
+
+                Session["PotentialReqID"] = rqID;
+                session.potentialRequisitionfileID = (int) Session["PotentialReqID"];
+
+                return Json(new { status = true, data = session},JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception ex)
+            {
+                return Json(new { status = false, error = $"error: {ex.Message}" },JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpGet]
+        public JsonResult GetUploadsOfRequisition(int rqID)
+        {
+            //method gets the list of uploaded documents for a requisition
+            try
+            {
+                var rootPath = Server.MapPath("~/uploads");
+                var Cfg = new RequisitionHelper() { };
+                var uploaded_documents = Cfg.GetRequisitionDocuments(rqID,rootPath);
+
+                return Json(new { status = true, data = uploaded_documents },JsonRequestBehavior.AllowGet);
             }
             catch(Exception ex)
             {

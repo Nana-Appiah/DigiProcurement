@@ -5,7 +5,7 @@ using System.Web;
 using DigiProc;
 
 using System.Diagnostics;
-
+using System.Runtime.Serialization;
 
 namespace DigiProc.Helpers
 {
@@ -980,6 +980,7 @@ namespace DigiProc.Helpers
         public string nameOfPriority { get; set; }
     }
 
+    [Serializable]
     public struct UserSession
     {
         public string userName { get; set; }
@@ -991,6 +992,8 @@ namespace DigiProc.Helpers
 
         public string approverTag { get; set; }
         public string bioName { get; set; }
+
+        public int potentialRequisitionfileID { get; set; }
     }
 
     #endregion

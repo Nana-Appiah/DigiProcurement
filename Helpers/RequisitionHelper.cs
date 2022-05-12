@@ -5,7 +5,7 @@ using System.Web;
 
 using DigiProc;
 using System.Diagnostics;
-
+using System.IO;
 
 namespace DigiProc.Helpers
 {
@@ -757,6 +757,61 @@ namespace DigiProc.Helpers
 
         #endregion
 
+        #region Requisition-File
+
+        public bool SaveRequisitionFileUpload(RequisitionFile item)
+        {
+            //method saves the contents of the requisition file upload
+            try
+            {
+                config.RequisitionFiles.Add(item);
+                config.SaveChanges();
+
+                return true;
+            }
+            catch(Exception exc)
+            {
+                Debug.Print(exc.Message);
+                return false;
+            }
+        }
+
+        public List<RequisitionDocument> GetRequisitionDocuments(int rId, string resourcePath)
+        {
+            //method is responsible for fetching uploaded images associated with a requisition
+            List<RequisitionDocument> data = new List<RequisitionDocument>();
+
+            try
+            {
+                var list = config.RequisitionFiles.Where(rq => rq.RequisitionID == rId).ToList();
+                if (list.Count() > 0)
+                {
+                    foreach(var item in list)
+                    {
+                        var rqd = new RequisitionDocument() { 
+                            Id = item.RequisitionFileID,
+                            requisitionId = (int) item.RequisitionID,
+                            fileDescription = item.RequisitionFileDescription,
+                            file = Convert.ToBase64String(item.RequisitionFileName),
+                            filepath = Path.Combine(resourcePath,item.RequisitionFileDescription)
+                            //file = item.RequisitionFileName
+                        };
+
+                        data.Add(rqd);
+                    }
+                }
+
+                return data.ToList();
+            }
+            catch(Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return data;
+            }
+        }
+
+        #endregion
+
     }
 
     public struct LPOApprovalLookup
@@ -840,6 +895,16 @@ namespace DigiProc.Helpers
     {
         public int Id { get; set; }
         public int capexFlag { get;set; }
+    }
+
+    public struct RequisitionDocument
+    {
+        public int Id { get; set; }
+        public int requisitionId { get; set; }
+        public string fileDescription { get; set; }
+        //public byte[] file { get; set; }  //changed from byte[]
+        public string file { get; set; }
+        public string filepath { get; set; }
     }
 
 }

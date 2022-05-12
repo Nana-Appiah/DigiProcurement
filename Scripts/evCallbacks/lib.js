@@ -524,12 +524,33 @@ lib.returnRequistionDetails2 = function (_urlString, _ID, rno, req, d, p, _STAT,
             p.val(r.data.priority);
 
             $.each(r.data.rLookups, function (i, d) {
-                alert(d.ProductCode); alert(d.ProductName); alert(d.Quantity); alert(d.narration);
+                //alert(d.ProductCode); alert(d.ProductName); alert(d.Quantity); alert(d.narration);
                 dta[i] = [d.Id, d.RequisitionId, d.ProductCode, d.ProductName, d.Quantity, d.narration];
             });
 
             _widget.getStore().removeAll();
             _widget.getStore().loadData(dta);
+        }
+    });
+}
+
+lib.storeRequisitionInSession = function (_urlString, rId) {
+    $.post(_urlString, { rqID: rId }).done(function (r) {
+        return r.status.toString();
+    });
+}
+
+lib.returnRequisitionDocuments = function (_urlString, rId, _widget) {
+    var docs = [];
+    $.getJSON(_urlString, { rqID: rId }, function (r) {
+        if (r.status.toString() == "true") {
+            $.each(r.data, function (i, d) {
+                //alert(d.fileDescription); alert(d.filepath);
+                docs[i] = [d.Id, d.requisitionId, d.fileDescription, d.file, d.filepath];
+            });
+
+            _widget.getStore().removeAll();
+            _widget.getStore().loadData(docs);
         }
     });
 }

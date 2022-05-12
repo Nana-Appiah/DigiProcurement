@@ -183,8 +183,10 @@
     </Compile>
     <Compile Include="Helpers\CommitteeHelper.cs" />
     <Compile Include="Helpers\ConfigurationHelper.cs" />
+    <Compile Include="Helpers\ILogger.cs" />
     <Compile Include="Helpers\PFHelper.cs" />
     <Compile Include="Helpers\RequisitionHelper.cs" />
+    <Compile Include="Helpers\Serializer.cs" />
     <Compile Include="Helpers\Utility.cs" />
     <Compile Include="Helpers\VendorHelper.cs" />
     <Compile Include="Item.cs">
@@ -1351,6 +1353,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
     <Folder Include="Properties\PublishProfiles\" />
+    <Folder Include="uploads\" />
     <Folder Include="Views\Capex\" />
     <Folder Include="Views\Committee\" />
     <Folder Include="Views\Master\" />

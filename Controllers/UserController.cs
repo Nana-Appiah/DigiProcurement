@@ -53,6 +53,14 @@ namespace DigiProc.Views.User
 
                     Session["userSession"] = _session;
 
+                    //log event
+                    new Log() { 
+                        Entity = @"User",
+                        Event = @"Authentication",
+                        Description = String.Empty, // Serializer.SerializeObject(_session),
+                        Actor = _session.userName
+                    }.WriteLog();
+
                     return Json(new { status = true, data = objUser }, JsonRequestBehavior.AllowGet);
                     //return RedirectToAction("Main", "Home");
                 }

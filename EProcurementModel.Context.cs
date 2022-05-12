@@ -56,9 +56,9 @@ namespace DigiProc
         public virtual DbSet<Capex> Capexes { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<Profile> Profiles { get; set; }
-        public virtual DbSet<RequisitionFile> RequisitionFiles { get; set; }
         public virtual DbSet<Usr> Usrs { get; set; }
         public virtual DbSet<LPOApproval> LPOApprovals { get; set; }
         public virtual DbSet<Cfg> Cfgs { get; set; }
+        public virtual DbSet<RequisitionFile> RequisitionFiles { get; set; }
     }
 }

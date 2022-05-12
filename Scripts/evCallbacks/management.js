@@ -2,6 +2,7 @@
 
     var mgmtEditor = lib.returnEditorControl();
     var REQUISITION_NUMBER = '';
+    var REQUISITION_ID = 0;
     var LPO_Status = '';
 
     var LPO_ID = 0;
@@ -12,6 +13,8 @@
     mgmt.on('click', function () {
 
         var req = Ext.getCmp('mgmtWdow');
+
+        
 
         if (!req) {
             req = new Ext.Window({
@@ -81,7 +84,7 @@
                                                                     'rowdblclick': function (e, t) {
                                                                         var record = e.getStore().getAt(t);
 
-                                                                        var REQUISITION_ID = record.get('Id');
+                                                                        REQUISITION_ID = record.get('Id');
                                                                         REQUISITION_NUMBER = record.get('RequisitionNo');
 
                                                                         $('#mgmbRNo').val(record.get('RequisitionNo'));
@@ -90,7 +93,7 @@
                                                                         //REQUISITION_ID = record.get('Id');
                                                                         lib.returnRequistionDetails2('/Requisition/GetRequisitionDetails2', REQUISITION_ID, $('#rno'), $('#requestee'), $('#dept'), $('#priority'), 2, Ext.getCmp('mgmtReqItemsGrid'));
                                                                         //lib.getItemGridGivenRequisitionID('/Requisition/GetRequisitionItemList', REQUISITION_ID, 2, Ext.getCmp('mgmtReqItemsGrid'));
-
+                                                                        lib.storeRequisitionInSession('/Requisition/StorePotentialRequisitonUploadID', REQUISITION_ID)
                                                                         //do json call from the event listener
                                                                         
 
@@ -260,17 +263,21 @@
                                                                 listeners: {
                                                                     'click': function (btn) {
                                                                         var fpfrm = Ext.getCmp('fp').getForm();
+                                                                        
                                                                         if (fpfrm.isValid()) {
+                                                                            var formData = fpfrm.getValues();
                                                                             fpfrm.submit({
                                                                                 //clientValidation: true,
-                                                                                url: '/Requisition/FileUpload',
+                                                                                data: formData,
+                                                                                url: '/Requisition/fUpload',
                                                                                 method: 'POST',
-                                                                                waitMsg: 'Uploading document...please wait',
-                                                                                success: function (r, a) {
-                                                                                    msg('Success', 'Processed file "' + o.result.file + '" on the server');
+                                                                                //waitMsg: 'Uploading document...please wait',
+                                                                                success: function (form, action) {
+                                                                                    //msg('Success', 'Processed file "' + o.result.file + '" on the server');
+                                                                                    Ext.Msg.alert('Success', action.toString())
                                                                                 },
-                                                                                failure: function (r, a) {
-
+                                                                                failure: function (form, action) {
+                                                                                    Ext.Msg.alert('Failure', aciton.toString());
                                                                                 }
                                                                             });
 
@@ -281,7 +288,78 @@
                                                         ]
                                                     },
                                                     {
-                                                        id:'', title:'Grid'
+                                                        id: '', title: 'Image or Document uploads',
+                                                        items: [
+                                                            new Ext.grid.GridPanel({
+                                                                id: 'GrdUploads', height: 250, autoScroll: true, autoExpandColumn: 'fileDescription',
+                                                                //plugins: editor,
+                                                                store: new Ext.data.GroupingStore({
+                                                                    reader: new Ext.data.ArrayReader({}, [
+                                                                        { name: 'Id', type: 'int' },
+                                                                        { name: 'requisitionId', type: 'int' },
+                                                                        { name: 'fileDescription', type: 'string' },
+                                                                        { name: 'file', type: 'string' },
+                                                                        { name: 'filepath', type: 'string' }
+                                                                    ]),
+                                                                    groupField: 'fileDescription'
+                                                                }),
+                                                                columns: [
+                                                                    { id: 'Id', header: '#s', width: 150, hidden: true, sortable: true, dataIndex: 'Id' },
+                                                                    { id: 'requisitionId', header: 'ReqNo', width: 150, hidden: true, sortable: true, dataIndex: 'requisitionId' },
+                                                                    { id: 'fileDescription', header: 'File', width: 150, hidden: false, sortable: true, dataIndex: 'fileDescription' },
+                                                                    { id: 'file', header: 'File', width: 150, hidden: true, sortable: true, dataIndex: 'file' },
+                                                                    { id: 'filepath', header: 'FilePath', width: 150, hidden: false, sortable: true, dataIndex: 'filepath' }
+                                                                ],
+                                                                stripeRows: true,
+                                                                listeners: {
+                                                                    'afterrender': function () {
+                                                                        setInterval(function () {
+                                                                            if (REQUISITION_ID > 0) {
+                                                                                //get images for last requisition clicked
+                                                                                lib.returnRequisitionDocuments('/Requisition/GetUploadsOfRequisition', REQUISITION_ID, Ext.getCmp('GrdUploads'));
+                                                                            }
+                                                                            
+                                                                        }, 2000);
+                                                                        
+                                                                    },
+                                                                    'rowdblclick': function (e, t) {
+                                                                        var fileReader = new FileReader();
+                                                                        var rec = e.getStore().getAt(t);
+                                                                        //var img = window.atob('data:image/png;base64,' + rec.get('file'));
+
+                                                                        var myTpl = new Ext.XTemplate(
+                                                                            '<div style="max-width:380px;max-height:100%;">',
+                                                                            '<img id="{id}" style="width:370px;height:450px;border:5px solid red;" src="{urlPath} alt="{alternative}">',
+                                                                            '</div>'
+                                                                        );
+                                                                        myTpl.compile();
+                                                                        alert(rec.get('filepath'));
+                                                                        var generatedHTML = myTpl.append({
+                                                                            id: rec.get('Id'),
+                                                                            urlPath: 'file:///' +  rec.get('filepath'), //'../../uploads/' + rec.get('fileDescription'), // rec.get('filepath'),
+                                                                            alternative: rec.get('filepath')
+                                                                        });
+
+                                                                        var img = window.atob(rec.get('file'));
+                                                                        new Ext.Window({
+                                                                            id: rec.get('Id'),
+                                                                            title: rec.get('fileDescription'),
+                                                                            width: 400,
+                                                                            height: 500,
+                                                                            defaults: { xtype: 'panel', border: true },
+                                                                            items: [
+                                                                                {
+                                                                                    items: [
+                                                                                        myTpl
+                                                                                    ]
+                                                                                }
+                                                                            ]
+
+                                                                        }).show();
+                                                                    }
+                                                                }
+                                                            })
+                                                        ]
                                                     }
                                                 ]
                                             }

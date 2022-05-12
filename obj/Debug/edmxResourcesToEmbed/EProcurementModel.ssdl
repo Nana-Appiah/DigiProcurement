@@ -264,7 +264,7 @@
     <Property Name="RequisitionFileID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="RequisitionID" Type="int" />
     <Property Name="RequisitionFileDescription" Type="varchar" MaxLength="200" />
-    <Property Name="RequisitionFileName" Type="binary" MaxLength="50" />
+    <Property Name="RequisitionFileName" Type="varbinary(max)" />
   </EntityType>
   <EntityType Name="RequisitionItem">
     <Key>
