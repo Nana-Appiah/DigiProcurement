@@ -285,7 +285,9 @@ namespace DigiProc.Helpers
 
             try
             {
-                var obj = config.Usrs.Where(u => u.usrname == _user).Where(p => p.usrpassword == _pwd).FirstOrDefault();
+                //var obj = config.Usrs.Where(u => u.usrname == _user).Where(p => p.usrpassword == _pwd).FirstOrDefault();
+                var obj = config.Usrs.Where(u => u.usrname == _user).FirstOrDefault();
+
                 if (obj != null)
                 {
 

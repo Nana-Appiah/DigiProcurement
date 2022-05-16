@@ -33,41 +33,50 @@ namespace DigiProc.Views.User
             try
             {
                 usrname = usrname.Replace(@"panafricansl.com", string.Empty);
-                ConfigurationHelper Cfg = new ConfigurationHelper();
-                var objUser = Cfg.GetUser(usrname, Security.Hashing.CreateMD5Hash(pwd));
+                string data = string.Format("?username={0}&pass={1}", usrname, pwd);
+                ApiServer api = new ApiServer() { ApiParams = data };
 
-                if (objUser.isActive == @"Yes")
+                string req = api.ApiRequest();
+                if (req.Contains(@"OK"))
                 {
-                    var usModules = new Utility() { }.getUserModules(objUser.username); //obj.getUserModules(session.userName);
+                    ConfigurationHelper Cfg = new ConfigurationHelper();
+                    var objUser = Cfg.GetUser(usrname, Security.Hashing.CreateMD5Hash(pwd));
 
-                    var _session = new UserSession()
+                    if (objUser.isActive == @"Yes")
                     {
-                        userDepartment = new Department { Name = objUser.nameOfDepartment },
-                        userName = objUser.username,
-                        userProfile = objUser.PrManager.nameOfProfile,
-                        moduleString = objUser.PrManager.contentOfProfile,
-                        modules = usModules,
-                        approverTag = objUser.userTag,
-                        bioName = string.Format("{0} {1} {2}",objUser.sname,objUser.fname,objUser.onames)
-                    };
+                        var usModules = new Utility() { }.getUserModules(objUser.username); //obj.getUserModules(session.userName);
 
-                    Session["userSession"] = _session;
+                        var _session = new UserSession()
+                        {
+                            userDepartment = new Department { Name = objUser.nameOfDepartment },
+                            userName = objUser.username,
+                            userProfile = objUser.PrManager.nameOfProfile,
+                            moduleString = objUser.PrManager.contentOfProfile,
+                            modules = usModules,
+                            approverTag = objUser.userTag,
+                            bioName = string.Format("{0} {1} {2}", objUser.sname, objUser.fname, objUser.onames)
+                        };
 
-                    //log event
-                    new Log() { 
-                        Entity = @"User",
-                        Event = @"Authentication",
-                        Description = String.Empty, // Serializer.SerializeObject(_session),
-                        Actor = _session.userName
-                    }.WriteLog();
+                        Session["userSession"] = _session;
 
-                    return Json(new { status = true, data = objUser }, JsonRequestBehavior.AllowGet);
-                    //return RedirectToAction("Main", "Home");
+                        //log event
+                        new Log()
+                        {
+                            Entity = @"User",
+                            Event = @"Authentication",
+                            Description = String.Empty, 
+                            Actor = _session.userName
+                        }.WriteLog();
+
+                        return Json(new { status = true, data = objUser }, JsonRequestBehavior.AllowGet);
+                        //return RedirectToAction("Main", "Home");
+                    }
+                    else
+                    {
+                        return Json(new { status = false }, JsonRequestBehavior.AllowGet);
+                    }
                 }
-                else
-                {
-                    return Json(new { status = false }, JsonRequestBehavior.AllowGet);
-                }
+                else { return Json(new { status = false },JsonRequestBehavior.AllowGet); }
             }
             catch (Exception ex)
             {
