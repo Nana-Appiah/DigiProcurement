@@ -304,7 +304,7 @@ namespace DigiProc.Controllers
                 obj.ShippingAddress = _values[4];
                 obj.PaymentTerm = _values[5];
                 obj.OtherTermsAndConditions = _values[6];
-                obj.ProcurementTypeId = int.Parse(_values[8]);
+                obj.ProcurementTypeId = int.Parse(_values[7]);
                 obj.LPOStatusID = 4; //4=LPO Generated
 
                 var bln = new RequisitionHelper { }.SaveLocalPurchaseOrder(obj);
@@ -491,6 +491,26 @@ namespace DigiProc.Controllers
                 var rootPath = ConfigurationManager.AppSettings["sharedF"].ToString();
                 var Cfg = new RequisitionHelper() { };
                 var uploaded_documents = Cfg.GetRequisitionDocuments(rqID,rootPath);
+
+                return Json(new { status = true, data = uploaded_documents },JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception ex)
+            {
+                return Json(new { status = false, error = $"error: {ex.Message}" },JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpGet]
+        public JsonResult GetUploadsOfRequisitionNumber(string rqNo)
+        {
+            //method gets the list of uploaded documents, given the requsition number
+            try
+            {
+                var rootPath = ConfigurationManager.AppSettings["sharedF"].ToString();
+                var Cfg = new RequisitionHelper() { };
+
+                var objRequisition = Cfg.GetRequisition(rqNo);
+                var uploaded_documents = Cfg.GetRequisitionDocuments(objRequisition.RequisitionID, rootPath);
 
                 return Json(new { status = true, data = uploaded_documents },JsonRequestBehavior.AllowGet);
             }

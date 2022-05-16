@@ -324,34 +324,9 @@
                                                                     'rowdblclick': function (e, t) {
                                                                         
                                                                         var rec = e.getStore().getAt(t);
-                                                                        
-                                                                        
+
                                                                         var img = 'http://localhost/uploads/' + rec.get('fileDescription');
-                                                                        console.log('file path is ' + img);
-
                                                                         window.open(img,'_blank','width=700,height=650');
-
-                                                                        //new Ext.Window({
-                                                                        //    id: rec.get('Id'),
-                                                                        //    title: rec.get('fileDescription'),
-                                                                        //    width: 400,
-                                                                        //    height: 500,
-                                                                        //    defaults: { xtype: 'panel', border: true },
-                                                                        //    items: [
-                                                                        //        {
-                                                                        //            items: [
-                                                                        //                {
-                                                                        //                    tpl: new Ext.XTemplate(
-                                                                        //                        '<div id="dv" style="display:flex;justify-content: center;align-items: center;overflow: hidden">',
-                                                                        //                        '<img id="{id}" style="flex-shrink:0;min-width:100%;min-height:100%;border:5px solid red;" src="{source}" alt="{alternative}" />',
-                                                                        //                        '</div>'
-                                                                        //                    ), compiled: true, data: { id:rec.get('Id'), source:img.src, alternative:'red dot' }
-                                                                        //                }
-                                                                        //            ]
-                                                                        //        }
-                                                                        //    ]
-
-                                                                        //}).show();
                                                                     }
                                                                 }
                                                             })

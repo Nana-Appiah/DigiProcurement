@@ -106,15 +106,22 @@
                                                                         CAPEX_LIST.push(result[z]);
                                                                     }
 
-                                                                    console.log(CAPEX_LIST);
-                                                                    $.post('/Capex/PostCapexData', { _data: CAPEX_LIST })
-                                                                        .done(function (r) {
-                                                                            if (r.status.toString() == "true") {
-                                                                                Ext.MessageBox.alert("CAPEX", r.data, this);
-                                                                                $('#capex-btn-clear').trigger('click');
-                                                                            }
-                                                                    });
+                                                                    //check if capex window is open
+                                                                    $.getJSON('/Capex/GetCapexStatus', {}, function (stat) {
+                                                                        if (stat.data.toString() == "OPENED") {
+                                                                            $.post('/Capex/PostCapexData', { _data: CAPEX_LIST })
+                                                                                .done(function (r) {
+                                                                                    if (r.status.toString() == "true") {
+                                                                                        Ext.MessageBox.alert("CAPEX", r.data, this);
+                                                                                        $('#capex-btn-clear').trigger('click');
+                                                                                    }
+                                                                                });
 
+                                                                        }
+                                                                        else {
+                                                                            Ext.Msg.alert('CAPEX Status','CAPEX window is closed. Contact Finance to enable CAPEX input',this)
+                                                                        }
+                                                                    })                                                                   
                                                                 }
                                                             }
                                                         }

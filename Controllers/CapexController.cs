@@ -76,11 +76,11 @@ namespace DigiProc.Controllers
                 bool bn = Cfg.GetStatusOfCAPEX();
                 var status = bn == true ? @"OPENED" : @"CLOSED";
 
-                return Json(new { status = bn, data = status },JsonRequestBehavior.AllowGet);
+                return Json(new { status = true, capexstatus = bn, data = status },JsonRequestBehavior.AllowGet);
             }
             catch(Exception ex)
             {
-                return Json(new { status = false, error = $"error: {ex.Message}" },JsonRequestBehavior.AllowGet);
+                return Json(new { status = false,  error = $"error: {ex.Message}" },JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -88,14 +88,16 @@ namespace DigiProc.Controllers
         public JsonResult PostCapexStatus(int capexstatusId)
         {
             //statusId used to close or open CAPEX
-            string strStatus = capexstatusId == 1 ? "CLICK TO OPEN CAPEX" : "CLICK TO CLOSE CAPEX";
+            string strStatus = capexstatusId == 1 ? "CLICK TO CLOSE CAPEX" : "CLICK TO OPEN CAPEX";
+            string btnStatus = capexstatusId == 1 ? "OPENED" : "CLOSED";
+
             try
             {
 
                 var Cfg = new RequisitionHelper();
                 bool bln = Cfg.SetStatusOfCAPEX(capexstatusId);
 
-                return Json(new {status = bln, data = strStatus },JsonRequestBehavior.AllowGet);
+                return Json(new {status = bln, data = strStatus, btn = btnStatus },JsonRequestBehavior.AllowGet);
             }
             catch(Exception ex)
             {

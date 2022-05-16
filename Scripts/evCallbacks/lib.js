@@ -555,6 +555,21 @@ lib.returnRequisitionDocuments = function (_urlString, rId, _widget) {
     });
 }
 
+lib.returnRequisitionDocsForREQNos = function (_urlString, rNo, _widget) {
+    var docs = [];
+    $.getJSON(_urlString, { rqNo: rNo }, function (r) {
+        if (r.status.toString() == "true") {
+            $.each(r.data, function (i, d) {
+                //alert(d.fileDescription); alert(d.filepath);
+                docs[i] = [d.Id, d.requisitionId, d.fileDescription, d.file, d.filepath];
+            });
+
+            _widget.getStore().removeAll();
+            _widget.getStore().loadData(docs);
+        }
+    });
+}
+
 lib.returnMonthStore = function () {
     //returns an array of the months of the year
     var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];

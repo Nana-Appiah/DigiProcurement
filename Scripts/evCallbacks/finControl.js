@@ -366,43 +366,49 @@
                                         items: [
                                             { id:'capexstatus', xtype: 'textfield', disabled: true },
                                             {
-                                                xtype: 'button',id:'capex-btn-status',
+                                                id:'capex-btn-status',width:150,
                                                 listeners: {
+                                                    'afterrender': function () {
+                                                        //get status of CAPEX upon rendering
+                                                       
+                                                        $.getJSON('/Capex/GetCapexStatus', {}, function (r) {
+                                                            
+                                                            if (r.status.toString() == "true") {
+                                                                $('#capexstatus').val(r.data.toString());
+                                                                if (r.data.toString() == 'OPENED') {
+                                                                    Ext.getCmp('capex-btn-status').setText('CLICK TO CLOSE CAPEX');
+                                                                    CLOSED_CAPEX_STATUS_ID = 0;
+                                                                }
+                                                                else if (r.data.toString() == 'CLOSED') {
+                                                                    Ext.getCmp('capex-btn-status').setText('CLICK TO OPEN CAPEX');
+                                                                    CLOSED_CAPEX_STATUS_ID = 1;
+                                                                }
+                                                            }
+                                                        });
+                                                    },
                                                     'click': function (btn) {
                                                         $.post('/Capex/PostCapexStatus',
                                                             { capexstatusId: CLOSED_CAPEX_STATUS_ID })
                                                             .done(function (r) {
                                                                 if (r.status.toString() == "true") {
+
                                                                     Ext.getCmp('capex-btn-status').setText(r.data.toString());
-                                                                    if (CLOSED_CAPEX_STATUS_ID == 1)
+                                                                    $('#capexstatus').val(r.btn.toString());
+
+                                                                    if (r.btn.toString() == "OPENED")
                                                                     {
-                                                                        CLOSED_CAPEX_STATUS_ID = 0;
+                                                                        CLOSED_CAPEX_STATUS_ID = 0;   
                                                                     }
-                                                                    else { CLOSED_CAPEX_STATUS_ID = 1; }
+                                                                    else
+                                                                    {
+                                                                        CLOSED_CAPEX_STATUS_ID = 1;
+                                                                    }
                                                                 }
                                                         });
                                                     }
                                                 }
                                             }
-                                        ],
-                                        listeners: {
-                                            'render': function () {
-                                                //get status of CAPEX upon rendering
-                                                $.getJSON('/Capex/GetCapexStatus', {}, function (r) {
-                                                    if (r.status.toString() == "true") {
-                                                        $('#capexstatus').val(r.data.toString());
-                                                        if (r.data.toString() == 'OPENED') {
-                                                            Ext.getCmp('capex-btn-status').setText('CLICK TO CLOSE CAPEX');
-                                                            CLOSED_CAPEX_STATUS_ID = 1;
-                                                        }
-                                                        else {
-                                                            Ext.getCmp('capex-btn-status').setText('CLICK TO OPEN CAPEX');
-                                                            CLOSED_CAPEX_STATUS_ID = 0;
-                                                        }
-                                                    }
-                                                });
-                                            }
-                                        }
+                                        ]
                                     }
                                 ]
                             }
