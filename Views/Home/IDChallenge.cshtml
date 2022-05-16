@@ -51,12 +51,17 @@
                             //window.location = "Home/Main";
                             window.location = "@Url.Action("Main","Home")";
                         }
-                        else if (msg.msg.toString() == "false") {
-                            $('div#dvstat').empty().append('<b style="font-size:15px;color:red;">Incorrect login credentials.Please try again</b>').fadeIn('slow').fadeOut('slow');
+                        else if (msg.status.toString() == "false")
+                        {
+                            if (msg.reason.toString() == "pwd") {
+                                $('div#dvstat').empty().append('<b style="font-size:15px;color:red;">Incorrect login credentials.Please try again</b>').fadeIn('slow').fadeOut('slow');
+                            }
+
+                            if (msg.reason.toString() == "inactive") {
+                                $('div#dvstat').empty().append('<b style="font-size:12px;color:red;">User account is de-activated.Please contact Admin</b>').fadeIn('slow').fadeOut('slow');
+                            }
                         }
-                        else if (msg.msg.toString() == "User account is de-activated") {
-                            $('div#dvstat').empty().append('<b style="font-size:12px;color:red;">User account is de-activated.Please contact Admin</b>').fadeIn('slow').fadeOut('slow');
-                        }
+                        
                 })
 
 

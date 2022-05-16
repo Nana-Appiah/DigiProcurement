@@ -359,16 +359,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="RequisitionFiles">
-      <EntityTypeMapping TypeName="EProcurementDbModel.RequisitionFile">
-        <MappingFragment StoreEntitySet="RequisitionFile">
-          <ScalarProperty Name="RequisitionFileName" ColumnName="RequisitionFileName" />
-          <ScalarProperty Name="RequisitionFileDescription" ColumnName="RequisitionFileDescription" />
-          <ScalarProperty Name="RequisitionID" ColumnName="RequisitionID" />
-          <ScalarProperty Name="RequisitionFileID" ColumnName="RequisitionFileID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Usrs">
       <EntityTypeMapping TypeName="EProcurementDbModel.Usr">
         <MappingFragment StoreEntitySet="Usr">
@@ -398,6 +388,24 @@
           <ScalarProperty Name="PersonTag" ColumnName="PersonTag" />
           <ScalarProperty Name="LPO_ID" ColumnName="LPO_ID" />
           <ScalarProperty Name="ApprovalID" ColumnName="ApprovalID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Cfgs">
+      <EntityTypeMapping TypeName="EProcurementDbModel.Cfg">
+        <MappingFragment StoreEntitySet="Cfg">
+          <ScalarProperty Name="C_capex_flag" ColumnName="_capex_flag" />
+          <ScalarProperty Name="cfid" ColumnName="cfid" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RequisitionFiles">
+      <EntityTypeMapping TypeName="EProcurementDbModel.RequisitionFile">
+        <MappingFragment StoreEntitySet="RequisitionFile">
+          <ScalarProperty Name="RequisitionFileName" ColumnName="RequisitionFileName" />
+          <ScalarProperty Name="RequisitionFileDescription" ColumnName="RequisitionFileDescription" />
+          <ScalarProperty Name="RequisitionID" ColumnName="RequisitionID" />
+          <ScalarProperty Name="RequisitionFileID" ColumnName="RequisitionFileID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

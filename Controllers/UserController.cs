@@ -73,14 +73,14 @@ namespace DigiProc.Views.User
                     }
                     else
                     {
-                        return Json(new { status = false }, JsonRequestBehavior.AllowGet);
+                        return Json(new { status = false, reason = @"inactive" }, JsonRequestBehavior.AllowGet);
                     }
                 }
-                else { return Json(new { status = false },JsonRequestBehavior.AllowGet); }
+                else { return Json(new { status = false, reason = @"pwd" },JsonRequestBehavior.AllowGet); }
             }
             catch (Exception ex)
             {
-                return Json(new { status = false, error = $"error: {ex.Message}" }, JsonRequestBehavior.AllowGet);
+                return Json(new { status = false, reason = $"error: {ex.Message}" }, JsonRequestBehavior.AllowGet);
             }
         }
 
