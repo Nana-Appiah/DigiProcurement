@@ -185,6 +185,22 @@ namespace DigiProc.Helpers
             }
         }
 
+        public Requisition GetRequisition(string rqNo)
+        {
+            //method gets a requisition object
+            Requisition obj = null;
+            try
+            {
+                obj = config.Requisitions.Where(x => x.RequisitionNo == rqNo).FirstOrDefault();
+                return obj;
+            }
+            catch(Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return obj;
+            }
+        }
+
         #endregion
 
         #region RequisitionItems

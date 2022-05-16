@@ -2,6 +2,7 @@
 
     var def_pic = "standard.jpg";
     var LPO_ID = 0;
+    var REQUISITION_Number = '';
 
     var approvalFrm = Ext.get('approval');
 
@@ -56,10 +57,9 @@
                                                                         { name: 'statusOfLPO', type: 'string' },
 
                                                                         { name: 'PurchaseDate', type: 'datetime' },
-                                                                        { name: 'ExpectedDate', type: 'datetime' },
+                                                                        { name: 'ExpectedDate', type: 'string' },
                                                                         { name: 'ShippingAddress', type: 'string' },
                                                                         { name: 'PaymentTerm', type: 'string' }
-
                                                                     ]),
                                                                     groupField: 'LPONumber'
                                                                 }),
@@ -92,12 +92,14 @@
                                                                         LPO_ID = rec.get('Id');
                                                                         $('#vd').val(rec.get('nameOfVendor'));
                                                                         $('#pd').val(rec.get('PurchaseDate'));
+                                                                        
                                                                         $('#dd').val(rec.get('ExpectedDate'));
 
                                                                         $('#sha').val(rec.get('ShippingAddress'));
                                                                         $('#pt').val(rec.get('PaymentTerm'));
-                                                                        $('#rq').val(rec.get('requisitionNumber'));
 
+                                                                        REQUISITION_Number = rec.get('requisitionNumber');
+                                                                        $('#rq').val(REQUISITION_Number);
                                                                         //get approval history
                                                                         lib.returnApprovalHistoryGrid('/ProcessFlow/GetLPOApprovalHistory', LPO_ID, Ext.getCmp('procApprovalGrid'));
                                                                     }
@@ -218,9 +220,53 @@
                                                     }  
                                                 ]
                                             },
-
-                                            { columnWidth:.2, title:'Documents'}
-
+                                            {
+                                                columnWidth: .2, title: 'Documents', defaults: { xtype: 'panel' },
+                                                items: [
+                                                    {
+                                                        defaults: { xtype: 'form', frame: true, border: true }, layout: 'fit',
+                                                        items: [
+                                                            new Ext.grid.GridPanel({
+                                                                id: 'GrdAprUploads', height: 250, autoScroll: true, autoExpandColumn: 'fileDescription',
+                                                                //plugins: editor,
+                                                                store: new Ext.data.GroupingStore({
+                                                                    reader: new Ext.data.ArrayReader({}, [
+                                                                        { name: 'Id', type: 'int' },
+                                                                        { name: 'requisitionId', type: 'int' },
+                                                                        { name: 'fileDescription', type: 'string' },
+                                                                        { name: 'file', type: 'string' },
+                                                                        { name: 'filepath', type: 'string' }
+                                                                    ]),
+                                                                    groupField: 'fileDescription'
+                                                                }),
+                                                                columns: [
+                                                                    { id: 'Id', header: '#s', width: 150, hidden: true, sortable: true, dataIndex: 'Id' },
+                                                                    { id: 'requisitionId', header: 'ReqNo', width: 150, hidden: true, sortable: true, dataIndex: 'requisitionId' },
+                                                                    { id: 'fileDescription', header: 'File', width: 150, hidden: false, sortable: true, dataIndex: 'fileDescription' },
+                                                                    { id: 'file', header: 'File', width: 150, hidden: true, sortable: true, dataIndex: 'file' },
+                                                                    { id: 'filepath', header: 'FilePath', width: 150, hidden: true, sortable: true, dataIndex: 'filepath' }
+                                                                ],
+                                                                stripeRows: true,
+                                                                listeners: {
+                                                                    'afterrender': function () {
+                                                                        setInterval(function () {
+                                                                            if (REQUISITION_Number.length > 0) {
+                                                                                //get images for last requisition clicked
+                                                                                lib.returnRequisitionDocsForREQNos('/Requisition/GetUploadsOfRequisitionNumber', REQUISITION_Number, Ext.getCmp('GrdAprUploads'));
+                                                                            }
+                                                                        }, 2000);
+                                                                    },
+                                                                    'rowdblclick': function (e, t) {
+                                                                        var rec = e.getStore().getAt(t);
+                                                                        var img = 'http://localhost/uploads/' + rec.get('fileDescription');
+                                                                        window.open(img, '_blank', 'width=700,height=650');
+                                                                    }
+                                                                }
+                                                            })
+                                                        ]
+                                                    }
+                                                ]
+                                            }
                                         ]
                                     }
                                 ]
