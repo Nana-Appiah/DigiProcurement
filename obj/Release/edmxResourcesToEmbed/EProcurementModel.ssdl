@@ -22,6 +22,13 @@
     <Property Name="FinancialYrId" Type="int" />
     <Property Name="DId" Type="int" />
   </EntityType>
+  <EntityType Name="Cfg">
+    <Key>
+      <PropertyRef Name="cfid" />
+    </Key>
+    <Property Name="cfid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="_capex_flag" Type="int" />
+  </EntityType>
   <EntityType Name="Committee">
     <Key>
       <PropertyRef Name="CommitteeID" />
@@ -230,7 +237,7 @@
       <PropertyRef Name="RequisitionID" />
     </Key>
     <Property Name="RequisitionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="RequisitionNo" Type="varchar" MaxLength="25" />
+    <Property Name="RequisitionNo" Type="varchar(max)" />
     <Property Name="RequestedBy" Type="varchar" MaxLength="50" />
     <Property Name="FinancialYrID" Type="int" />
     <Property Name="CompanyID" Type="int" />
@@ -257,7 +264,7 @@
     <Property Name="RequisitionFileID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="RequisitionID" Type="int" />
     <Property Name="RequisitionFileDescription" Type="varchar" MaxLength="200" />
-    <Property Name="RequisitionFileName" Type="binary" MaxLength="50" />
+    <Property Name="RequisitionFileName" Type="varbinary(max)" />
   </EntityType>
   <EntityType Name="RequisitionItem">
     <Key>
@@ -597,6 +604,7 @@
   <EntityContainer Name="EProcurementDbModelStoreContainer">
     <EntitySet Name="BusinessType" EntityType="Self.BusinessType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Capex" EntityType="Self.Capex" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Cfg" EntityType="Self.Cfg" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Committee" EntityType="Self.Committee" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CommitteeMember" EntityType="Self.CommitteeMember" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Company" EntityType="Self.Company" Schema="dbo" store:Type="Tables" />

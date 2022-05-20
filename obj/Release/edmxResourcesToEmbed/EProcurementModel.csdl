@@ -124,7 +124,7 @@
       <PropertyRef Name="RequisitionID" />
     </Key>
     <Property Name="RequisitionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="RequisitionNo" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+    <Property Name="RequisitionNo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
     <Property Name="RequestedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="FinancialYrID" Type="Int32" />
     <Property Name="CompanyID" Type="Int32" />
@@ -450,13 +450,14 @@
       <End Role="RequisitionItem" EntitySet="RequisitionItems" />
     </AssociationSet>
     <EntitySet Name="Profiles" EntityType="EProcurementDbModel.Profile" />
-    <EntitySet Name="RequisitionFiles" EntityType="EProcurementDbModel.RequisitionFile" />
     <EntitySet Name="Usrs" EntityType="EProcurementDbModel.Usr" />
     <AssociationSet Name="FK_Usr_Department" Association="EProcurementDbModel.FK_Usr_Department">
       <End Role="Department" EntitySet="Departments" />
       <End Role="Usr" EntitySet="Usrs" />
     </AssociationSet>
     <EntitySet Name="LPOApprovals" EntityType="EProcurementDbModel.LPOApproval" />
+    <EntitySet Name="Cfgs" EntityType="EProcurementDbModel.Cfg" />
+    <EntitySet Name="RequisitionFiles" EntityType="EProcurementDbModel.RequisitionFile" />
   </EntityContainer>
   <Association Name="FK_UserModule_Module">
     <End Type="EProcurementDbModel.Module" Role="Module" Multiplicity="0..1" />
@@ -692,15 +693,6 @@
     <Property Name="profileContent" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
     <Property Name="inUse" Type="Int32" />
   </EntityType>
-  <EntityType Name="RequisitionFile">
-    <Key>
-      <PropertyRef Name="RequisitionFileID" />
-    </Key>
-    <Property Name="RequisitionFileID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="RequisitionID" Type="Int32" />
-    <Property Name="RequisitionFileDescription" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-    <Property Name="RequisitionFileName" Type="Binary" MaxLength="50" FixedLength="true" />
-  </EntityType>
   <EntityType Name="Usr">
     <Key>
       <PropertyRef Name="Id" />
@@ -743,5 +735,21 @@
     <Property Name="ApprovalStatus" Type="Int32" />
     <Property Name="ApprovalComments" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
     <Property Name="PersonName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Cfg">
+    <Key>
+      <PropertyRef Name="cfid" />
+    </Key>
+    <Property Name="cfid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="C_capex_flag" Type="Int32" />
+  </EntityType>
+  <EntityType Name="RequisitionFile">
+    <Key>
+      <PropertyRef Name="RequisitionFileID" />
+    </Key>
+    <Property Name="RequisitionFileID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RequisitionID" Type="Int32" />
+    <Property Name="RequisitionFileDescription" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="RequisitionFileName" Type="Binary" MaxLength="Max" FixedLength="false" />
   </EntityType>
 </Schema>
