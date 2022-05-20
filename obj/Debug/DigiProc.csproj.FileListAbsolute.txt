@@ -413,3 +413,5 @@ C:\Users\ofosu\OneDrive\Documents\Projects\DigiProc\obj\Debug\DigiProc.csproj.Co
 C:\Users\ofosu\OneDrive\Documents\Projects\DigiProc\obj\Debug\DigiProc.csproj.CopyComplete
 C:\Users\ofosu\OneDrive\Documents\Projects\DigiProc\obj\Debug\DigiProc.dll
 C:\Users\ofosu\OneDrive\Documents\Projects\DigiProc\obj\Debug\DigiProc.pdb
+C:\Users\ofosu\OneDrive\Documents\Projects\DigiProc\bin\System.Net.Http.Formatting.dll
+C:\Users\ofosu\OneDrive\Documents\Projects\DigiProc\bin\System.Net.Http.Formatting.xml
