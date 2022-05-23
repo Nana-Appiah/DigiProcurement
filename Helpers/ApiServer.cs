@@ -30,6 +30,8 @@ namespace DigiProc.Helpers
                 //adding an accept header for json format
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
+                //serialize here
+                
                 //list data response
                 HttpContent c = new StringContent(ApiParams, System.Text.Encoding.UTF8, "application/json");
                 HttpResponseMessage response = client.PostAsync(baseURI, c).Result;
