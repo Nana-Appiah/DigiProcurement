@@ -475,12 +475,12 @@
                                                     {
                                                         id: 'LPOotherFrm', title: 'Other Info', defaults: { xtype: 'datefield', format: 'd-m-Y', anchor: '95%' }, layout: 'form',
                                                         items: [
-                                                            { xtype: 'numberfield', id: 'vat', fieldLabel: 'VAT', minValue: 1, maxValue: 30 },
+                                                            { xtype: 'numberfield', id: 'vat', fieldLabel: 'VAT', hidden: true, minValue: 1, maxValue: 30 },
                                                             { id: 'pdate', fieldLabel: 'Purchase Date' },
                                                             { id: 'expdate', fieldLabel: 'Delivery Date' },
                                                             { xtype: 'combo', id: 'payment', fieldLabel: 'Payment Term', forceSelection: true, typeAhead: true, mode: 'local', store: ['Cash', 'Cheque'] },
-                                                            { xtype: 'textfield', id: 'cheque', fieldLabel: 'Cheque No' },
-                                                            { xtype: 'textfield', id: 'shipping', fieldLabel: 'Shipping Addr' },
+                                                            { xtype: 'textfield', id: 'cheque', fieldLabel: 'Cheque No',hidden: true },
+                                                            { xtype: 'textfield', id: 'shipping', fieldLabel: 'Shipping Addr', hidden: true },
                                                             { xtype: 'textarea', id: 'terms', fieldLabel: 'Terms and Conditions' }
                                                         ],
                                                         buttons: [
@@ -522,7 +522,7 @@
                                                                 listeners: {
                                                                     'click': function (btn) {
                                                                         Ext.getCmp('LPORegGridFrm').getForm().reset();
-                                                                        Ext.getCmp('LPODetailsFrm').getForm().reset();
+                                                                        //Ext.getCmp('LPODetailsFrm').getForm().reset();
                                                                         Ext.getCmp('LPOProcFrm').getForm().reset();
                                                                         Ext.getCmp('LPOotherFrm').getForm().reset();
 

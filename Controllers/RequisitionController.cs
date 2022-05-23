@@ -298,7 +298,7 @@ namespace DigiProc.Controllers
                 var _values = _value.Split(',');
 
                 obj.LPOID = int.Parse(_values[0]);
-                obj.VAT = decimal.Parse(_values[1]);
+                obj.VAT = 0m;// decimal.Parse(_values[1]);
                 obj.PurchaseOrderDate = DateTime.ParseExact(_values[2],"dd-MM-yyyy", null);
                 obj.ExpectedDeliveryDate = DateTime.ParseExact(_values[3], "dd-MM-yyyy", null);
                 obj.ShippingAddress = _values[4];
