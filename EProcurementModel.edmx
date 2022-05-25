@@ -261,6 +261,7 @@
           <Property Name="LastUpdatedBy" Type="varchar" MaxLength="50" />
           <Property Name="LastUpdatedDate" Type="date" />
           <Property Name="isNotif" Type="int" />
+          <Property Name="reqSrc" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="RequisitionFile">
           <Key>
@@ -873,6 +874,7 @@
           <NavigationProperty Name="Company" Relationship="EProcurementDbModel.FK_Requisition_Company" FromRole="Requisition" ToRole="Company" />
           <NavigationProperty Name="Department" Relationship="EProcurementDbModel.FK_Requisition_Department" FromRole="Requisition" ToRole="Department" />
           <Property Name="isNotif" Type="Int32" />
+          <Property Name="reqSrc" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="RequisitionItem">
           <Key>
@@ -1602,6 +1604,7 @@
           <EntitySetMapping Name="Requisitions">
             <EntityTypeMapping TypeName="EProcurementDbModel.Requisition">
               <MappingFragment StoreEntitySet="Requisition">
+                <ScalarProperty Name="reqSrc" ColumnName="reqSrc" />
                 <ScalarProperty Name="isNotif" ColumnName="isNotif" />
                 <ScalarProperty Name="RequisitionID" ColumnName="RequisitionID" />
                 <ScalarProperty Name="RequisitionNo" ColumnName="RequisitionNo" />

@@ -23,6 +23,13 @@ namespace DigiProc.Helpers
             return string.Format("{0}-{1}", dateStr, _idString);
         }
 
+        public string GenerateRequisitionSourceNumber(string reqNo)
+        {
+            //generates a requisition number for a new item being splintered
+            int _id = GetRequisitionCounter(reqNo);
+            return string.Format("{0}{1}", reqNo, _id.ToString());
+        }
+
         private string getDate()
         {
             var s = DateTime.Now.ToString("dd-MM-yyyy");
@@ -286,6 +293,54 @@ namespace DigiProc.Helpers
             {
                 Debug.Print(ex.Message);
                 return rqitems;
+            }
+        }
+
+        public RequisitionItem GetRequisitionItem(int reqItmID, int itmID)
+        {
+            //method is used to fetch a particular requisition item
+            RequisitionItem obj = null;
+            try
+            {
+                obj = config.RequisitionItems.Where(rq => rq.RequisitionItemID == reqItmID).Where(rq => rq.ItemID == itmID).FirstOrDefault();
+                return obj;
+            }
+            catch(Exception x)
+            {
+                Debug.Print(x.Message);
+                return obj;
+            }
+        }
+
+        public bool CreateSplinterRequisition(Requisition rq, RequisitionItem rqItm)
+        {
+            try
+            {
+                using (config)
+                {
+                    try
+                    {
+                        config.Requisitions.Add(rq);
+                        config.SaveChanges();
+
+                        var dbId = rq.RequisitionID;
+
+                        rqItm.RequisitionID = dbId;
+                        config.SaveChanges();
+
+                        return true;
+                    }
+                    catch(Exception error)
+                    {
+                        Debug.Print(error.Message);
+                        return false;
+                    }
+                }
+            }
+            catch(Exception x)
+            {
+                Debug.Print(x.Message);
+                return false;
             }
         }
 

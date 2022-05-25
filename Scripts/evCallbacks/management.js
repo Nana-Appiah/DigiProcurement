@@ -3,6 +3,10 @@
     var mgmtEditor = lib.returnEditorControl();
     var REQUISITION_NUMBER = '';
     var REQUISITION_ID = 0;
+    var SELECTED_RQ_ID = 0;
+    var SELECTED_PRODUCT_CODE = '';
+    var DEPARTMENT_ID = 0;
+
     var LPO_Status = '';
 
     var LPO_ID = 0;
@@ -48,7 +52,8 @@
                                                                 id: 'mgmtdept', store: lib.returnDepartmentStore('/Utility/GetDepartments'), valueField: 'DepartmentID', displayField: 'Name',
                                                                 listeners: {
                                                                     'select': function () {
-                                                                        lib.returnRequisitionNumbersGrid('/Requisition/GetRequisitionNos', 2, Ext.getCmp('mgmtdept').getValue(), Ext.getCmp('mgmtReqGrid'));
+                                                                        DEPARTMENT_ID = Ext.getCmp('mgmtdept').getValue();
+                                                                        lib.returnRequisitionNumbersGrid('/Requisition/GetRequisitionNos', 2, DEPARTMENT_ID, Ext.getCmp('mgmtReqGrid'));
                                                                     }
                                                                 }
                                                             }
@@ -155,10 +160,46 @@
                                                                         }
                                                                     }
                                                                 ],
-                                                                stripeRows: true
+                                                                stripeRows: true,
+                                                                listeners: {
+                                                                    'rowdblclick': function (e, t) {
+                                                                        var rekord = e.getStore().getAt(t);
+                                                                        SELECTED_RQ_ID = rekord.get('Id');
+                                                                        SELECTED_PRODUCT_CODE = rekord.get('ProductCode');
+                                                                        //alert('requisition ID is ' + SELECTED_RQ_ID.toString());
+                                                                    }
+                                                                }
                                                             })
                                                         ],
                                                         buttons: [
+                                                            {
+                                                                id: '', text: 'Generate separate requisition',
+                                                                listeners: {
+                                                                    'click': function (e) {
+                                                                        if ((SELECTED_RQ_ID > 0) && (SELECTED_PRODUCT_CODE.length > 0)) {
+
+                                                                            Ext.MessageBox.confirm("Generate Requisition", "Are you sure you want to create a splinter requisition for " + SELECTED_PRODUCT_CODE + "?", function (btn) {
+                                                                                if (btn == "yes") {
+                                                                                    $.post('/Requisition/DeCoupleRequisitions',
+                                                                                        { rqItmID: SELECTED_RQ_ID, rqNo: Ext.fly('mgmbRNo').getValue(), prodCode: SELECTED_PRODUCT_CODE })
+                                                                                        .done(function (rs) {
+                                                                                            if (rs.status.toString() == "true") {
+                                                                                                Ext.Msg.alert('SEPARATE REQUISITIONS', SELECTED_PRODUCT_CODE + ' splintered as a different requisition', this);
+
+                                                                                                //refresh grid with old requisition data
+                                                                                                lib.returnRequisitionNumbersGrid('/Requisition/GetRequisitionNos', 2, DEPARTMENT_ID, Ext.getCmp('mgmtReqGrid'));
+                                                                                                Ext.getCmp('mgmtReqItemsGrid').getStore().removeAll();
+                                                                                                lib.returnRequistionDetails2('/Requisition/GetRequisitionDetails2', REQUISITION_ID, $('#rno'), $('#requestee'), $('#dept'), $('#priority'), 2, Ext.getCmp('mgmtReqItemsGrid'));
+                                                                                            }
+                                                                                        });
+                                                                                }
+                                                                            });
+
+                                                                            
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
                                                             {
                                                                 id: '', text: 'Calculate Total Amout',
                                                                 listeners: {

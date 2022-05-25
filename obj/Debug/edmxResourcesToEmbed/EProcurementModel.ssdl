@@ -256,6 +256,7 @@
     <Property Name="LastUpdatedBy" Type="varchar" MaxLength="50" />
     <Property Name="LastUpdatedDate" Type="date" />
     <Property Name="isNotif" Type="int" />
+    <Property Name="reqSrc" Type="varchar(max)" />
   </EntityType>
   <EntityType Name="RequisitionFile">
     <Key>

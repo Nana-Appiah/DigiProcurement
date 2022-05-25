@@ -34,6 +34,7 @@ namespace DigiProc
         public string LastUpdatedBy { get; set; }
         public Nullable<System.DateTime> LastUpdatedDate { get; set; }
         public Nullable<int> isNotif { get; set; }
+        public string reqSrc { get; set; }
     
         public virtual Currency Currency { get; set; }
         public virtual FinancialYear FinancialYear { get; set; }

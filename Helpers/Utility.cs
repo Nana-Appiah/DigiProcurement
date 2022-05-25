@@ -471,6 +471,35 @@ namespace DigiProc.Helpers
             }
         }
 
+        public Product GetItem(string productCode)
+        {
+            //gets product using product code
+            Product product = new Product();
+            try
+            {
+                var item = config.Items.Where(i => i.ItemCode == productCode).FirstOrDefault();
+                if (item != null)
+                {
+
+                    product.Id = item.ItemID;
+                    product.ProductName = item.ItemName;
+                    product.ProductCode = item.ItemCode;
+                    product.ProductMinimumStock = (int)item.MinStockLevel;
+                    product.ProductMaximumStock = (int)item.MaxStockLevel;
+                    product.ProductDescription = item.ItemDescription;
+                    product.SIUnit = new StandardUnit { }.get(config, (int)item.SIUnitID);
+                    product.ProductCategoryId = (int)item.ItemCategoryID;
+                }
+
+                return product;
+            }
+            catch (Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return product;
+            }
+        }
+
         public List<Product> GetItems()
         {
             //gets all the items in the data store
