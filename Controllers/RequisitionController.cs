@@ -9,6 +9,7 @@ using DigiProc.Helpers;
 using System.Diagnostics;
 using System.Configuration;
 using System.IO;
+using DigiProc.Notif;
 
 namespace DigiProc.Controllers
 {
@@ -94,6 +95,9 @@ namespace DigiProc.Controllers
             {
                 //insert into dbo.requisition
                 //insert into dbo.requisitionitems
+                //use marathon-api to send mail notification to Admin Officer
+                var dictMsg = new Dictionary<int, string>(); //for holding data for notification
+
                 var util = new Utility();
                 var oCompany = util.getDefaultCompany();
                 var oDepartment = util.getDepartment(dept);
@@ -142,9 +146,22 @@ namespace DigiProc.Controllers
                             FinApprovalStatus = 1  //PENDING
                         };
 
-                        if (helper.SaveRequisitionItems(oReqItem)) { success += 1; } else { failed += 1; }
+                        if (helper.SaveRequisitionItems(oReqItem)) { success += 1; dictMsg.Add((int)oReqItem.ItemID, oReqItem.Narration); } else { failed += 1; }
                     }
                 }
+
+                //asynchronous mail notification here
+
+                var msg = new Message() 
+                {
+                    to = new Worker() { }.fetchUsingTag(@"Finance Officer"),
+                    subject = String.Format("PROCUREMENT REQUEST FROM {0}", session.userDepartment.Name),
+                    body = String.Format("A Procurement request with reference {0} has been made by {1} from {2},seeking immediate attention." + Environment.NewLine + "Please log in to {3} as soon as possible to process request" + Environment.NewLine + "Thank you.", o.RequisitionNo, session.bioName, session.userDepartment.Name, ConfigurationManager.AppSettings["AppUrl"].ToString()),
+                    cc = new Worker() { }.fetchUsingTag(@"Administrative Officer"),
+                    bcc = new Worker() { }.fetchUsingTag(@"IT")
+                };
+
+                new ApiServer() {  }.ApiMailRequest(msg);
 
                 return Json(new { status = true, data = $"Requisition {rqNo} saved successfully\r\nTotal Count = {values.Length.ToString()}, Successful inserts = {success.ToString()} Failed inserts = {failed.ToString()}" },JsonRequestBehavior.AllowGet);
             }
@@ -205,9 +222,7 @@ namespace DigiProc.Controllers
 
                         var obj = new RequisitionItem() { RequisitionItemID = int.Parse(str[0]) };
                         bln = Cfg.ApproveRequisitionItem(obj.RequisitionItemID, 2);
-
-
-
+                        
                         if (bln) { success += 1; } else { failed += 1; }
                     }
 
@@ -219,6 +234,18 @@ namespace DigiProc.Controllers
 
                     //if (success == dta.Length) { new RequisitionHelper { }.ChangeRequisitionStatus(req_id, 2); }
                 }
+
+                //mail notification
+                var msg = new Message()
+                {
+                    to = new Worker() { }.fetchUsingTag(@"Administrative Officer"),
+                    subject = String.Format("PROCUREMENT APPROVAL"),
+                    body = String.Format("A Procurement has been approved, seeking your immediate attention.Please log in to {0} to process request\r\nThank you.", ConfigurationManager.AppSettings["AppUrl"].ToString()),
+                    cc = new Worker() { }.fetchUsingTag(@"Finance Officer")
+                    ,bcc = new Worker() { }.fetchUsingTag(@"Fin")
+                };
+
+                new ApiServer() { }.ApiMailRequest(msg);
 
                 return Json(new { status = bln, data = $"{success.ToString()} requisition items approved" },JsonRequestBehavior.AllowGet);
             }
@@ -263,6 +290,17 @@ namespace DigiProc.Controllers
                     }
                 }
 
+                //var msg = new Message()
+                //{
+                //    to = new Worker() { }.fetchUsingTag(@"Finance Officer"),
+                //    subject = String.Format("PROCUREMENT REQUEST FROM {0}", session.userDepartment.Name),
+                //    body = String.Format("A Procurement request with reference {0} has been made by {1} from {2},\r\nseeking immediate attention\r\nPlease log in to {3} to process request\r\nThank you.", o.RequisitionNo, session.bioName, session.userDepartment.Name, ConfigurationManager.AppSettings["AppUrl"].ToString()),
+                //    cc = new Worker() { }.fetchUsingTag(@"Administrative Officer"),
+                //    bcc = new Worker() { }.fetchUsingTag(@"IT")
+                //};
+
+                //new ApiServer() { }.ApiMailRequest(msg);
+
                 return Json(new { status = blnSuccess, data = $"Local Purchasing Order record created for {dta.Length.ToString()} items" },JsonRequestBehavior.AllowGet);
             }
             catch(Exception ex)
@@ -298,7 +336,7 @@ namespace DigiProc.Controllers
                 var _values = _value.Split(',');
 
                 obj.LPOID = int.Parse(_values[0]);
-                obj.VAT = 0m;// decimal.Parse(_values[1]);
+                obj.VAT = 0m;
                 obj.PurchaseOrderDate = DateTime.ParseExact(_values[2],"dd-MM-yyyy", null);
                 obj.ExpectedDeliveryDate = DateTime.ParseExact(_values[3], "dd-MM-yyyy", null);
                 obj.ShippingAddress = _values[4];
@@ -308,6 +346,18 @@ namespace DigiProc.Controllers
                 obj.LPOStatusID = 4; //4=LPO Generated
 
                 var bln = new RequisitionHelper { }.SaveLocalPurchaseOrder(obj);
+
+                //var msg = new Message()
+                //{
+                //    to = new Worker() { }.fetchUsingTag(@"Finance Officer"),
+                //    subject = String.Format("PROCUREMENT REQUEST FROM {0}", session.userDepartment.Name),
+                //    body = String.Format("A Procurement request with reference {0} has been made by {1} from {2},\r\nseeking immediate attention\r\nPlease log in to {3} to process request\r\nThank you.", o.RequisitionNo, session.bioName, session.userDepartment.Name, ConfigurationManager.AppSettings["AppUrl"].ToString()),
+                //    cc = new Worker() { }.fetchUsingTag(@"Administrative Officer"),
+                //    bcc = new Worker() { }.fetchUsingTag(@"IT")
+                //};
+
+                //new ApiServer() { }.ApiMailRequest(msg);
+
                 return Json(new { status = bln, data = obj },JsonRequestBehavior.AllowGet);  
             }
             catch(Exception ex)
