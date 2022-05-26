@@ -626,5 +626,22 @@ namespace DigiProc.Controllers
             }
         }
 
+        [HttpPost]
+        public JsonResult ReceiveProcurement(string ReqNo)
+        {
+            //method is responsible for receiving procurement items and updating the capex
+            try
+            {
+                var cfg = new RequisitionHelper();
+                bool bln = cfg.ReceiveProcurementItems(ReqNo);
+
+                return Json(new { status = bln },JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception ex)
+            {
+                return Json(new { status = false, error = $"error: {ex.Message}" },JsonRequestBehavior.AllowGet);
+            }
+        }
+
     }
 }
