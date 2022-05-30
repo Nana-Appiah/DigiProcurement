@@ -196,6 +196,7 @@ namespace DigiProc.Helpers
         {
             //method is responsible for receiving items and changing the status in the data store
             int newstatusid = 0;
+            string dept = string.Empty;
 
             using (var context = new ProcurementDbEntities())
             {
@@ -205,9 +206,12 @@ namespace DigiProc.Helpers
                     {
                         var objLPO = context.LPOes.Where(x => x.RequisitionNo == strRequisitionNo).FirstOrDefault();
                         var objReq = context.Requisitions.Where(x => x.RequisitionNo == strRequisitionNo).FirstOrDefault();
-                        var data = context.RequisitionItems.Where(x => x.RequisitionID == objReq.RequisitionID).Where(x=>x.FinApprovalStatus == (int)objLPO.LPOStatusID).ToList();
+                        var data = context.RequisitionItems.Where(x => x.RequisitionID == objReq.RequisitionID).Where(x => x.FinApprovalStatus == (int)objLPO.LPOStatusID).ToList();
 
                         newstatusid = (int)objLPO.LPOStatusID + 1;
+                        dept = objReq.RequisitionNo.Split('-')[1];
+                        var objDept = context.Departments.Where(d => d.Name == dept).FirstOrDefault();
+                        var activeY = new Utility() { }.getActiveFinancialYear();
 
                         //LPO 
                         objLPO.LPOStatusID = newstatusid;
@@ -222,10 +226,14 @@ namespace DigiProc.Helpers
                             {
                                 d.FinApprovalStatus = newstatusid;
                                 context.SaveChanges();
+
+                                //reconcile items to the capex here
+                                this.ReconcileCAPEX(d, objDept.DepartmentID, activeY.FinancialYrID);
                             }
                         }
 
                         trans.Commit();
+                        
                         return true;
                     }
                     catch(Exception x)
@@ -234,6 +242,53 @@ namespace DigiProc.Helpers
                         trans.Rollback();
                         return false;
                     }
+                }
+            }
+        }
+
+        public bool ReconcileCAPEX(RequisitionItem rq, int departmentId, int finYrId)
+        {
+            //method is responsible for the reconciliation of received items by the branches
+            bool bln = false;
+            using (var cfg = new ProcurementDbEntities())
+            {
+                try
+                {
+                    var o = new Utility() { }.getActiveFinancialYear();
+                    var cpx = cfg.Capexes.Where(c => c.DId == departmentId).Where(c => c.FinancialYrId == finYrId)
+                                                    .Where(c => c.CapexItemID == rq.ItemID).FirstOrDefault();
+
+                    if (cpx != null)
+                    {
+                        cpx.QuantitySupplied = (int)(cpx.QuantitySupplied + rq.Quantity);
+                        cpx.QuantityOutstanding = (int)(cpx.QuantityOutstanding - rq.Quantity);
+
+                        cfg.SaveChanges();
+                        bln = true;
+                    }
+                    else
+                    {
+                        //item supplied, but not in capex.
+                        var acx = new AlternativeCapex()
+                        {
+                            DId = departmentId,
+                            AltCapexItemID = rq.ItemID,
+                            Qty = rq.Quantity,
+                            FinYrID = finYrId,
+                            dte = DateTime.Now
+                        };
+
+                        cfg.AlternativeCapexes.Add(acx);
+                        cfg.SaveChanges();
+                        bln = true;
+                    }
+                    
+                    return bln;
+                }
+                catch(Exception ex)
+                {
+                    Debug.Print(ex.Message);
+                    return false;
                 }
             }
         }

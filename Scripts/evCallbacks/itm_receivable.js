@@ -133,7 +133,7 @@
 
                                                                                 if (btn == "yes") {
                                                                                     //perform an action here
-                                                                                    $.post('/Requisition/ReceiveProcurement').done(function (rs) {
+                                                                                    $.post('/Requisition/ReceiveProcurement', { ReqNo: REQ_No }).done(function (rs) {
                                                                                         if (rs.status.toString() == "true") {
                                                                                             Ext.Msg.alert('ITEMS RECEIVED', 'Items from requisition ' + REQ_No + ' physically received', this);
                                                                                             $('#btn-item-clear').trigger('click');

@@ -60,5 +60,7 @@ namespace DigiProc
         public virtual DbSet<LPOApproval> LPOApprovals { get; set; }
         public virtual DbSet<Cfg> Cfgs { get; set; }
         public virtual DbSet<RequisitionFile> RequisitionFiles { get; set; }
+        public virtual DbSet<AlternativeCapex> AlternativeCapexes { get; set; }
+        public virtual DbSet<AlternativeCapex1> AlternativeCapex1 { get; set; }
     }
 }
