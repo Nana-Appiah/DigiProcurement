@@ -2,7 +2,7 @@
 
     var REQ_ID = 0;
     var REQ_No = '';
-    var pfx = '';
+    var pfx = '..';
 
     var rFrm = Ext.get('itm_receivable');
 
@@ -39,10 +39,10 @@
                                                         defaults: { xtype: 'combo', forceSelection: true, typeAhead: true, mode: 'local', anchor: '90%', allowBlank: false }, layout: 'fit',
                                                         items: [
                                                             {
-                                                                id: 'dptsearch', store: lib.returnDepartmentStore('/Utility/GetDepartments'), valueField: 'DepartmentID', displayField: 'Name',
+                                                                id: 'dptsearch', store: lib.returnDepartmentStore(pfx + '/Utility/GetDepartments'), valueField: 'DepartmentID', displayField: 'Name',
                                                                 listeners: {
                                                                     'select': function () {
-                                                                        lib.returnRequisitionNumbersGrid('/Requisition/GetRequisitionNos', 5, Ext.getCmp('dptsearch').getValue(), Ext.getCmp('mgmtFinalApprovedGrid'));
+                                                                        lib.returnRequisitionNumbersGrid(pfx + '/Requisition/GetRequisitionNos', 5, Ext.getCmp('dptsearch').getValue(), Ext.getCmp('mgmtFinalApprovedGrid'));
                                                                     }
                                                                 }
                                                             }
@@ -80,7 +80,7 @@
                                                                         REQ_No = record.get('RequisitionNo');
 
                                                                         var STATUS_ID = 5;
-                                                                        lib.returnRequisitionRecord('/Requisition/GetRequisitionDetails2', REQ_ID, STATUS_ID, Ext.getCmp('ApprLPOGrid'))
+                                                                        lib.returnRequisitionRecord(pfx + '/Requisition/GetRequisitionDetails2', REQ_ID, STATUS_ID, Ext.getCmp('ApprLPOGrid'))
                                                                     }
                                                                 }
                                                             })
@@ -134,7 +134,7 @@
 
                                                                                 if (btn == "yes") {
                                                                                     //perform an action here
-                                                                                    $.post('/Requisition/ReceiveProcurement', { ReqNo: REQ_No }).done(function (rs) {
+                                                                                    $.post(pfx + '/Requisition/ReceiveProcurement', { ReqNo: REQ_No }).done(function (rs) {
                                                                                         if (rs.status.toString() == "true") {
                                                                                             Ext.Msg.alert('ITEMS RECEIVED', 'Items from requisition ' + REQ_No + ' physically received', this);
                                                                                             $('#btn-item-clear').trigger('click');

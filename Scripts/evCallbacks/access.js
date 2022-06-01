@@ -3,6 +3,7 @@
 access.GetAssignedModules = function (URL, icons) {
     //alert('loading...');
     var _data;
+	var pfx = '..';
     var icons_count = icons.length;
     $.getJSON(URL, {}, function (res) {
         $.each(res, function (idx, _value) {
@@ -11,7 +12,7 @@ access.GetAssignedModules = function (URL, icons) {
                 var control = $(this);
                 if (i <= icons_count - 1) {
                     if (control.hasClass(_value.SystemName)) {
-                        $.getScript('/Scripts/evCallbacks/' + _value.SystemName + '.js');
+                        $.getScript(pfx + '/Scripts/evCallbacks/' + _value.SystemName + '.js');
                         control.show();
                     }
                 }

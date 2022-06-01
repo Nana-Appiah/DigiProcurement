@@ -4,7 +4,7 @@
     var editor = lib.returnEditorControl();
     var BIGDATA = [];
 
-    var pfx = '';
+    var pfx = '..';
 
     var breq = Ext.get('branchReq');
 
@@ -55,15 +55,15 @@
                                                         id: 'ufrmBDetails', title: 'Requisition Details', defaults: { xtype: 'combo', forceSelection: true, typeAhead: true, mode: 'local', allowBlank: false, anchor: '95%' },
                                                         items: [
                                                             {
-                                                                id: 'cborqnId', fieldLabel: 'Requisition Type', store: lib.RequisitionTypeStore('/Utility/GetRequisitionTypes'),
+                                                                id: 'cborqnId', fieldLabel: 'Requisition Type', store: lib.RequisitionTypeStore(pfx + '/Utility/GetRequisitionTypes'),
                                                                 valueField: 'RequisitionTypeID', displayField: 'RequisitionType1'
                                                             },
                                                             {
-                                                                id: 'cbocurrId', fieldLabel: 'Currency', store: lib.currencyStore('/Utility/GetCurrencies'),
+                                                                id: 'cbocurrId', fieldLabel: 'Currency', store: lib.currencyStore(pfx + '/Utility/GetCurrencies'),
                                                                 valueField: 'Id', displayField: 'nameOfcurrency'
                                                             },
                                                             {
-                                                                id: 'cbopriorityId', fieldLabel: 'Priority', store: lib.PriorityTypeStore('/Utility/GetPriorityTypes'),
+                                                                id: 'cbopriorityId', fieldLabel: 'Priority', store: lib.PriorityTypeStore(pfx + '/Utility/GetPriorityTypes'),
                                                                 valueField: 'Id', displayField: 'nameOfPriority'
                                                             },
                                                             {
@@ -104,11 +104,11 @@
                                                                 stripeRows: true,
                                                                 listeners: {
                                                                     'render': function () {
-                                                                        lib.getItemGrid('/Utility/GetItemList', Ext.getCmp('Req'));
+                                                                        lib.getItemGrid(pfx + '/Utility/GetItemList', Ext.getCmp('Req'));
                                                                     },
                                                                     'afterrender': function () {
                                                                         setInterval(function () {
-                                                                            lib.getItemGrid('/Utility/GetItemList', Ext.getCmp('Req'));
+                                                                            lib.getItemGrid(pfx + '/Utility/GetItemList', Ext.getCmp('Req'));
                                                                         }, 180000);
                                                                     }
                                                                 }
@@ -158,7 +158,7 @@
                                                                         Ext.getCmp('ufrmBRequest').getForm().reset();
                                                                         Ext.getCmp('Req').getStore().removeAll();
                                                                         Ext.getCmp('xBrRqList').getStore().removeAll();
-                                                                        lib.getItemGrid('/Utility/GetItemList', Ext.getCmp('Req'));
+                                                                        lib.getItemGrid(pfx + '/Utility/GetItemList', Ext.getCmp('Req'));
                                                                     }
                                                                 }
                                                             }
@@ -219,7 +219,7 @@
                                                                                 dta[i] = str;
                                                                             });
 
-                                                                            $.post('/Requisition/PostRequisitionRequest', {
+                                                                            $.post(pfx + '/Requisition/PostRequisitionRequest', {
                                                                                 rqNo: Ext.fly('bRNo').getValue(), requestee: Ext.fly('bRequestee').getValue(), comp: Ext.fly('bComp').getValue(),
                                                                                 dept: Ext.fly('bDept').getValue(), rqnId: Ext.getCmp('cborqnId').getValue(), currencyId: Ext.getCmp('cbocurrId').getValue(),
                                                                                 priorityId: Ext.getCmp('cbopriorityId').getValue(), location: Ext.fly('rqnlocation').getValue(), comment: Ext.fly('xBrComments').getValue(),
@@ -231,7 +231,7 @@
                                                                                     Ext.getCmp('ufrmBDetails').getForm().reset();
                                                                                     $('#x-btn-rq-clear').trigger('click');
                                                                                     $('#xBrComments').val('');
-                                                                                    lib.getPrelimData('/Requisition/GetRequisitionPrelimData', Ext.getCmp('bRNo'), Ext.getCmp('bRequestee'), Ext.getCmp('bComp'), Ext.getCmp('bDept'));
+                                                                                    lib.getPrelimData(pfx + '/Requisition/GetRequisitionPrelimData', Ext.getCmp('bRNo'), Ext.getCmp('bRequestee'), Ext.getCmp('bComp'), Ext.getCmp('bDept'));
                                                                                 });
                                                                         }
                                                                     }

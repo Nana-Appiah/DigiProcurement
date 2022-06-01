@@ -11,7 +11,7 @@
 
     var LPO_ID = 0;
     var LPO_No = '';
-    var pfx = '';
+    var pfx = '..';
 
     var def_pic = "../../images/standard.jpg";
 
@@ -51,11 +51,11 @@
                                                         defaults: { xtype: 'combo', forceSelection: true, typeAhead: true, mode: 'local' }, layout: 'fit',
                                                         items: [
                                                             {
-                                                                id: 'mgmtdept', store: lib.returnDepartmentStore('/Utility/GetDepartments'), valueField: 'DepartmentID', displayField: 'Name',
+                                                                id: 'mgmtdept', store: lib.returnDepartmentStore(pfx + '/Utility/GetDepartments'), valueField: 'DepartmentID', displayField: 'Name',
                                                                 listeners: {
                                                                     'select': function () {
                                                                         DEPARTMENT_ID = Ext.getCmp('mgmtdept').getValue();
-                                                                        lib.returnRequisitionNumbersGrid('/Requisition/GetRequisitionNos', 2, DEPARTMENT_ID, Ext.getCmp('mgmtReqGrid'));
+                                                                        lib.returnRequisitionNumbersGrid(pfx + '/Requisition/GetRequisitionNos', 2, DEPARTMENT_ID, Ext.getCmp('mgmtReqGrid'));
                                                                     }
                                                                 }
                                                             }
@@ -97,9 +97,9 @@
                                                                         $('#mgmbRequestee').val(record.get('Requestee'));
                                                                         $('#mgmPriority').val(record.get('priority'));
                                                                         //REQUISITION_ID = record.get('Id');
-                                                                        lib.returnRequistionDetails2('/Requisition/GetRequisitionDetails2', REQUISITION_ID, $('#rno'), $('#requestee'), $('#dept'), $('#priority'), 2, Ext.getCmp('mgmtReqItemsGrid'));
+                                                                        lib.returnRequistionDetails2(pfx + '/Requisition/GetRequisitionDetails2', REQUISITION_ID, $('#rno'), $('#requestee'), $('#dept'), $('#priority'), 2, Ext.getCmp('mgmtReqItemsGrid'));
                                                                         //lib.getItemGridGivenRequisitionID('/Requisition/GetRequisitionItemList', REQUISITION_ID, 2, Ext.getCmp('mgmtReqItemsGrid'));
-                                                                        lib.storeRequisitionInSession('/Requisition/StorePotentialRequisitonUploadID', REQUISITION_ID)
+                                                                        lib.storeRequisitionInSession(pfx + '/Requisition/StorePotentialRequisitonUploadID', REQUISITION_ID)
                                                                         //do json call from the event listener
                                                                         
 
@@ -182,16 +182,16 @@
 
                                                                             Ext.MessageBox.confirm("Generate Requisition", "Are you sure you want to create a splinter requisition for " + SELECTED_PRODUCT_CODE + "?", function (btn) {
                                                                                 if (btn == "yes") {
-                                                                                    $.post('/Requisition/DeCoupleRequisitions',
+                                                                                    $.post(pfx + '/Requisition/DeCoupleRequisitions',
                                                                                         { rqItmID: SELECTED_RQ_ID, rqNo: Ext.fly('mgmbRNo').getValue(), prodCode: SELECTED_PRODUCT_CODE })
                                                                                         .done(function (rs) {
                                                                                             if (rs.status.toString() == "true") {
                                                                                                 Ext.Msg.alert('SEPARATE REQUISITIONS', SELECTED_PRODUCT_CODE + ' splintered as a different requisition', this);
 
                                                                                                 //refresh grid with old requisition data
-                                                                                                lib.returnRequisitionNumbersGrid('/Requisition/GetRequisitionNos', 2, DEPARTMENT_ID, Ext.getCmp('mgmtReqGrid'));
+                                                                                                lib.returnRequisitionNumbersGrid(pfx + '/Requisition/GetRequisitionNos', 2, DEPARTMENT_ID, Ext.getCmp('mgmtReqGrid'));
                                                                                                 Ext.getCmp('mgmtReqItemsGrid').getStore().removeAll();
-                                                                                                lib.returnRequistionDetails2('/Requisition/GetRequisitionDetails2', REQUISITION_ID, $('#rno'), $('#requestee'), $('#dept'), $('#priority'), 2, Ext.getCmp('mgmtReqItemsGrid'));
+                                                                                                lib.returnRequistionDetails2(pfx + '/Requisition/GetRequisitionDetails2', REQUISITION_ID, $('#rno'), $('#requestee'), $('#dept'), $('#priority'), 2, Ext.getCmp('mgmtReqItemsGrid'));
                                                                                             }
                                                                                         });
                                                                                 }
@@ -233,7 +233,7 @@
                                                         id: 'mgmvendorfrm', title: 'Select Vendor',
                                                         defaults: { xtype: 'combo', forceSelection: true, typeAhead: true, mode: 'local' }, layout: 'fit',
                                                         items: [
-                                                            { id: 'mgmvendor', store: lib.returnVendorStore('/Utility/GetVendors'), valueField: 'VendorID', displayField: 'VendorName' }
+                                                            { id: 'mgmvendor', store: lib.returnVendorStore(pfx + '/Utility/GetVendors'), valueField: 'VendorID', displayField: 'VendorName' }
                                                         ],
                                                         buttons: [
                                                             {
@@ -258,7 +258,7 @@
                                                                             reqs.push(resultant[z]);
                                                                         }
 
-                                                                        $.post('/Requisition/CreateLPORecord',
+                                                                        $.post(pfx + '/Requisition/CreateLPORecord',
                                                                             {
                                                                                 rNo: REQUISITION_NUMBER, vID: Ext.getCmp('mgmvendor').getValue(),
                                                                                 LPOstatus: 3, finStatusId: 3, totAmt: Ext.fly('txtTotal').getValue(),
@@ -311,7 +311,7 @@
                                                                             fpfrm.submit({
                                                                                 //clientValidation: true,
                                                                                 data: formData,
-                                                                                url: '/Requisition/fUpload',
+                                                                                url: pfx + '/Requisition/fUpload',
                                                                                 method: 'POST',
                                                                                 //waitMsg: 'Uploading document...please wait',
                                                                                 success: function (form, action) {
@@ -358,7 +358,7 @@
                                                                         setInterval(function () {
                                                                             if (REQUISITION_ID > 0) {
                                                                                 //get images for last requisition clicked
-                                                                                lib.returnRequisitionDocuments('/Requisition/GetUploadsOfRequisition', REQUISITION_ID, Ext.getCmp('GrdUploads'));
+                                                                                lib.returnRequisitionDocuments(pfx + '/Requisition/GetUploadsOfRequisition', REQUISITION_ID, Ext.getCmp('GrdUploads'));
                                                                             }
                                                                             
                                                                         }, 2000);
@@ -421,11 +421,11 @@
                                                                 stripeRows: true,
                                                                 listeners: {
                                                                     'render': function () {
-                                                                        lib.returnLocalPurchasingOrderGrid('/Requisition/GetLPOs', Ext.getCmp('LPOGrid'));
+                                                                        lib.returnLocalPurchasingOrderGrid(pfx + '/Requisition/GetLPOs', Ext.getCmp('LPOGrid'));
                                                                     },
                                                                     'afterrender': function () {
                                                                         setInterval(function () {
-                                                                            lib.returnLocalPurchasingOrderGrid('/Requisition/GetLPOs', Ext.getCmp('LPOGrid'));
+                                                                            lib.returnLocalPurchasingOrderGrid(pfx + '/Requisition/GetLPOs', Ext.getCmp('LPOGrid'));
                                                                         },5000);
                                                                     },
                                                                     'rowdblclick': function (e, t) {
@@ -437,7 +437,7 @@
                                                                         LPO_ID = rec.get('Id');
                                                                         LPO_No = rec.get('LPONumber');
 
-                                                                        lib.returnItemGridGivenLPONumber('/Requisition/GetRequisitionItemListUsingLPO', rec.get('Id'), Ext.getCmp('LPOReqGrid'));
+                                                                        lib.returnItemGridGivenLPONumber(pfx + '/Requisition/GetRequisitionItemListUsingLPO', rec.get('Id'), Ext.getCmp('LPOReqGrid'));
                                                                     }
                                                                 }
                                                             })
@@ -447,7 +447,7 @@
                                                                 id: '', text: 'Refresh',
                                                                 listeners: {
                                                                     'click': function (btn) {
-                                                                        lib.returnLocalPurchasingOrderGrid('/Requisition/GetLPOs', Ext.getCmp('LPOGrid'));
+                                                                        lib.returnLocalPurchasingOrderGrid(pfx + '/Requisition/GetLPOs', Ext.getCmp('LPOGrid'));
                                                                     }
                                                                 }
                                                             }
@@ -459,7 +459,7 @@
                                                 columnWidth: .5, defaults: { xtype: 'form', frame: true, border: true },
                                                 items: [
                                                     {
-                                                        id: 'LPORegGridFrm', title: 'Grid comes here',
+                                                        id: 'LPORegGridFrm', title: 'Items',
                                                         items: [
                                                             new Ext.grid.GridPanel({
                                                                 id: 'LPOReqGrid', height: 100, autoScroll: true, autoExpandColumn: 'ProductName',
@@ -505,11 +505,11 @@
                                                         id: 'LPOProcFrm', title: 'Procurement Type', defaults: { xtype: 'combo', forceSelection: true, typeAhead: true, allowBlank: false, mode: 'local' }, layout: 'fit',
                                                         items: [
                                                             {
-                                                                id: 'proctypeid', store: lib.returnProcurementTypeStore('/Utility/GetProcurementTypes'),
+                                                                id: 'proctypeid', store: lib.returnProcurementTypeStore(pfx + '/Utility/GetProcurementTypes'),
                                                                 valueField: 'ProcurementTypeID', displayField: 'ProcurementDescription',
                                                                 listeners: {
                                                                     'select': function () {
-                                                                        lib.returnProcessFlowData('/Requisition/GetProcessFlowDetails', Ext.getCmp('proctypeid').getValue(), Ext.getCmp('LPOPFLimit'), Ext.getCmp('PFListGrid'));
+                                                                        lib.returnProcessFlowData(pfx + '/Requisition/GetProcessFlowDetails', Ext.getCmp('proctypeid').getValue(), Ext.getCmp('LPOPFLimit'), Ext.getCmp('PFListGrid'));
                                                                     }
                                                                 }
                                                             }
@@ -546,7 +546,7 @@
                                                                                 Ext.fly('expdate').getValue() + ',' + Ext.fly('shipping').getValue() + ',' +
                                                                                 Ext.fly('payment').getValue() + ',' + Ext.fly('terms').getValue() + ',' + Ext.getCmp('proctypeid').getValue();
 
-                                                                            $.post('/Requisition/CreateLocalPurchasingOrder',
+                                                                            $.post(pfx + '/Requisition/CreateLocalPurchasingOrder',
                                                                                 {
                                                                                     _value: str
                                                                                 })
