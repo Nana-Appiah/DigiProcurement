@@ -200,7 +200,7 @@
                                                     {
                                                         title: 'Brief Comments', defaults: { xtype: 'textarea', height: 150, anchor: '95%', allowBlank: false }, layout: 'fit',
                                                         items: [
-                                                            { id: 'xBrComments' }
+                                                            { id: 'xBrComments', allowBlank: false }
                                                         ],
                                                         buttons: [
                                                             {

@@ -81,3 +81,5 @@ G:\Dev_Repository\Projects\Nana\Apps\eProc\obj\Release\DigiProc.csproj.CoreCompi
 G:\Dev_Repository\Projects\Nana\Apps\eProc\obj\Release\DigiProc.csproj.CopyComplete
 G:\Dev_Repository\Projects\Nana\Apps\eProc\obj\Release\DigiProc.dll
 G:\Dev_Repository\Projects\Nana\Apps\eProc\obj\Release\DigiProc.pdb
+G:\Dev_Repository\Projects\Nana\Apps\eProc\bin\System.Net.Http.Formatting.dll
+G:\Dev_Repository\Projects\Nana\Apps\eProc\bin\System.Net.Http.Formatting.xml

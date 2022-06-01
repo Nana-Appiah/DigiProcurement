@@ -150,17 +150,17 @@ namespace DigiProc.Controllers
                         if (helper.SaveRequisitionItems(oReqItem)) { success += 1; dictMsg.Add((int)oReqItem.ItemID, oReqItem.Narration); } else { failed += 1; }
                     }
                 }
-                
-                //var msg = new Message() 
-                //{
-                //    to = new Worker() { }.fetchUsingTag(@"Finance Officer"),
-                //    subject = String.Format("PROCUREMENT REQUEST FROM {0}", session.userDepartment.Name),
-                //    body = String.Format("A Procurement request with reference {0} has been made by {1} from {2},seeking immediate attention." + Environment.NewLine + "Please log in to {3} as soon as possible to process request" + Environment.NewLine + "Thank you.", o.RequisitionNo, session.bioName, session.userDepartment.Name, ConfigurationManager.AppSettings["AppUrl"].ToString()),
-                //    cc = new Worker() { }.fetchUsingTag(@"Administrative Officer"),
-                //    bcc = new Worker() { }.fetchUsingTag(@"IT")
-                //};
 
-                //new ApiServer() {  }.ApiMailRequest(msg);
+                var msg = new Message()
+                {
+                    to = new Worker() { }.fetchUsingTag(@"Finance Officer"),
+                    subject = String.Format("PROCUREMENT REQUEST FROM {0}", session.userDepartment.Name),
+                    body = String.Format("A Procurement request with reference {0} has been made by {1} from {2},seeking immediate attention." + Environment.NewLine + "Please log in to {3} as soon as possible to process request" + Environment.NewLine + "Thank you.", o.RequisitionNo, session.bioName, session.userDepartment.Name, ConfigurationManager.AppSettings["AppUrl"].ToString()),
+                    cc = new Worker() { }.fetchUsingTag(@"Administrative Officer"),
+                    bcc = new Worker() { }.fetchUsingTag(@"IT")
+                };
+
+                new ApiServer() { }.ApiMailRequest(msg);
 
                 return Json(new { status = true, data = $"Requisition {rqNo} saved successfully\r\nTotal Count = {values.Length.ToString()}, Successful inserts = {success.ToString()} Failed inserts = {failed.ToString()}" },JsonRequestBehavior.AllowGet);
             }
@@ -177,9 +177,7 @@ namespace DigiProc.Controllers
             try
             {
                 var session = (UserSession)Session["userSession"];
-                //generate a new requisition number
-                //get requisition record and make few amendments
-                //insert new requisition record
+
                 var objUtils = new Utility() { };
                 var cfg = new RequisitionHelper() { };
 
@@ -194,29 +192,6 @@ namespace DigiProc.Controllers
 
                 reqObj.RequisitionNo = cfg.GenerateRequisitionSourceNumber(string.Format("{0}-", rqNo));
                 reqObj.RequestedBy = session.userName;
-
-                //reqObj.RequisitionID = 0;
-                //reqItm.RequisitionID = 0;
-
-                //create a new object
-                //var o = new Requisition()
-                //{
-                //    RequisitionNo = cfg.GenerateRequisitionSourceNumber(string.Format("{0}-", rqNo)),
-                //    RequestedBy = reqObj.RequestedBy,
-                //    FinancialYrID = reqObj.FinancialYrID,
-                //    CompanyID = reqObj.CompanyID,
-                //    DepartmentID = reqObj.DepartmentID,
-                //    RequisitionTypeID = reqObj.RequisitionTypeID,
-                //    Location = reqObj.Location,
-                //    CurrencyID = reqObj.CurrencyID,
-                //    PriorityID = reqObj.PriorityID,
-                //    RequisitionDescription = reqObj.RequisitionDescription,
-                //    RequisitionStatusID = reqObj.RequisitionStatusID,
-                //    CreatedBy = session.userName,
-                //    CreatedDate = DateTime.Now,
-                //    isNotif = 1,
-                //    reqSrc = rqNo
-                //};
 
                 var bln = cfg.CreateSplinterRequisition(reqObj, reqItm);
 

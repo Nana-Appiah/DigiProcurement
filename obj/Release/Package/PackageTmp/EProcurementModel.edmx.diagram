@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="ef002004cf0d450fa22c9925efde5116" Name="Diagram1" ZoomLevel="73">
+      <Diagram DiagramId="ef002004cf0d450fa22c9925efde5116" Name="Diagram1" ZoomLevel="83">
         <EntityTypeShape EntityType="EProcurementDbModel.Committee" Width="1.5" PointX="5.75" PointY="9.5" IsExpanded="true" />
         <EntityTypeShape EntityType="EProcurementDbModel.CommitteeMember" Width="1.5" PointX="8" PointY="9" IsExpanded="true" />
         <EntityTypeShape EntityType="EProcurementDbModel.Currency" Width="1.5" PointX="3" PointY="7.625" IsExpanded="true" />
@@ -17,8 +17,8 @@
         <EntityTypeShape EntityType="EProcurementDbModel.PriorityType" Width="1.5" PointX="3" PointY="12.875" IsExpanded="true" />
         <EntityTypeShape EntityType="EProcurementDbModel.Requisition" Width="1.5" PointX="5.875" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="EProcurementDbModel.RequisitionItem" Width="1.5" PointX="12.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="EProcurementDbModel.RequisitionStatu" Width="1.5" PointX="3" PointY="15.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="EProcurementDbModel.RequisitionType" Width="1.5" PointX="5.75" PointY="15" IsExpanded="true" />
+        <EntityTypeShape EntityType="EProcurementDbModel.RequisitionStatu" Width="1.75" PointX="3" PointY="15.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="EProcurementDbModel.RequisitionType" Width="1.5" PointX="407.625" PointY="416.625" IsExpanded="true" />
         <EntityTypeShape EntityType="EProcurementDbModel.SIUnit" Width="1.5" PointX="7.75" PointY="6" IsExpanded="true" />
         <EntityTypeShape EntityType="EProcurementDbModel.UserModule" Width="1.5" PointX="7.75" PointY="12.75" IsExpanded="true" />
         <EntityTypeShape EntityType="EProcurementDbModel.Vendor" Width="2" PointX="2.875" PointY="0.625" IsExpanded="true" />
