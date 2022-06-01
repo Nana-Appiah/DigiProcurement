@@ -6,7 +6,7 @@
     var currencyEditStatus = false;
     var ItemCategoryEditStatus = false;
     var ItemMasterEditStatus = false;
-
+    var pfx = '';
 
     var currencyGrid = function (ktrl) {
         $.getJSON('Utility/GetCurrencies', {}, function (rs) {

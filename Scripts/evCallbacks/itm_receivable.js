@@ -2,6 +2,7 @@
 
     var REQ_ID = 0;
     var REQ_No = '';
+    var pfx = '';
 
     var rFrm = Ext.get('itm_receivable');
 

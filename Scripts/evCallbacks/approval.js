@@ -3,6 +3,7 @@
     var def_pic = "standard.jpg";
     var LPO_ID = 0;
     var REQUISITION_Number = '';
+    var pfx = '';
 
     var approvalFrm = Ext.get('approval');
 

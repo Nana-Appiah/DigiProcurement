@@ -5,6 +5,7 @@
     var APPROVED_REQUISITIONS = [];
 
     var CLOSED_CAPEX_STATUS_ID = 0;
+    var pfx = '';
 
     var finC = Ext.get('finControl');
 

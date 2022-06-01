@@ -3,6 +3,7 @@
     //statuses
     var recordId = 0;
     var PositionEditStatus = false;
+    var pfx = '';
 
     var committee = Ext.get('committee');
 

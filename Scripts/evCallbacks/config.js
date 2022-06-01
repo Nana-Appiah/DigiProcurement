@@ -1,6 +1,7 @@
 ﻿Ext.onReady(function () {
 
     var PROFILE_CONTENT = '';
+    var pfx = '';
 
     var usr_config = Ext.get('config');
 

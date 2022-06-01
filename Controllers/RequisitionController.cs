@@ -155,7 +155,7 @@ namespace DigiProc.Controllers
                 {
                     to = new Worker() { }.fetchUsingTag(@"Finance Officer"),
                     subject = String.Format("PROCUREMENT REQUEST FROM {0}", session.userDepartment.Name),
-                    body = String.Format("A Procurement request with reference {0} has been made by {1} from {2},seeking immediate attention." + Environment.NewLine + "Please log in to {3} as soon as possible to process request" + Environment.NewLine + "Thank you.", o.RequisitionNo, session.bioName, session.userDepartment.Name, ConfigurationManager.AppSettings["AppUrl"].ToString()),
+                    body = String.Format("A Procurement request with reference {0} has been made by {1} from {2},seeking immediate attention.<br />Please log in to {3} as soon as possible to process request.<br />Thank you.", o.RequisitionNo, session.bioName, session.userDepartment.Name, ConfigurationManager.AppSettings["AppUrl"].ToString()),
                     cc = new Worker() { }.fetchUsingTag(@"Administrative Officer"),
                     bcc = new Worker() { }.fetchUsingTag(@"IT")
                 };
@@ -271,7 +271,7 @@ namespace DigiProc.Controllers
                 {
                     to = new Worker() { }.fetchUsingTag(@"Administrative Officer"),
                     subject = String.Format("PROCUREMENT APPROVAL"),
-                    body = String.Format("A Procurement has been approved, seeking your immediate attention.Please log in to {0} to process request\r\nThank you.", ConfigurationManager.AppSettings["AppUrl"].ToString()),
+                    body = String.Format("A Procurement has been approved, seeking your immediate attention.<br />Please log in to {0} to process request.<br />Thank you.", ConfigurationManager.AppSettings["AppUrl"].ToString()),
                     cc = new Worker() { }.fetchUsingTag(@"Finance Officer")
                     ,bcc = new Worker() { }.fetchUsingTag(@"Fin")
                 };
@@ -324,8 +324,8 @@ namespace DigiProc.Controllers
                 //var msg = new Message()
                 //{
                 //    to = new Worker() { }.fetchUsingTag(@"Finance Officer"),
-                //    subject = String.Format("PROCUREMENT REQUEST FROM {0}", session.userDepartment.Name),
-                //    body = String.Format("A Procurement request with reference {0} has been made by {1} from {2},\r\nseeking immediate attention\r\nPlease log in to {3} to process request\r\nThank you.", o.RequisitionNo, session.bioName, session.userDepartment.Name, ConfigurationManager.AppSettings["AppUrl"].ToString()),
+                //    subject = String.Format("LOCAL PURCHASING ORDER"),
+                //    body = String.Format("A Procurement request with reference {0} has been made by {1} from {2},<br />\r\nseeking immediate attention\r\nPlease log in to {3} to process request\r\nThank you.", o.RequisitionNo, session.bioName, session.userDepartment.Name, ConfigurationManager.AppSettings["AppUrl"].ToString()),
                 //    cc = new Worker() { }.fetchUsingTag(@"Administrative Officer"),
                 //    bcc = new Worker() { }.fetchUsingTag(@"IT")
                 //};

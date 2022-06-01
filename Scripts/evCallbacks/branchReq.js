@@ -4,6 +4,8 @@
     var editor = lib.returnEditorControl();
     var BIGDATA = [];
 
+    var pfx = '';
+
     var breq = Ext.get('branchReq');
 
     breq.on('click', function () {
@@ -45,7 +47,7 @@
                                                         ],
                                                         listeners: {
                                                             'render': function () {
-                                                                lib.getPrelimData('/Requisition/GetRequisitionPrelimData',Ext.getCmp('bRNo'), Ext.getCmp('bRequestee'), Ext.getCmp('bComp'), Ext.getCmp('bDept'));
+                                                                lib.getPrelimData(pfx + '/Requisition/GetRequisitionPrelimData',Ext.getCmp('bRNo'), Ext.getCmp('bRequestee'), Ext.getCmp('bComp'), Ext.getCmp('bDept'));
                                                             }
                                                         }
                                                     },

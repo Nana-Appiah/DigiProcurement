@@ -36,8 +36,8 @@ namespace DigiProc.Views.User
                 string data = string.Format("?username={0}&pass={1}", usrname, pwd);
                 ApiServer api = new ApiServer() { ApiParams = data };
 
-                //string req = api.ApiRequest();
-                string req = @"OK";
+                string req = api.ApiRequest();
+                //string req = @"OK";
                 if (req.Contains(@"OK"))
                 {
                     ConfigurationHelper Cfg = new ConfigurationHelper();

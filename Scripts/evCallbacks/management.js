@@ -11,6 +11,8 @@
 
     var LPO_ID = 0;
     var LPO_No = '';
+    var pfx = '';
+
     var def_pic = "../../images/standard.jpg";
 
     var mgmt = Ext.get('management');

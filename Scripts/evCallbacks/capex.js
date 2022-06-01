@@ -2,6 +2,7 @@
 
     var editor = lib.returnEditorControl();
     var capexform = Ext.get('capex');
+    var pfx = '';
 
     var CAPEX_LIST = [];
 
