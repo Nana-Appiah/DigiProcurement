@@ -605,6 +605,20 @@ lib.getCapexItemGrid = function (_urlString,_ID, _widget) {
     });
 }
 
+lib.getAlternateCapexItemGrid = function (_urlString, _ID, _widget) {
+    var alternate_capex_data = [];
+    $.getJSON(_urlString, { departmentID: _ID }, function (r) {
+        if (r.status.toString() == "true") {
+            $.each(r.data, function (i, d) {
+                alternate_capex_data[i] = [d.Id, d.itemName, d.Quantity, d.nameOfDepartment, d.financialYear];
+            });
+        }
+
+        _widget.getStore().removeAll();
+        _widget.getStore().loadData(alternate_capex_data);
+    });
+}
+
 //Local Purchasing Orders
 lib.returnLocalPurchasingOrderGrid = function (_urlString, _widget) {
     var purchase_orders = [];

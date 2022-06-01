@@ -12,7 +12,7 @@ namespace DigiProc
     using System;
     using System.Collections.Generic;
     
-    public partial class Usr
+    public partial class Usr1
     {
         public int Id { get; set; }
         public string surname { get; set; }
@@ -28,6 +28,6 @@ namespace DigiProc
         public string uProfile { get; set; }
         public string tag { get; set; }
     
-        public virtual Department Department { get; set; }
+        public virtual Department1 Department { get; set; }
     }
 }

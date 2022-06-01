@@ -789,6 +789,43 @@ namespace DigiProc.Helpers
             }
         }
 
+        public List<AlternateCapexLookup> GetDepartmentAlternateCapexRecords(int dId)
+        {
+            //gets the alternate CAPEX records for the selected department
+            List<AlternateCapexLookup> records = new List<AlternateCapexLookup>();
+
+            using (var cfg = new ProcurementDbEntities())
+            {
+                try
+                {
+                    var data = cfg.AlternativeCapexes.Where(x => x.DId == dId).ToList();
+                    if (data.Count() > 0)
+                    {
+                        foreach (var d in data)
+                        {
+                            var o = new AlternateCapexLookup()
+                            {
+                                Id = d.AltCapexID,
+                                nameOfDepartment = new Utility() { }.getDepartment(d.DId).Name,
+                                itemName = new Utility() { }.GetItem((int)d.AltCapexItemID).ProductName,
+                                Quantity = (int)d.Qty,
+                                financialYear = new Utility() { }.getActiveFinancialYear().FinancialYr 
+                            };
+
+                            records.Add(o);
+                        }
+                    }
+
+                    return records;
+                }
+                catch(Exception ex)
+                {
+                    Debug.Print(ex.Message);
+                    return records;
+                }
+            }
+        }
+
         public List<CapexLookup> GetDepartmentCapexRecords(int dId)
         {
             //gets capex records for selected department
@@ -1191,6 +1228,15 @@ namespace DigiProc.Helpers
         public string financialYear { get; set; }
 
         public string nameOfDepartment { get; set; }
+    }
+
+    public struct AlternateCapexLookup
+    {
+        public int Id { get; set; }
+        public string itemName { get; set; }
+        public string nameOfDepartment { get; set; }
+        public int Quantity { get; set; }
+        public string financialYear { get; set; }
     }
 
     public struct LocalPurchaseOrderLookup

@@ -12,7 +12,7 @@ namespace DigiProc
     using System;
     using System.Collections.Generic;
     
-    public partial class LPOApproval
+    public partial class LPOApproval1
     {
         public int ApprovalID { get; set; }
         public Nullable<int> LPO_ID { get; set; }

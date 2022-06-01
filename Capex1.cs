@@ -12,7 +12,7 @@ namespace DigiProc
     using System;
     using System.Collections.Generic;
     
-    public partial class Capex
+    public partial class Capex1
     {
         public int CapexID { get; set; }
         public Nullable<int> CapexItemID { get; set; }

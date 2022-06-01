@@ -12,12 +12,12 @@ namespace DigiProc
     using System;
     using System.Collections.Generic;
     
-    public partial class LPO
+    public partial class LPO1
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public LPO()
+        public LPO1()
         {
-            this.RequisitionItems = new HashSet<RequisitionItem>();
+            this.RequisitionItems = new HashSet<RequisitionItem1>();
         }
     
         public int LPOID { get; set; }
@@ -36,6 +36,6 @@ namespace DigiProc
         public Nullable<int> ProcurementTypeId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<RequisitionItem> RequisitionItems { get; set; }
+        public virtual ICollection<RequisitionItem1> RequisitionItems { get; set; }
     }
 }

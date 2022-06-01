@@ -12,7 +12,7 @@ namespace DigiProc
     using System;
     using System.Collections.Generic;
     
-    public partial class Requisition
+    public partial class Requisition1
     {
         public int RequisitionID { get; set; }
         public string RequisitionNo { get; set; }
@@ -36,12 +36,12 @@ namespace DigiProc
         public Nullable<int> isNotif { get; set; }
         public string reqSrc { get; set; }
     
-        public virtual Company Company { get; set; }
-        public virtual Currency Currency { get; set; }
-        public virtual Department Department { get; set; }
-        public virtual FinancialYear FinancialYear { get; set; }
-        public virtual PriorityType PriorityType { get; set; }
+        public virtual Company1 Company { get; set; }
+        public virtual Currency1 Currency { get; set; }
+        public virtual Department1 Department { get; set; }
+        public virtual FinancialYear1 FinancialYear { get; set; }
+        public virtual PriorityType1 PriorityType { get; set; }
         public virtual RequisitionStatu RequisitionStatu { get; set; }
-        public virtual RequisitionType RequisitionType { get; set; }
+        public virtual RequisitionType1 RequisitionType { get; set; }
     }
 }

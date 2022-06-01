@@ -12,7 +12,7 @@ namespace DigiProc
     using System;
     using System.Collections.Generic;
     
-    public partial class Vendor
+    public partial class Vendor1
     {
         public int VendorID { get; set; }
         public string VendorNo { get; set; }
@@ -37,7 +37,7 @@ namespace DigiProc
         public string LastUpdatedBy { get; set; }
         public Nullable<System.DateTime> LastUpdatedDate { get; set; }
     
-        public virtual BusinessType BusinessType { get; set; }
-        public virtual VendorType VendorType { get; set; }
+        public virtual BusinessType1 BusinessType { get; set; }
+        public virtual VendorType1 VendorType { get; set; }
     }
 }

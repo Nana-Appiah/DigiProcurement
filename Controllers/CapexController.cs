@@ -53,6 +53,7 @@ namespace DigiProc.Controllers
             }
         }
 
+        [HttpGet]
         public JsonResult GetCapexData(int departmentID)
         {
             try
@@ -63,6 +64,25 @@ namespace DigiProc.Controllers
             catch (Exception ex)
             {
                 return Json(new { status = false, error = $"error: {ex.Message}" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpGet]
+        public JsonResult GetAlternateCapexData(int departmentID)
+        {
+            try
+            {
+                var cfg = new RequisitionHelper();
+                var alternate_capex_list = cfg.GetDepartmentAlternateCapexRecords(departmentID);
+                if (alternate_capex_list.Count() > 0)
+                {
+                    return Json(new {status = true, data = alternate_capex_list }, JsonRequestBehavior.AllowGet);
+                }
+                else { return Json(new { status = false, msg = @"No data" }, JsonRequestBehavior.AllowGet); }
+            }
+            catch(Exception ex)
+            {
+                return Json(new { status = false, error = $"error: {ex.Message}" },JsonRequestBehavior.AllowGet);
             }
         }
 

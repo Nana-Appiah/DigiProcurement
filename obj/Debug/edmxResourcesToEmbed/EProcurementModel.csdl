@@ -1,5 +1,160 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="EProcurementDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="ProcurementDbEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="AlternativeCapexes" EntityType="EProcurementDbModel.AlternativeCapex" />
+    <EntitySet Name="BusinessTypes" EntityType="EProcurementDbModel.BusinessType" />
+    <EntitySet Name="Capexes" EntityType="EProcurementDbModel.Capex" />
+    <EntitySet Name="Cfgs" EntityType="EProcurementDbModel.Cfg" />
+    <EntitySet Name="Committees" EntityType="EProcurementDbModel.Committee" />
+    <EntitySet Name="CommitteeMembers" EntityType="EProcurementDbModel.CommitteeMember" />
+    <EntitySet Name="Companies" EntityType="EProcurementDbModel.Company" />
+    <EntitySet Name="Currencies" EntityType="EProcurementDbModel.Currency" />
+    <EntitySet Name="Departments" EntityType="EProcurementDbModel.Department" />
+    <EntitySet Name="FinancialYears" EntityType="EProcurementDbModel.FinancialYear" />
+    <EntitySet Name="Items" EntityType="EProcurementDbModel.Item" />
+    <EntitySet Name="ItemCategories" EntityType="EProcurementDbModel.ItemCategory" />
+    <EntitySet Name="Loggers" EntityType="EProcurementDbModel.Logger" />
+    <EntitySet Name="LPOes" EntityType="EProcurementDbModel.LPO" />
+    <EntitySet Name="LPOApprovals" EntityType="EProcurementDbModel.LPOApproval" />
+    <EntitySet Name="Modules" EntityType="EProcurementDbModel.Module" />
+    <EntitySet Name="NotificationGroups" EntityType="EProcurementDbModel.NotificationGroup" />
+    <EntitySet Name="NotificationLists" EntityType="EProcurementDbModel.NotificationList" />
+    <EntitySet Name="PFNotificationLists" EntityType="EProcurementDbModel.PFNotificationList" />
+    <EntitySet Name="Positions" EntityType="EProcurementDbModel.Position" />
+    <EntitySet Name="PriorityTypes" EntityType="EProcurementDbModel.PriorityType" />
+    <EntitySet Name="ProcessFlows" EntityType="EProcurementDbModel.ProcessFlow" />
+    <EntitySet Name="ProcessFlowLists" EntityType="EProcurementDbModel.ProcessFlowList" />
+    <EntitySet Name="ProcurementTypes" EntityType="EProcurementDbModel.ProcurementType" />
+    <EntitySet Name="Profiles" EntityType="EProcurementDbModel.Profile" />
+    <EntitySet Name="Requisitions" EntityType="EProcurementDbModel.Requisition" />
+    <EntitySet Name="RequisitionFiles" EntityType="EProcurementDbModel.RequisitionFile" />
+    <EntitySet Name="RequisitionItems" EntityType="EProcurementDbModel.RequisitionItem" />
+    <EntitySet Name="RequisitionStatus" EntityType="EProcurementDbModel.RequisitionStatu" />
+    <EntitySet Name="RequisitionTypes" EntityType="EProcurementDbModel.RequisitionType" />
+    <EntitySet Name="SIUnits" EntityType="EProcurementDbModel.SIUnit" />
+    <EntitySet Name="sysdiagrams" EntityType="EProcurementDbModel.sysdiagram" />
+    <EntitySet Name="UserModules" EntityType="EProcurementDbModel.UserModule" />
+    <EntitySet Name="Usrs" EntityType="EProcurementDbModel.Usr" />
+    <EntitySet Name="Vendors" EntityType="EProcurementDbModel.Vendor" />
+    <EntitySet Name="VendorTypes" EntityType="EProcurementDbModel.VendorType" />
+    <AssociationSet Name="FK_Vendor_BusinessType" Association="EProcurementDbModel.FK_Vendor_BusinessType">
+      <End Role="BusinessType" EntitySet="BusinessTypes" />
+      <End Role="Vendor" EntitySet="Vendors" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CommitteeMember_Committee" Association="EProcurementDbModel.FK_CommitteeMember_Committee">
+      <End Role="Committee" EntitySet="Committees" />
+      <End Role="CommitteeMember" EntitySet="CommitteeMembers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CommitteeMember_Position" Association="EProcurementDbModel.FK_CommitteeMember_Position">
+      <End Role="Position" EntitySet="Positions" />
+      <End Role="CommitteeMember" EntitySet="CommitteeMembers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Requisition_Company" Association="EProcurementDbModel.FK_Requisition_Company">
+      <End Role="Company" EntitySet="Companies" />
+      <End Role="Requisition" EntitySet="Requisitions" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Requisition_Currency" Association="EProcurementDbModel.FK_Requisition_Currency">
+      <End Role="Currency" EntitySet="Currencies" />
+      <End Role="Requisition" EntitySet="Requisitions" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Requisition_Department" Association="EProcurementDbModel.FK_Requisition_Department">
+      <End Role="Department" EntitySet="Departments" />
+      <End Role="Requisition" EntitySet="Requisitions" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Usr_Department" Association="EProcurementDbModel.FK_Usr_Department">
+      <End Role="Department" EntitySet="Departments" />
+      <End Role="Usr" EntitySet="Usrs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Requisition_FinancialYear" Association="EProcurementDbModel.FK_Requisition_FinancialYear">
+      <End Role="FinancialYear" EntitySet="FinancialYears" />
+      <End Role="Requisition" EntitySet="Requisitions" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Item_ItemCategory" Association="EProcurementDbModel.FK_Item_ItemCategory">
+      <End Role="ItemCategory" EntitySet="ItemCategories" />
+      <End Role="Item" EntitySet="Items" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Item_SIUnit" Association="EProcurementDbModel.FK_Item_SIUnit">
+      <End Role="SIUnit" EntitySet="SIUnits" />
+      <End Role="Item" EntitySet="Items" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RequisitionItem_LPO" Association="EProcurementDbModel.FK_RequisitionItem_LPO">
+      <End Role="LPO" EntitySet="LPOes" />
+      <End Role="RequisitionItem" EntitySet="RequisitionItems" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserModule_Module" Association="EProcurementDbModel.FK_UserModule_Module">
+      <End Role="Module" EntitySet="Modules" />
+      <End Role="UserModule" EntitySet="UserModules" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PFNotificationList_NotificationGroup" Association="EProcurementDbModel.FK_PFNotificationList_NotificationGroup">
+      <End Role="NotificationGroup" EntitySet="NotificationGroups" />
+      <End Role="PFNotificationList" EntitySet="PFNotificationLists" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PFNotificationList_ProcessFlow" Association="EProcurementDbModel.FK_PFNotificationList_ProcessFlow">
+      <End Role="ProcessFlow" EntitySet="ProcessFlows" />
+      <End Role="PFNotificationList" EntitySet="PFNotificationLists" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Requisition_PriorityType" Association="EProcurementDbModel.FK_Requisition_PriorityType">
+      <End Role="PriorityType" EntitySet="PriorityTypes" />
+      <End Role="Requisition" EntitySet="Requisitions" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProcessFlow_ProcurementType" Association="EProcurementDbModel.FK_ProcessFlow_ProcurementType">
+      <End Role="ProcurementType" EntitySet="ProcurementTypes" />
+      <End Role="ProcessFlow" EntitySet="ProcessFlows" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Requisition_RequisitionStatus" Association="EProcurementDbModel.FK_Requisition_RequisitionStatus">
+      <End Role="RequisitionStatu" EntitySet="RequisitionStatus" />
+      <End Role="Requisition" EntitySet="Requisitions" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Requisition_RequisitionType" Association="EProcurementDbModel.FK_Requisition_RequisitionType">
+      <End Role="RequisitionType" EntitySet="RequisitionTypes" />
+      <End Role="Requisition" EntitySet="Requisitions" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Vendor_VendorType" Association="EProcurementDbModel.FK_Vendor_VendorType">
+      <End Role="VendorType" EntitySet="VendorTypes" />
+      <End Role="Vendor" EntitySet="Vendors" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="AlternativeCapex">
+    <Key>
+      <PropertyRef Name="AltCapexID" />
+    </Key>
+    <Property Name="AltCapexID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DId" Type="Int32" />
+    <Property Name="AltCapexItemID" Type="Int32" />
+    <Property Name="Qty" Type="Int32" />
+    <Property Name="FinYrID" Type="Int32" />
+    <Property Name="dte" Type="DateTime" Precision="0" />
+  </EntityType>
+  <EntityType Name="BusinessType">
+    <Key>
+      <PropertyRef Name="BusinessTypeID" />
+    </Key>
+    <Property Name="BusinessTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="BusinessDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Vendors" Relationship="EProcurementDbModel.FK_Vendor_BusinessType" FromRole="BusinessType" ToRole="Vendor" />
+  </EntityType>
+  <EntityType Name="Capex">
+    <Key>
+      <PropertyRef Name="CapexID" />
+    </Key>
+    <Property Name="CapexID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CapexItemID" Type="Int32" />
+    <Property Name="CapexTypeID" Type="Int32" />
+    <Property Name="EstimatedDeadline" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="QuantityRequested" Type="Int32" />
+    <Property Name="QuantitySupplied" Type="Int32" />
+    <Property Name="QuantityOutstanding" Type="Int32" />
+    <Property Name="Justification" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="FinancialYrId" Type="Int32" />
+    <Property Name="DId" Type="Int32" />
+  </EntityType>
+  <EntityType Name="Cfg">
+    <Key>
+      <PropertyRef Name="cfid" />
+    </Key>
+    <Property Name="cfid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="C_capex_flag" Type="Int32" />
+  </EntityType>
   <EntityType Name="Committee">
     <Key>
       <PropertyRef Name="CommitteeID" />
@@ -7,7 +162,7 @@
     <Property Name="CommitteeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="CommitteeName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
     <Property Name="CommitteeDescription" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="CommitteeMembers" Relationship="Self.FK_CommitteeMember_Committee" FromRole="Committee" ToRole="CommitteeMember" />
+    <NavigationProperty Name="CommitteeMembers" Relationship="EProcurementDbModel.FK_CommitteeMember_Committee" FromRole="Committee" ToRole="CommitteeMember" />
   </EntityType>
   <EntityType Name="CommitteeMember">
     <Key>
@@ -21,8 +176,16 @@
     <Property Name="PositionID" Type="Int32" />
     <Property Name="EmailAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="active" Type="Int32" />
-    <NavigationProperty Name="Committee" Relationship="Self.FK_CommitteeMember_Committee" FromRole="CommitteeMember" ToRole="Committee" />
+    <NavigationProperty Name="Committee" Relationship="EProcurementDbModel.FK_CommitteeMember_Committee" FromRole="CommitteeMember" ToRole="Committee" />
     <NavigationProperty Name="Position" Relationship="EProcurementDbModel.FK_CommitteeMember_Position" FromRole="CommitteeMember" ToRole="Position" />
+  </EntityType>
+  <EntityType Name="Company">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+    </Key>
+    <Property Name="CompanyID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CompanyDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Requisitions" Relationship="EProcurementDbModel.FK_Requisition_Company" FromRole="Company" ToRole="Requisition" />
   </EntityType>
   <EntityType Name="Currency">
     <Key>
@@ -31,7 +194,17 @@
     <Property Name="CurrencyID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="CurrencyName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="CurrencySymbol" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
-    <NavigationProperty Name="Requisitions" Relationship="Self.FK_Requisition_Currency" FromRole="Currency" ToRole="Requisition" />
+    <NavigationProperty Name="Requisitions" Relationship="EProcurementDbModel.FK_Requisition_Currency" FromRole="Currency" ToRole="Requisition" />
+  </EntityType>
+  <EntityType Name="Department">
+    <Key>
+      <PropertyRef Name="DepartmentID" />
+    </Key>
+    <Property Name="DepartmentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Head" Type="Int32" />
+    <NavigationProperty Name="Requisitions" Relationship="EProcurementDbModel.FK_Requisition_Department" FromRole="Department" ToRole="Requisition" />
+    <NavigationProperty Name="Usrs" Relationship="EProcurementDbModel.FK_Usr_Department" FromRole="Department" ToRole="Usr" />
   </EntityType>
   <EntityType Name="FinancialYear">
     <Key>
@@ -41,7 +214,7 @@
     <Property Name="FinancialYr" Type="String" MaxLength="9" FixedLength="true" Unicode="false" />
     <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="IsActive" Type="Int32" />
-    <NavigationProperty Name="Requisitions" Relationship="Self.FK_Requisition_FinancialYear" FromRole="FinancialYear" ToRole="Requisition" />
+    <NavigationProperty Name="Requisitions" Relationship="EProcurementDbModel.FK_Requisition_FinancialYear" FromRole="FinancialYear" ToRole="Requisition" />
   </EntityType>
   <EntityType Name="Item">
     <Key>
@@ -59,8 +232,8 @@
     <Property Name="LastUpdatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="LastUpdatedDate" Type="DateTime" Precision="0" />
     <Property Name="ItemCategoryID" Type="Int32" />
-    <NavigationProperty Name="ItemCategory" Relationship="Self.FK_Item_ItemCategory" FromRole="Item" ToRole="ItemCategory" />
-    <NavigationProperty Name="SIUnit" Relationship="Self.FK_Item_SIUnit" FromRole="Item" ToRole="SIUnit" />
+    <NavigationProperty Name="ItemCategory" Relationship="EProcurementDbModel.FK_Item_ItemCategory" FromRole="Item" ToRole="ItemCategory" />
+    <NavigationProperty Name="SIUnit" Relationship="EProcurementDbModel.FK_Item_SIUnit" FromRole="Item" ToRole="SIUnit" />
   </EntityType>
   <EntityType Name="ItemCategory">
     <Key>
@@ -69,7 +242,7 @@
     <Property Name="CategoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="CategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="CategoryDescription" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="Items" Relationship="Self.FK_Item_ItemCategory" FromRole="ItemCategory" ToRole="Item" />
+    <NavigationProperty Name="Items" Relationship="EProcurementDbModel.FK_Item_ItemCategory" FromRole="ItemCategory" ToRole="Item" />
   </EntityType>
   <EntityType Name="Logger">
     <Key>
@@ -87,6 +260,7 @@
     </Key>
     <Property Name="LPOID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="RequisitionNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="VendorID" Type="Int32" />
     <Property Name="VAT" Type="Decimal" Precision="9" Scale="2" />
     <Property Name="PurchaseOrderDate" Type="DateTime" Precision="0" />
     <Property Name="ExpectedDeliveryDate" Type="DateTime" Precision="0" />
@@ -94,12 +268,23 @@
     <Property Name="PaymentTerm" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="OtherTermsAndConditions" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
     <Property Name="LPOStatusID" Type="Int32" />
-    <NavigationProperty Name="RequisitionItems" Relationship="EProcurementDbModel.FK_RequisitionItem_LPO" FromRole="LPO" ToRole="RequisitionItem" />
-    <Property Name="VendorID" Type="Int32" />
     <Property Name="TotAmt" Type="Decimal" Precision="18" Scale="2" />
-    <Property Name="LPONo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="NetAmt" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="LPONo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="ProcurementTypeId" Type="Int32" />
+    <NavigationProperty Name="RequisitionItems" Relationship="EProcurementDbModel.FK_RequisitionItem_LPO" FromRole="LPO" ToRole="RequisitionItem" />
+  </EntityType>
+  <EntityType Name="LPOApproval">
+    <Key>
+      <PropertyRef Name="ApprovalID" />
+    </Key>
+    <Property Name="ApprovalID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="LPO_ID" Type="Int32" />
+    <Property Name="PersonTag" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="PersonName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="ApprovalDate" Type="DateTime" Precision="0" />
+    <Property Name="ApprovalStatus" Type="Int32" />
+    <Property Name="ApprovalComments" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="Module">
     <Key>
@@ -111,13 +296,88 @@
     <Property Name="DateAssigned" Type="DateTime" Precision="0" />
     <NavigationProperty Name="UserModules" Relationship="EProcurementDbModel.FK_UserModule_Module" FromRole="Module" ToRole="UserModule" />
   </EntityType>
+  <EntityType Name="NotificationGroup">
+    <Key>
+      <PropertyRef Name="NotificationGroupID" />
+    </Key>
+    <Property Name="NotificationGroupID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="NotificationGroupName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="NotificationMailString" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="NotificationDescription" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="PFNotificationLists" Relationship="EProcurementDbModel.FK_PFNotificationList_NotificationGroup" FromRole="NotificationGroup" ToRole="PFNotificationList" />
+  </EntityType>
+  <EntityType Name="NotificationList">
+    <Key>
+      <PropertyRef Name="NotificationID" />
+    </Key>
+    <Property Name="NotificationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="EmailAddress" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+    <Property Name="tag" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="isActive" Type="Int32" />
+  </EntityType>
+  <EntityType Name="PFNotificationList">
+    <Key>
+      <PropertyRef Name="PFNotificationListID" />
+    </Key>
+    <Property Name="PFNotificationListID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PFID" Type="Int32" Nullable="false" />
+    <Property Name="NotificationGroupID" Type="Int32" />
+    <NavigationProperty Name="NotificationGroup" Relationship="EProcurementDbModel.FK_PFNotificationList_NotificationGroup" FromRole="PFNotificationList" ToRole="NotificationGroup" />
+    <NavigationProperty Name="ProcessFlow" Relationship="EProcurementDbModel.FK_PFNotificationList_ProcessFlow" FromRole="PFNotificationList" ToRole="ProcessFlow" />
+  </EntityType>
+  <EntityType Name="Position">
+    <Key>
+      <PropertyRef Name="PositionID" />
+    </Key>
+    <Property Name="PositionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Designation" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="CommitteeMembers" Relationship="EProcurementDbModel.FK_CommitteeMember_Position" FromRole="Position" ToRole="CommitteeMember" />
+  </EntityType>
   <EntityType Name="PriorityType">
     <Key>
       <PropertyRef Name="PriorityID" />
     </Key>
     <Property Name="PriorityID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="PriorityDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="Requisitions" Relationship="Self.FK_Requisition_PriorityType" FromRole="PriorityType" ToRole="Requisition" />
+    <NavigationProperty Name="Requisitions" Relationship="EProcurementDbModel.FK_Requisition_PriorityType" FromRole="PriorityType" ToRole="Requisition" />
+  </EntityType>
+  <EntityType Name="ProcessFlow">
+    <Key>
+      <PropertyRef Name="ProcessFlowID" />
+    </Key>
+    <Property Name="ProcessFlowID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProcurementTypeId" Type="Int32" />
+    <Property Name="Limit" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="ProcessFlowOrder" Type="Int32" />
+    <NavigationProperty Name="PFNotificationLists" Relationship="EProcurementDbModel.FK_PFNotificationList_ProcessFlow" FromRole="ProcessFlow" ToRole="PFNotificationList" />
+    <NavigationProperty Name="ProcurementType" Relationship="EProcurementDbModel.FK_ProcessFlow_ProcurementType" FromRole="ProcessFlow" ToRole="ProcurementType" />
+  </EntityType>
+  <EntityType Name="ProcessFlowList">
+    <Key>
+      <PropertyRef Name="ProcessFlowListID" />
+    </Key>
+    <Property Name="ProcessFlowListID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProcessFlowID" Type="Int32" />
+    <Property Name="Flow" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="ProcurementType">
+    <Key>
+      <PropertyRef Name="ProcurementTypeID" />
+    </Key>
+    <Property Name="ProcurementTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProcurementDescription" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="ProcessFlows" Relationship="EProcurementDbModel.FK_ProcessFlow_ProcurementType" FromRole="ProcurementType" ToRole="ProcessFlow" />
+  </EntityType>
+  <EntityType Name="Profile">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="profileName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="profileContent" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="inUse" Type="Int32" />
   </EntityType>
   <EntityType Name="Requisition">
     <Key>
@@ -142,15 +402,24 @@
     <Property Name="AuthorizedDate" Type="DateTime" Precision="0" />
     <Property Name="LastUpdatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="LastUpdatedDate" Type="DateTime" Precision="0" />
-    <NavigationProperty Name="Currency" Relationship="Self.FK_Requisition_Currency" FromRole="Requisition" ToRole="Currency" />
-    <NavigationProperty Name="FinancialYear" Relationship="Self.FK_Requisition_FinancialYear" FromRole="Requisition" ToRole="FinancialYear" />
-    <NavigationProperty Name="PriorityType" Relationship="Self.FK_Requisition_PriorityType" FromRole="Requisition" ToRole="PriorityType" />
-    <NavigationProperty Name="RequisitionStatu" Relationship="Self.FK_Requisition_RequisitionStatus" FromRole="Requisition" ToRole="RequisitionStatus" />
-    <NavigationProperty Name="RequisitionType" Relationship="Self.FK_Requisition_RequisitionType" FromRole="Requisition" ToRole="RequisitionType" />
-    <NavigationProperty Name="Company" Relationship="EProcurementDbModel.FK_Requisition_Company" FromRole="Requisition" ToRole="Company" />
-    <NavigationProperty Name="Department" Relationship="EProcurementDbModel.FK_Requisition_Department" FromRole="Requisition" ToRole="Department" />
     <Property Name="isNotif" Type="Int32" />
     <Property Name="reqSrc" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Company" Relationship="EProcurementDbModel.FK_Requisition_Company" FromRole="Requisition" ToRole="Company" />
+    <NavigationProperty Name="Currency" Relationship="EProcurementDbModel.FK_Requisition_Currency" FromRole="Requisition" ToRole="Currency" />
+    <NavigationProperty Name="Department" Relationship="EProcurementDbModel.FK_Requisition_Department" FromRole="Requisition" ToRole="Department" />
+    <NavigationProperty Name="FinancialYear" Relationship="EProcurementDbModel.FK_Requisition_FinancialYear" FromRole="Requisition" ToRole="FinancialYear" />
+    <NavigationProperty Name="PriorityType" Relationship="EProcurementDbModel.FK_Requisition_PriorityType" FromRole="Requisition" ToRole="PriorityType" />
+    <NavigationProperty Name="RequisitionStatu" Relationship="EProcurementDbModel.FK_Requisition_RequisitionStatus" FromRole="Requisition" ToRole="RequisitionStatu" />
+    <NavigationProperty Name="RequisitionType" Relationship="EProcurementDbModel.FK_Requisition_RequisitionType" FromRole="Requisition" ToRole="RequisitionType" />
+  </EntityType>
+  <EntityType Name="RequisitionFile">
+    <Key>
+      <PropertyRef Name="RequisitionFileID" />
+    </Key>
+    <Property Name="RequisitionFileID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RequisitionID" Type="Int32" />
+    <Property Name="RequisitionFileDescription" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="RequisitionFileName" Type="Binary" MaxLength="Max" FixedLength="false" />
   </EntityType>
   <EntityType Name="RequisitionItem">
     <Key>
@@ -172,7 +441,7 @@
     </Key>
     <Property Name="RequisitionStatusID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="RequisitionStatusDesc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="Requisitions" Relationship="Self.FK_Requisition_RequisitionStatus" FromRole="RequisitionStatus" ToRole="Requisition" />
+    <NavigationProperty Name="Requisitions" Relationship="EProcurementDbModel.FK_Requisition_RequisitionStatus" FromRole="RequisitionStatu" ToRole="Requisition" />
   </EntityType>
   <EntityType Name="RequisitionType">
     <Key>
@@ -181,7 +450,7 @@
     <Property Name="RequisitionTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="RequisitionType1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="RequisitionDescription" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="Requisitions" Relationship="Self.FK_Requisition_RequisitionType" FromRole="RequisitionType" ToRole="Requisition" />
+    <NavigationProperty Name="Requisitions" Relationship="EProcurementDbModel.FK_Requisition_RequisitionType" FromRole="RequisitionType" ToRole="Requisition" />
   </EntityType>
   <EntityType Name="SIUnit">
     <Key>
@@ -190,7 +459,17 @@
     <Property Name="SIUnitID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="Metric" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="Measurement" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="Items" Relationship="Self.FK_Item_SIUnit" FromRole="SIUnit" ToRole="Item" />
+    <NavigationProperty Name="Items" Relationship="EProcurementDbModel.FK_Item_SIUnit" FromRole="SIUnit" ToRole="Item" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
   </EntityType>
   <EntityType Name="UserModule">
     <Key>
@@ -202,12 +481,33 @@
     <Property Name="DateAssigned" Type="DateTime" Precision="0" />
     <NavigationProperty Name="Module" Relationship="EProcurementDbModel.FK_UserModule_Module" FromRole="UserModule" ToRole="Module" />
   </EntityType>
+  <EntityType Name="Usr">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="surname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="firstname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="othernames" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="usrname" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+    <Property Name="usrpassword" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+    <Property Name="deptId" Type="Int32" />
+    <Property Name="isActive" Type="Int32" />
+    <Property Name="isLogged" Type="Int32" />
+    <Property Name="isAD" Type="Int32" />
+    <Property Name="isAdmin" Type="Int32" />
+    <Property Name="uProfile" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="tag" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Department" Relationship="EProcurementDbModel.FK_Usr_Department" FromRole="Usr" ToRole="Department" />
+  </EntityType>
   <EntityType Name="Vendor">
     <Key>
       <PropertyRef Name="VendorID" />
     </Key>
     <Property Name="VendorID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="VendorNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="VendorName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="VendorLocation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="ContactPerson" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
     <Property Name="VendorTypeID" Type="Int32" />
     <Property Name="CompanyRegistrationNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
@@ -215,21 +515,19 @@
     <Property Name="TIN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="NameOfOwner" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
     <Property Name="CompanyContact" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CompanyHomeContact" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="CompanyWebsite" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CompanyFb" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CompanyLinkedIn" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="CompanyEmailAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CompanyGHPostAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CompanyBusinessTypeID" Type="Int32" />
     <Property Name="CreatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="CreatedDate" Type="DateTime" Precision="0" />
     <Property Name="LastUpdatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="LastUpdatedDate" Type="DateTime" Precision="0" />
-    <NavigationProperty Name="VendorType" Relationship="Self.FK_Vendor_VendorType" FromRole="Vendor" ToRole="VendorType" />
-    <Property Name="VendorNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="VendorLocation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="CompanyFb" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="CompanyLinkedIn" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="CompanyGHPostAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="CompanyHomeContact" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="CompanyBusinessTypeID" Type="Int32" />
     <NavigationProperty Name="BusinessType" Relationship="EProcurementDbModel.FK_Vendor_BusinessType" FromRole="Vendor" ToRole="BusinessType" />
+    <NavigationProperty Name="VendorType" Relationship="EProcurementDbModel.FK_Vendor_VendorType" FromRole="Vendor" ToRole="VendorType" />
   </EntityType>
   <EntityType Name="VendorType">
     <Key>
@@ -237,250 +535,7 @@
     </Key>
     <Property Name="VendorTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="VendorDescription" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="Vendors" Relationship="Self.FK_Vendor_VendorType" FromRole="VendorType" ToRole="Vendor" />
-  </EntityType>
-  <Association Name="FK_CommitteeMember_Committee">
-    <End Role="Committee" Type="Self.Committee" Multiplicity="0..1" />
-    <End Role="CommitteeMember" Type="Self.CommitteeMember" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Committee">
-        <PropertyRef Name="CommitteeID" />
-      </Principal>
-      <Dependent Role="CommitteeMember">
-        <PropertyRef Name="CommitteeID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Requisition_Currency">
-    <End Role="Currency" Type="Self.Currency" Multiplicity="0..1" />
-    <End Role="Requisition" Type="Self.Requisition" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Currency">
-        <PropertyRef Name="CurrencyID" />
-      </Principal>
-      <Dependent Role="Requisition">
-        <PropertyRef Name="CurrencyID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Requisition_FinancialYear">
-    <End Role="FinancialYear" Type="Self.FinancialYear" Multiplicity="0..1" />
-    <End Role="Requisition" Type="Self.Requisition" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="FinancialYear">
-        <PropertyRef Name="FinancialYrID" />
-      </Principal>
-      <Dependent Role="Requisition">
-        <PropertyRef Name="FinancialYrID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Item_ItemCategory">
-    <End Role="ItemCategory" Type="Self.ItemCategory" Multiplicity="0..1" />
-    <End Role="Item" Type="Self.Item" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ItemCategory">
-        <PropertyRef Name="CategoryID" />
-      </Principal>
-      <Dependent Role="Item">
-        <PropertyRef Name="ItemCategoryID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Item_SIUnit">
-    <End Role="SIUnit" Type="Self.SIUnit" Multiplicity="0..1" />
-    <End Role="Item" Type="Self.Item" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="SIUnit">
-        <PropertyRef Name="SIUnitID" />
-      </Principal>
-      <Dependent Role="Item">
-        <PropertyRef Name="SIUnitID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Requisition_PriorityType">
-    <End Role="PriorityType" Type="Self.PriorityType" Multiplicity="0..1" />
-    <End Role="Requisition" Type="Self.Requisition" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="PriorityType">
-        <PropertyRef Name="PriorityID" />
-      </Principal>
-      <Dependent Role="Requisition">
-        <PropertyRef Name="PriorityID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Requisition_RequisitionStatus">
-    <End Role="RequisitionStatus" Type="Self.RequisitionStatu" Multiplicity="0..1" />
-    <End Role="Requisition" Type="Self.Requisition" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="RequisitionStatus">
-        <PropertyRef Name="RequisitionStatusID" />
-      </Principal>
-      <Dependent Role="Requisition">
-        <PropertyRef Name="RequisitionStatusID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Requisition_RequisitionType">
-    <End Role="RequisitionType" Type="Self.RequisitionType" Multiplicity="0..1" />
-    <End Role="Requisition" Type="Self.Requisition" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="RequisitionType">
-        <PropertyRef Name="RequisitionTypeID" />
-      </Principal>
-      <Dependent Role="Requisition">
-        <PropertyRef Name="RequisitionTypeID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Vendor_VendorType">
-    <End Role="VendorType" Type="Self.VendorType" Multiplicity="0..1" />
-    <End Role="Vendor" Type="Self.Vendor" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="VendorType">
-        <PropertyRef Name="VendorTypeID" />
-      </Principal>
-      <Dependent Role="Vendor">
-        <PropertyRef Name="VendorTypeID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <EntityContainer Name="ProcurementDbEntities" annotation:LazyLoadingEnabled="true">
-    <EntitySet Name="Committees" EntityType="Self.Committee" />
-    <EntitySet Name="CommitteeMembers" EntityType="Self.CommitteeMember" />
-    <EntitySet Name="Currencies" EntityType="Self.Currency" />
-    <EntitySet Name="FinancialYears" EntityType="Self.FinancialYear" />
-    <EntitySet Name="Items" EntityType="Self.Item" />
-    <EntitySet Name="ItemCategories" EntityType="Self.ItemCategory" />
-    <EntitySet Name="Loggers" EntityType="Self.Logger" />
-    <EntitySet Name="LPOes" EntityType="Self.LPO" />
-    <EntitySet Name="Modules" EntityType="Self.Module" />
-    <EntitySet Name="PriorityTypes" EntityType="Self.PriorityType" />
-    <EntitySet Name="Requisitions" EntityType="Self.Requisition" />
-    <EntitySet Name="RequisitionItems" EntityType="Self.RequisitionItem" />
-    <EntitySet Name="RequisitionStatus" EntityType="Self.RequisitionStatu" />
-    <EntitySet Name="RequisitionTypes" EntityType="Self.RequisitionType" />
-    <EntitySet Name="SIUnits" EntityType="Self.SIUnit" />
-    <EntitySet Name="UserModules" EntityType="Self.UserModule" />
-    <EntitySet Name="Vendors" EntityType="Self.Vendor" />
-    <EntitySet Name="VendorTypes" EntityType="Self.VendorType" />
-    <AssociationSet Name="FK_CommitteeMember_Committee" Association="Self.FK_CommitteeMember_Committee">
-      <End Role="Committee" EntitySet="Committees" />
-      <End Role="CommitteeMember" EntitySet="CommitteeMembers" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Requisition_Currency" Association="Self.FK_Requisition_Currency">
-      <End Role="Currency" EntitySet="Currencies" />
-      <End Role="Requisition" EntitySet="Requisitions" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Requisition_FinancialYear" Association="Self.FK_Requisition_FinancialYear">
-      <End Role="FinancialYear" EntitySet="FinancialYears" />
-      <End Role="Requisition" EntitySet="Requisitions" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Item_ItemCategory" Association="Self.FK_Item_ItemCategory">
-      <End Role="ItemCategory" EntitySet="ItemCategories" />
-      <End Role="Item" EntitySet="Items" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Item_SIUnit" Association="Self.FK_Item_SIUnit">
-      <End Role="SIUnit" EntitySet="SIUnits" />
-      <End Role="Item" EntitySet="Items" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Requisition_PriorityType" Association="Self.FK_Requisition_PriorityType">
-      <End Role="PriorityType" EntitySet="PriorityTypes" />
-      <End Role="Requisition" EntitySet="Requisitions" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Requisition_RequisitionStatus" Association="Self.FK_Requisition_RequisitionStatus">
-      <End Role="RequisitionStatus" EntitySet="RequisitionStatus" />
-      <End Role="Requisition" EntitySet="Requisitions" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Requisition_RequisitionType" Association="Self.FK_Requisition_RequisitionType">
-      <End Role="RequisitionType" EntitySet="RequisitionTypes" />
-      <End Role="Requisition" EntitySet="Requisitions" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Vendor_VendorType" Association="Self.FK_Vendor_VendorType">
-      <End Role="VendorType" EntitySet="VendorTypes" />
-      <End Role="Vendor" EntitySet="Vendors" />
-    </AssociationSet>
-    <AssociationSet Name="FK_UserModule_Module" Association="EProcurementDbModel.FK_UserModule_Module">
-      <End Role="Module" EntitySet="Modules" />
-      <End Role="UserModule" EntitySet="UserModules" />
-    </AssociationSet>
-    <EntitySet Name="BusinessTypes" EntityType="EProcurementDbModel.BusinessType" />
-    <AssociationSet Name="FK_Vendor_BusinessType" Association="EProcurementDbModel.FK_Vendor_BusinessType">
-      <End Role="BusinessType" EntitySet="BusinessTypes" />
-      <End Role="Vendor" EntitySet="Vendors" />
-    </AssociationSet>
-    <EntitySet Name="NotificationLists" EntityType="EProcurementDbModel.NotificationList" />
-    <EntitySet Name="Positions" EntityType="EProcurementDbModel.Position" />
-    <AssociationSet Name="FK_CommitteeMember_Position" Association="EProcurementDbModel.FK_CommitteeMember_Position">
-      <End Role="Position" EntitySet="Positions" />
-      <End Role="CommitteeMember" EntitySet="CommitteeMembers" />
-    </AssociationSet>
-    <EntitySet Name="Companies" EntityType="EProcurementDbModel.Company" />
-    <EntitySet Name="Departments" EntityType="EProcurementDbModel.Department" />
-    <AssociationSet Name="FK_Requisition_Company" Association="EProcurementDbModel.FK_Requisition_Company">
-      <End Role="Company" EntitySet="Companies" />
-      <End Role="Requisition" EntitySet="Requisitions" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Requisition_Department" Association="EProcurementDbModel.FK_Requisition_Department">
-      <End Role="Department" EntitySet="Departments" />
-      <End Role="Requisition" EntitySet="Requisitions" />
-    </AssociationSet>
-    <EntitySet Name="NotificationGroups" EntityType="EProcurementDbModel.NotificationGroup" />
-    <EntitySet Name="PFNotificationLists" EntityType="EProcurementDbModel.PFNotificationList" />
-    <EntitySet Name="ProcessFlows" EntityType="EProcurementDbModel.ProcessFlow" />
-    <EntitySet Name="ProcurementTypes" EntityType="EProcurementDbModel.ProcurementType" />
-    <AssociationSet Name="FK_PFNotificationList_NotificationGroup" Association="EProcurementDbModel.FK_PFNotificationList_NotificationGroup">
-      <End Role="NotificationGroup" EntitySet="NotificationGroups" />
-      <End Role="PFNotificationList" EntitySet="PFNotificationLists" />
-    </AssociationSet>
-    <AssociationSet Name="FK_PFNotificationList_ProcessFlow" Association="EProcurementDbModel.FK_PFNotificationList_ProcessFlow">
-      <End Role="ProcessFlow" EntitySet="ProcessFlows" />
-      <End Role="PFNotificationList" EntitySet="PFNotificationLists" />
-    </AssociationSet>
-    <AssociationSet Name="FK_ProcessFlow_ProcurementType" Association="EProcurementDbModel.FK_ProcessFlow_ProcurementType">
-      <End Role="ProcurementType" EntitySet="ProcurementTypes" />
-      <End Role="ProcessFlow" EntitySet="ProcessFlows" />
-    </AssociationSet>
-    <EntitySet Name="ProcessFlowLists" EntityType="EProcurementDbModel.ProcessFlowList" />
-    <EntitySet Name="Capexes" EntityType="EProcurementDbModel.Capex" />
-    <EntitySet Name="sysdiagrams" EntityType="EProcurementDbModel.sysdiagram" />
-    <AssociationSet Name="FK_RequisitionItem_LPO" Association="EProcurementDbModel.FK_RequisitionItem_LPO">
-      <End Role="LPO" EntitySet="LPOes" />
-      <End Role="RequisitionItem" EntitySet="RequisitionItems" />
-    </AssociationSet>
-    <EntitySet Name="Profiles" EntityType="EProcurementDbModel.Profile" />
-    <EntitySet Name="Usrs" EntityType="EProcurementDbModel.Usr" />
-    <AssociationSet Name="FK_Usr_Department" Association="EProcurementDbModel.FK_Usr_Department">
-      <End Role="Department" EntitySet="Departments" />
-      <End Role="Usr" EntitySet="Usrs" />
-    </AssociationSet>
-    <EntitySet Name="LPOApprovals" EntityType="EProcurementDbModel.LPOApproval" />
-    <EntitySet Name="Cfgs" EntityType="EProcurementDbModel.Cfg" />
-    <EntitySet Name="RequisitionFiles" EntityType="EProcurementDbModel.RequisitionFile" />
-    <EntitySet Name="AlternativeCapexes" EntityType="EProcurementDbModel.AlternativeCapex" />
-    <EntitySet Name="AlternativeCapex1" EntityType="EProcurementDbModel.AlternativeCapex1" />
-  </EntityContainer>
-  <Association Name="FK_UserModule_Module">
-    <End Type="EProcurementDbModel.Module" Role="Module" Multiplicity="0..1" />
-    <End Type="EProcurementDbModel.UserModule" Role="UserModule" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Module">
-        <PropertyRef Name="ModuleID" />
-      </Principal>
-      <Dependent Role="UserModule">
-        <PropertyRef Name="ModuleID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <EntityType Name="BusinessType">
-    <Key>
-      <PropertyRef Name="BusinessTypeID" />
-    </Key>
-    <Property Name="BusinessTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="BusinessDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="Vendors" Relationship="EProcurementDbModel.FK_Vendor_BusinessType" FromRole="BusinessType" ToRole="Vendor" />
+    <NavigationProperty Name="Vendors" Relationship="EProcurementDbModel.FK_Vendor_VendorType" FromRole="VendorType" ToRole="Vendor" />
   </EntityType>
   <Association Name="FK_Vendor_BusinessType">
     <End Type="EProcurementDbModel.BusinessType" Role="BusinessType" Multiplicity="0..1" />
@@ -494,25 +549,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityType Name="NotificationList">
-    <Key>
-      <PropertyRef Name="NotificationID" />
-    </Key>
-    <Property Name="NotificationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="EmailAddress" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
-    <Property Name="tag" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-    <Property Name="isActive" Type="Int32" />
-  </EntityType>
-  <EntityType Name="Position">
-    <Key>
-      <PropertyRef Name="PositionID" />
-    </Key>
-    <Property Name="PositionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Designation" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="CommitteeMembers" Relationship="EProcurementDbModel.FK_CommitteeMember_Position" FromRole="Position" ToRole="CommitteeMember" />
-  </EntityType>
+  <Association Name="FK_CommitteeMember_Committee">
+    <End Type="EProcurementDbModel.Committee" Role="Committee" Multiplicity="0..1" />
+    <End Type="EProcurementDbModel.CommitteeMember" Role="CommitteeMember" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Committee">
+        <PropertyRef Name="CommitteeID" />
+      </Principal>
+      <Dependent Role="CommitteeMember">
+        <PropertyRef Name="CommitteeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_CommitteeMember_Position">
     <End Type="EProcurementDbModel.Position" Role="Position" Multiplicity="0..1" />
     <End Type="EProcurementDbModel.CommitteeMember" Role="CommitteeMember" Multiplicity="*" />
@@ -525,24 +573,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityType Name="Company">
-    <Key>
-      <PropertyRef Name="CompanyID" />
-    </Key>
-    <Property Name="CompanyID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="CompanyDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="Requisitions" Relationship="EProcurementDbModel.FK_Requisition_Company" FromRole="Company" ToRole="Requisition" />
-  </EntityType>
-  <EntityType Name="Department">
-    <Key>
-      <PropertyRef Name="DepartmentID" />
-    </Key>
-    <Property Name="DepartmentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-    <Property Name="Head" Type="Int32" />
-    <NavigationProperty Name="Requisitions" Relationship="EProcurementDbModel.FK_Requisition_Department" FromRole="Department" ToRole="Requisition" />
-    <NavigationProperty Name="Usrs" Relationship="EProcurementDbModel.FK_Usr_Department" FromRole="Department" ToRole="Usr" />
-  </EntityType>
   <Association Name="FK_Requisition_Company">
     <End Type="EProcurementDbModel.Company" Role="Company" Multiplicity="0..1" />
     <End Type="EProcurementDbModel.Requisition" Role="Requisition" Multiplicity="*" />
@@ -552,6 +582,18 @@
       </Principal>
       <Dependent Role="Requisition">
         <PropertyRef Name="CompanyID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Requisition_Currency">
+    <End Type="EProcurementDbModel.Currency" Role="Currency" Multiplicity="0..1" />
+    <End Type="EProcurementDbModel.Requisition" Role="Requisition" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Currency">
+        <PropertyRef Name="CurrencyID" />
+      </Principal>
+      <Dependent Role="Requisition">
+        <PropertyRef Name="CurrencyID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -567,45 +609,78 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityType Name="NotificationGroup">
-    <Key>
-      <PropertyRef Name="NotificationGroupID" />
-    </Key>
-    <Property Name="NotificationGroupID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="NotificationGroupName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="NotificationMailString" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <Property Name="NotificationDescription" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="PFNotificationLists" Relationship="EProcurementDbModel.FK_PFNotificationList_NotificationGroup" FromRole="NotificationGroup" ToRole="PFNotificationList" />
-  </EntityType>
-  <EntityType Name="PFNotificationList">
-    <Key>
-      <PropertyRef Name="PFNotificationListID" />
-    </Key>
-    <Property Name="PFNotificationListID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="PFID" Type="Int32" Nullable="false" />
-    <Property Name="NotificationGroupID" Type="Int32" />
-    <NavigationProperty Name="NotificationGroup" Relationship="EProcurementDbModel.FK_PFNotificationList_NotificationGroup" FromRole="PFNotificationList" ToRole="NotificationGroup" />
-    <NavigationProperty Name="ProcessFlow" Relationship="EProcurementDbModel.FK_PFNotificationList_ProcessFlow" FromRole="PFNotificationList" ToRole="ProcessFlow" />
-  </EntityType>
-  <EntityType Name="ProcessFlow">
-    <Key>
-      <PropertyRef Name="ProcessFlowID" />
-    </Key>
-    <Property Name="ProcessFlowID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="ProcurementTypeId" Type="Int32" />
-    <Property Name="Limit" Type="Decimal" Precision="18" Scale="2" />
-    <Property Name="ProcessFlowOrder" Type="Int32" />
-    <NavigationProperty Name="PFNotificationLists" Relationship="EProcurementDbModel.FK_PFNotificationList_ProcessFlow" FromRole="ProcessFlow" ToRole="PFNotificationList" />
-    <NavigationProperty Name="ProcurementType" Relationship="EProcurementDbModel.FK_ProcessFlow_ProcurementType" FromRole="ProcessFlow" ToRole="ProcurementType" />
-  </EntityType>
-  <EntityType Name="ProcurementType">
-    <Key>
-      <PropertyRef Name="ProcurementTypeID" />
-    </Key>
-    <Property Name="ProcurementTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="ProcurementDescription" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="ProcessFlows" Relationship="EProcurementDbModel.FK_ProcessFlow_ProcurementType" FromRole="ProcurementType" ToRole="ProcessFlow" />
-  </EntityType>
+  <Association Name="FK_Usr_Department">
+    <End Type="EProcurementDbModel.Department" Role="Department" Multiplicity="0..1" />
+    <End Type="EProcurementDbModel.Usr" Role="Usr" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Department">
+        <PropertyRef Name="DepartmentID" />
+      </Principal>
+      <Dependent Role="Usr">
+        <PropertyRef Name="deptId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Requisition_FinancialYear">
+    <End Type="EProcurementDbModel.FinancialYear" Role="FinancialYear" Multiplicity="0..1" />
+    <End Type="EProcurementDbModel.Requisition" Role="Requisition" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FinancialYear">
+        <PropertyRef Name="FinancialYrID" />
+      </Principal>
+      <Dependent Role="Requisition">
+        <PropertyRef Name="FinancialYrID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Item_ItemCategory">
+    <End Type="EProcurementDbModel.ItemCategory" Role="ItemCategory" Multiplicity="0..1" />
+    <End Type="EProcurementDbModel.Item" Role="Item" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ItemCategory">
+        <PropertyRef Name="CategoryID" />
+      </Principal>
+      <Dependent Role="Item">
+        <PropertyRef Name="ItemCategoryID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Item_SIUnit">
+    <End Type="EProcurementDbModel.SIUnit" Role="SIUnit" Multiplicity="0..1" />
+    <End Type="EProcurementDbModel.Item" Role="Item" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SIUnit">
+        <PropertyRef Name="SIUnitID" />
+      </Principal>
+      <Dependent Role="Item">
+        <PropertyRef Name="SIUnitID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RequisitionItem_LPO">
+    <End Type="EProcurementDbModel.LPO" Role="LPO" Multiplicity="0..1" />
+    <End Type="EProcurementDbModel.RequisitionItem" Role="RequisitionItem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LPO">
+        <PropertyRef Name="LPOID" />
+      </Principal>
+      <Dependent Role="RequisitionItem">
+        <PropertyRef Name="LPOID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserModule_Module">
+    <End Type="EProcurementDbModel.Module" Role="Module" Multiplicity="0..1" />
+    <End Type="EProcurementDbModel.UserModule" Role="UserModule" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Module">
+        <PropertyRef Name="ModuleID" />
+      </Principal>
+      <Dependent Role="UserModule">
+        <PropertyRef Name="ModuleID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_PFNotificationList_NotificationGroup">
     <End Type="EProcurementDbModel.NotificationGroup" Role="NotificationGroup" Multiplicity="0..1" />
     <End Type="EProcurementDbModel.PFNotificationList" Role="PFNotificationList" Multiplicity="*" />
@@ -630,6 +705,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_Requisition_PriorityType">
+    <End Type="EProcurementDbModel.PriorityType" Role="PriorityType" Multiplicity="0..1" />
+    <End Type="EProcurementDbModel.Requisition" Role="Requisition" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PriorityType">
+        <PropertyRef Name="PriorityID" />
+      </Principal>
+      <Dependent Role="Requisition">
+        <PropertyRef Name="PriorityID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_ProcessFlow_ProcurementType">
     <End Type="EProcurementDbModel.ProcurementType" Role="ProcurementType" Multiplicity="0..1" />
     <End Type="EProcurementDbModel.ProcessFlow" Role="ProcessFlow" Multiplicity="*" />
@@ -642,139 +729,40 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityType Name="ProcessFlowList">
-    <Key>
-      <PropertyRef Name="ProcessFlowListID" />
-    </Key>
-    <Property Name="ProcessFlowListID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="ProcessFlowID" Type="Int32" />
-    <Property Name="Flow" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-  </EntityType>
-  <EntityType Name="Capex">
-    <Key>
-      <PropertyRef Name="CapexID" />
-    </Key>
-    <Property Name="CapexID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="CapexTypeID" Type="Int32" />
-    <Property Name="EstimatedDeadline" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="QuantityRequested" Type="Int32" />
-    <Property Name="QuantitySupplied" Type="Int32" />
-    <Property Name="QuantityOutstanding" Type="Int32" />
-    <Property Name="Justification" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <Property Name="FinancialYrId" Type="Int32" />
-    <Property Name="DId" Type="Int32" />
-    <Property Name="CapexItemID" Type="Int32" />
-  </EntityType>
-  <EntityType Name="sysdiagram">
-    <Key>
-      <PropertyRef Name="diagram_id" />
-    </Key>
-    <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-    <Property Name="principal_id" Type="Int32" Nullable="false" />
-    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="version" Type="Int32" />
-    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
-  </EntityType>
-  <Association Name="FK_RequisitionItem_LPO">
-    <End Type="EProcurementDbModel.LPO" Role="LPO" Multiplicity="0..1" />
-    <End Type="EProcurementDbModel.RequisitionItem" Role="RequisitionItem" Multiplicity="*" />
+  <Association Name="FK_Requisition_RequisitionStatus">
+    <End Type="EProcurementDbModel.RequisitionStatu" Role="RequisitionStatu" Multiplicity="0..1" />
+    <End Type="EProcurementDbModel.Requisition" Role="Requisition" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="LPO">
-        <PropertyRef Name="LPOID" />
+      <Principal Role="RequisitionStatu">
+        <PropertyRef Name="RequisitionStatusID" />
       </Principal>
-      <Dependent Role="RequisitionItem">
-        <PropertyRef Name="LPOID" />
+      <Dependent Role="Requisition">
+        <PropertyRef Name="RequisitionStatusID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityType Name="Profile">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="profileName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="profileContent" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-    <Property Name="inUse" Type="Int32" />
-  </EntityType>
-  <EntityType Name="Usr">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="usrname" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
-    <Property Name="usrpassword" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
-    <Property Name="deptId" Type="Int32" />
-    <Property Name="isActive" Type="Int32" />
-    <Property Name="isLogged" Type="Int32" />
-    <Property Name="isAD" Type="Int32" />
-    <Property Name="isAdmin" Type="Int32" />
-    <Property Name="uProfile" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="Department" Relationship="EProcurementDbModel.FK_Usr_Department" FromRole="Usr" ToRole="Department" />
-    <Property Name="tag" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="surname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="firstname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="othernames" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-  </EntityType>
-  <Association Name="FK_Usr_Department">
-    <End Type="EProcurementDbModel.Department" Role="Department" Multiplicity="0..1" />
-    <End Type="EProcurementDbModel.Usr" Role="Usr" Multiplicity="*" />
+  <Association Name="FK_Requisition_RequisitionType">
+    <End Type="EProcurementDbModel.RequisitionType" Role="RequisitionType" Multiplicity="0..1" />
+    <End Type="EProcurementDbModel.Requisition" Role="Requisition" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="Department">
-        <PropertyRef Name="DepartmentID" />
+      <Principal Role="RequisitionType">
+        <PropertyRef Name="RequisitionTypeID" />
       </Principal>
-      <Dependent Role="Usr">
-        <PropertyRef Name="deptId" />
+      <Dependent Role="Requisition">
+        <PropertyRef Name="RequisitionTypeID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityType Name="LPOApproval">
-    <Key>
-      <PropertyRef Name="ApprovalID" />
-    </Key>
-    <Property Name="ApprovalID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="LPO_ID" Type="Int32" />
-    <Property Name="PersonTag" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="ApprovalDate" Type="DateTime" Precision="0" />
-    <Property Name="ApprovalStatus" Type="Int32" />
-    <Property Name="ApprovalComments" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <Property Name="PersonName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-  </EntityType>
-  <EntityType Name="Cfg">
-    <Key>
-      <PropertyRef Name="cfid" />
-    </Key>
-    <Property Name="cfid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="C_capex_flag" Type="Int32" />
-  </EntityType>
-  <EntityType Name="RequisitionFile">
-    <Key>
-      <PropertyRef Name="RequisitionFileID" />
-    </Key>
-    <Property Name="RequisitionFileID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="RequisitionID" Type="Int32" />
-    <Property Name="RequisitionFileDescription" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-    <Property Name="RequisitionFileName" Type="Binary" MaxLength="Max" FixedLength="false" />
-  </EntityType>
-  <EntityType Name="AlternativeCapex">
-    <Key>
-      <PropertyRef Name="AltCapexID" />
-    </Key>
-    <Property Name="AltCapexID" Type="Int32" Nullable="false" />
-    <Property Name="DId" Type="Int32" />
-    <Property Name="AltCapexItemID" Type="Int32" />
-    <Property Name="Qty" Type="Int32" />
-    <Property Name="FinYrID" Type="Int32" />
-    <Property Name="dte" Type="DateTime" Precision="0" />
-  </EntityType>
-  <EntityType Name="AlternativeCapex1">
-    <Key>
-      <PropertyRef Name="AltCapexID" />
-    </Key>
-    <Property Name="AltCapexID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="DId" Type="Int32" />
-    <Property Name="AltCapexItemID" Type="Int32" />
-    <Property Name="Qty" Type="Int32" />
-    <Property Name="FinYrID" Type="Int32" />
-    <Property Name="dte" Type="DateTime" Precision="0" />
-  </EntityType>
+  <Association Name="FK_Vendor_VendorType">
+    <End Type="EProcurementDbModel.VendorType" Role="VendorType" Multiplicity="0..1" />
+    <End Type="EProcurementDbModel.Vendor" Role="Vendor" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="VendorType">
+        <PropertyRef Name="VendorTypeID" />
+      </Principal>
+      <Dependent Role="Vendor">
+        <PropertyRef Name="VendorTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

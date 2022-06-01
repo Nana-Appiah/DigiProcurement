@@ -131,9 +131,6 @@
     <Compile Include="AlternativeCapex.cs">
       <DependentUpon>EProcurementModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="AlternativeCapex1.cs">
-      <DependentUpon>EProcurementModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -307,6 +304,7 @@
       <DependentUpon>EProcurementModel.edmx</DependentUpon>
       <LastGenOutput>EProcurementModel.Context.cs</LastGenOutput>
     </Content>
+    <Content Include="EProcurementModel.edmx.sql" />
     <Content Include="EProcurementModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>EProcurementModel.edmx</DependentUpon>

@@ -13,12 +13,9 @@ namespace DigiProc.Helpers
     {
         int CreateUserAccount(Usr item);
         bool AmendUserProfile(Usr item);
-
         bool CreateUserProfile(Profile item);
-
         int CreateUserModule(UserModule item);
-
-        
+       
     }
     public class ConfigurationHelper
         :IConfigurationHelper
@@ -287,7 +284,7 @@ namespace DigiProc.Helpers
             {
                 //var obj = config.Usrs.Where(u => u.usrname == _user).Where(p => p.usrpassword == _pwd).FirstOrDefault();
                 var obj = config.Usrs.Where(u => u.usrname == _user).FirstOrDefault();
-
+                
                 if (obj != null)
                 {
 

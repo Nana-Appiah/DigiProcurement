@@ -12,14 +12,12 @@ namespace DigiProc
     using System;
     using System.Collections.Generic;
     
-    public partial class LPOApproval
+    public partial class Logger1
     {
-        public int ApprovalID { get; set; }
-        public Nullable<int> LPO_ID { get; set; }
-        public string PersonTag { get; set; }
-        public string PersonName { get; set; }
-        public Nullable<System.DateTime> ApprovalDate { get; set; }
-        public Nullable<int> ApprovalStatus { get; set; }
-        public string ApprovalComments { get; set; }
+        public int LogID { get; set; }
+        public string LogEntity { get; set; }
+        public string LogEvent { get; set; }
+        public string LogDescription { get; set; }
+        public string LogActor { get; set; }
     }
 }
