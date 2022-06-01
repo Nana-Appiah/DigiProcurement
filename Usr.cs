@@ -15,6 +15,9 @@ namespace DigiProc
     public partial class Usr
     {
         public int Id { get; set; }
+        public string surname { get; set; }
+        public string firstname { get; set; }
+        public string othernames { get; set; }
         public string usrname { get; set; }
         public string usrpassword { get; set; }
         public Nullable<int> deptId { get; set; }
@@ -24,9 +27,6 @@ namespace DigiProc
         public Nullable<int> isAdmin { get; set; }
         public string uProfile { get; set; }
         public string tag { get; set; }
-        public string surname { get; set; }
-        public string firstname { get; set; }
-        public string othernames { get; set; }
     
         public virtual Department Department { get; set; }
     }

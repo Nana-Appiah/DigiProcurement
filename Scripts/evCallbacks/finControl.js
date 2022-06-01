@@ -45,6 +45,8 @@
                                                                 listeners: {
                                                                     'select': function () {
                                                                         lib.returnRequisitionNumbersGrid('/Requisition/GetRequisitionNos', 1, Ext.getCmp('fnDept').getValue(), Ext.getCmp('fnReqGrid'));
+                                                                        lib.getCapexItemGrid('/Capex/GetCapexData', Ext.getCmp('fnDept').getValue(), Ext.getCmp('DeptCapexGrid'));
+                                                                        lib.getAlternateCapexItemGrid('/Capex/GetAlternateCapexData', Ext.getCmp('fnDept').getValue(), Ext.getCmp('AltCapexGrid'));
                                                                     }
                                                                 }
                                                             }
@@ -228,16 +230,73 @@
                                                                 defaults: { xtype: 'form', frame: true, border: true  },layout:'form',
                                                                 items: [
                                                                     {
-                                                                        id: '', title: 'Search',
-                                                                        defaults: { xtype: 'combo', forceSelection: true, typeAhead: true, allowBlank: false, mode:'local' }, layout: 'fit',
+                                                                        id: '', title: 'Department CAPEX',
                                                                         items: [
-                                                                            { id: '', valueField: 'Id', displayField: 'ProductName', store: lib.returnItemStore('/Utility/GetItemList') }
+                                                                            new Ext.grid.GridPanel({
+                                                                                id: 'DeptCapexGrid', height: 200, autoScroll: true, autoExpandColumn: 'itemName',
+                                                                                //plugins: editor,
+                                                                                store: new Ext.data.GroupingStore({
+                                                                                    reader: new Ext.data.ArrayReader({}, [
+                                                                                        { name: 'Id', type: 'int' },
+                                                                                        { name: 'itemName', type: 'string' },
+                                                                                        { name: 'capexCategory', type: 'string' },
+                                                                                        { name: 'QtyRequested', type: 'string' },
+                                                                                        { name: 'QtySupplied', type: 'int' },
+                                                                                        { name: 'QtyOutstanding', type: 'string' },
+                                                                                        { name: 'justification', type: 'string' },
+                                                                                        { name: 'financialYear', type: 'string' },
+                                                                                        { name: 'nameOfDepartment', type: 'string' }
+                                                                                    ]),
+                                                                                    sortInfo: {
+                                                                                        field: 'Id',
+                                                                                        direction: 'ASC'
+                                                                                    },
+                                                                                    groupField: 'itemName'
+                                                                                }),
+                                                                                columns: [
+                                                                                    { id: 'Id', header: 'ID', width: 25, hidden: true, sortable: true, dataIndex: 'Id' },
+                                                                                    { id: 'itemName', header: 'Product', width: 200, hidden: false, sortable: true, dataIndex: 'itemName' },
+                                                                                    { id: 'capexCategory', header: 'Category', width: 100, hidden: true, sortable: true, dataIndex: 'capexCategory' },
+                                                                                    { id: 'QtyRequested', header: 'Qty Requested', width: 100, hidden: true, sortable: true, dataIndex: 'QtyRequested' },
+                                                                                    { id: 'QtySupplied', header: 'Qty Supplied', width: 80, hidden: false, sortable: true, dataIndex: 'QtySupplied'},
+                                                                                    { id: 'QtyOutstanding', header: 'Qty Outstanding', width: 150, hidden: false, sortable: false, dataIndex: 'QtyOutstanding'},
+                                                                                    { id: 'justification', header: 'Justification', width: 120, hidden: true, sortable: false, dataIndex: 'justification'},
+                                                                                    { id: 'financialYear', header: 'Deadline', width: 120, hidden: true, sortable: false, dataIndex: 'financialYear'},
+                                                                                    { id: 'nameOfDepartment', header: 'Department', width: 200, hidden: true, sortable: false, dataIndex: 'nameOfDepartment'}
+                                                                                ],
+                                                                                stripeRows: true
+                                                                            })
                                                                         ]
                                                                     },
                                                                     {
-                                                                        id: '', title: 'Search Results',
+                                                                        id: '', title: 'Items Procured not in CAPEX',
                                                                         items: [
-                                                                            //grid comes here
+                                                                            new Ext.grid.GridPanel({
+                                                                                id: 'AltCapexGrid', height: 200, autoScroll: true, autoExpandColumn: 'itemName',
+                                                                                //plugins: editor,
+                                                                                store: new Ext.data.GroupingStore({
+                                                                                    reader: new Ext.data.ArrayReader({}, [
+                                                                                        { name: 'Id', type: 'int' },
+                                                                                        { name: 'itemName', type: 'string' },
+                                                                                        { name: 'Quantity', type: 'int' },
+                                                                                        { name: 'nameOfDepartment', type: 'string' },
+                                                                                        { name: 'financialYear', type: 'string' }
+                                                                                    ]),
+                                                                                    sortInfo: {
+                                                                                        field: 'Id',
+                                                                                        direction: 'ASC'
+                                                                                    },
+                                                                                    groupField: 'itemName'
+                                                                                }),
+                                                                                columns: [
+                                                                                    { id: 'Id', header: 'ID', width: 25, hidden: true, sortable: true, dataIndex: 'Id' },
+                                                                                    { id: 'itemName', header: 'Product', width: 200, hidden: false, sortable: true, dataIndex: 'itemName' },
+                                                                                    { id: 'Quantity', header: 'Quantity', width: 120, hidden: false, sortable: false, dataIndex: 'Quantity' },
+                                                                                    { id: 'nameOfDepartment', header: 'Department', width: 200, hidden: true, sortable: false, dataIndex: 'nameOfDepartment' },
+                                                                                    { id: 'financialYear', header: 'Deadline', width: 120, hidden: true, sortable: false, dataIndex: 'financialYear' }
+                                                                                ],
+                                                                                stripeRows: true
+                                                                            })
                                                                         ]
                                                                     }
                                                                 ]

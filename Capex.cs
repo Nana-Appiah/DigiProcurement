@@ -15,6 +15,7 @@ namespace DigiProc
     public partial class Capex
     {
         public int CapexID { get; set; }
+        public Nullable<int> CapexItemID { get; set; }
         public Nullable<int> CapexTypeID { get; set; }
         public string EstimatedDeadline { get; set; }
         public Nullable<int> QuantityRequested { get; set; }
@@ -23,6 +24,5 @@ namespace DigiProc
         public string Justification { get; set; }
         public Nullable<int> FinancialYrId { get; set; }
         public Nullable<int> DId { get; set; }
-        public Nullable<int> CapexItemID { get; set; }
     }
 }

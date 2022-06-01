@@ -192,6 +192,107 @@ namespace DigiProc.Helpers
             }
         }
 
+        public bool ReceiveProcurementItems(string strRequisitionNo)
+        {
+            //method is responsible for receiving items and changing the status in the data store
+            int newstatusid = 0;
+            string dept = string.Empty;
+
+            using (var context = new ProcurementDbEntities())
+            {
+                using (var trans = context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        var objLPO = context.LPOes.Where(x => x.RequisitionNo == strRequisitionNo).FirstOrDefault();
+                        var objReq = context.Requisitions.Where(x => x.RequisitionNo == strRequisitionNo).FirstOrDefault();
+                        var data = context.RequisitionItems.Where(x => x.RequisitionID == objReq.RequisitionID).Where(x => x.FinApprovalStatus == (int)objLPO.LPOStatusID).ToList();
+
+                        newstatusid = (int)objLPO.LPOStatusID + 1;
+                        dept = objReq.RequisitionNo.Split('-')[1];
+                        var objDept = context.Departments.Where(d => d.Name == dept).FirstOrDefault();
+                        var activeY = new Utility() { }.getActiveFinancialYear();
+
+                        //LPO 
+                        objLPO.LPOStatusID = newstatusid;
+                        context.SaveChanges();
+
+                        objReq.RequisitionStatusID = newstatusid;
+                        context.SaveChanges();
+
+                        if (data.Count() > 0)
+                        {
+                            foreach(var d in data)
+                            {
+                                d.FinApprovalStatus = newstatusid;
+                                context.SaveChanges();
+
+                                //reconcile items to the capex here
+                                this.ReconcileCAPEX(d, objDept.DepartmentID, activeY.FinancialYrID);
+                            }
+                        }
+
+                        trans.Commit();
+                        
+                        return true;
+                    }
+                    catch(Exception x)
+                    {
+                        Debug.Print(x.Message);
+                        trans.Rollback();
+                        return false;
+                    }
+                }
+            }
+        }
+
+        public bool ReconcileCAPEX(RequisitionItem rq, int departmentId, int finYrId)
+        {
+            //method is responsible for the reconciliation of received items by the branches
+            bool bln = false;
+            using (var cfg = new ProcurementDbEntities())
+            {
+                try
+                {
+                    var o = new Utility() { }.getActiveFinancialYear();
+                    var cpx = cfg.Capexes.Where(c => c.DId == departmentId).Where(c => c.FinancialYrId == finYrId)
+                                                    .Where(c => c.CapexItemID == rq.ItemID).FirstOrDefault();
+
+                    if (cpx != null)
+                    {
+                        cpx.QuantitySupplied = (int)(cpx.QuantitySupplied + rq.Quantity);
+                        cpx.QuantityOutstanding = (int)(cpx.QuantityOutstanding - rq.Quantity);
+
+                        cfg.SaveChanges();
+                        bln = true;
+                    }
+                    else
+                    {
+                        //item supplied, but not in capex.
+                        var acx = new AlternativeCapex()
+                        {
+                            DId = departmentId,
+                            AltCapexItemID = rq.ItemID,
+                            Qty = rq.Quantity,
+                            FinYrID = finYrId,
+                            dte = DateTime.Now
+                        };
+
+                        cfg.AlternativeCapexes.Add(acx);
+                        cfg.SaveChanges();
+                        bln = true;
+                    }
+                    
+                    return bln;
+                }
+                catch(Exception ex)
+                {
+                    Debug.Print(ex.Message);
+                    return false;
+                }
+            }
+        }
+
         public Requisition GetRequisition(string rqNo)
         {
             //method gets a requisition object
@@ -396,6 +497,9 @@ namespace DigiProc.Helpers
 
         public bool SaveLocalPurchaseOrder(LPO item)
         {
+            //get requisition number from LPO number
+            //set requisitionstatusid = 4
+            //set finapprovalstatus in requisitionitems = 4 for requisitionid
             try
             {
                 if (item.LPOID == 0)
@@ -406,19 +510,56 @@ namespace DigiProc.Helpers
                 }
                 else
                 {
-                    var obj = config.LPOes.Where(x => x.LPOID == item.LPOID).FirstOrDefault();
-                    obj.VAT = item.VAT;
-                    obj.PurchaseOrderDate = item.PurchaseOrderDate;
-                    obj.ExpectedDeliveryDate = item.ExpectedDeliveryDate;
-                    obj.ShippingAddress = item.ShippingAddress;
-                    obj.PaymentTerm = item.PaymentTerm;
-                    obj.OtherTermsAndConditions = item.OtherTermsAndConditions;
-                    obj.LPOStatusID = item.LPOStatusID;
-                    obj.NetAmt = (obj.TotAmt - (obj.VAT / 100));
-                    obj.ProcurementTypeId = item.ProcurementTypeId;
+                    //use transaction object
+                    using (var trans = config.Database.BeginTransaction())
+                    {
+                        try
+                        {
+                            var obj = config.LPOes.Where(x => x.LPOID == item.LPOID).FirstOrDefault();
+                            
+                            obj.VAT = item.VAT;
+                            obj.PurchaseOrderDate = item.PurchaseOrderDate;
+                            obj.ExpectedDeliveryDate = item.ExpectedDeliveryDate;
+                            obj.ShippingAddress = item.ShippingAddress;
+                            obj.PaymentTerm = item.PaymentTerm;
+                            obj.OtherTermsAndConditions = item.OtherTermsAndConditions;
+                            obj.LPOStatusID = item.LPOStatusID;
+                            obj.NetAmt = (obj.TotAmt - (obj.VAT / 100));
+                            obj.ProcurementTypeId = item.ProcurementTypeId;
 
-                    config.SaveChanges();
-                    return true;
+                            config.SaveChanges();
+
+                            //requisition
+                            var arr = obj.LPONo.Replace(@"LPO", @"REQN").Split('-');
+                            var REQNstring = string.Format(@"{0}-{1}-{2}-{3}", arr[0], arr[1], arr[2], arr[3]);
+                            var rqObj = config.Requisitions.Where(r => r.RequisitionNo == REQNstring).FirstOrDefault();
+                            
+                            rqObj.RequisitionStatusID = item.LPOStatusID;
+                            config.SaveChanges();
+
+                            //requisition items
+                            int priorstatusID = ((int)item.LPOStatusID - 1);
+                            var rqItems = config.RequisitionItems.Where(ritem => ritem.RequisitionID == rqObj.RequisitionID).Where(ritem=>ritem.FinApprovalStatus == priorstatusID).ToList();
+                            if (rqItems.Count() > 0)
+                            {
+                                foreach(var rq in rqItems)
+                                {
+                                    rq.FinApprovalStatus = item.LPOStatusID;
+                                    config.SaveChanges();
+                                }
+                            }
+
+                            trans.Commit();
+                            return true;
+                        }
+                        catch(Exception x)
+                        {
+                            Debug.Print(x.Message);
+                            trans.Rollback();
+                            return false;
+                        }
+                    }
+                    
                 }
             }
             catch(Exception ex)
@@ -648,6 +789,43 @@ namespace DigiProc.Helpers
             }
         }
 
+        public List<AlternateCapexLookup> GetDepartmentAlternateCapexRecords(int dId)
+        {
+            //gets the alternate CAPEX records for the selected department
+            List<AlternateCapexLookup> records = new List<AlternateCapexLookup>();
+
+            using (var cfg = new ProcurementDbEntities())
+            {
+                try
+                {
+                    var data = cfg.AlternativeCapexes.Where(x => x.DId == dId).ToList();
+                    if (data.Count() > 0)
+                    {
+                        foreach (var d in data)
+                        {
+                            var o = new AlternateCapexLookup()
+                            {
+                                Id = d.AltCapexID,
+                                nameOfDepartment = new Utility() { }.getDepartment(d.DId).Name,
+                                itemName = new Utility() { }.GetItem((int)d.AltCapexItemID).ProductName,
+                                Quantity = (int)d.Qty,
+                                financialYear = new Utility() { }.getActiveFinancialYear().FinancialYr 
+                            };
+
+                            records.Add(o);
+                        }
+                    }
+
+                    return records;
+                }
+                catch(Exception ex)
+                {
+                    Debug.Print(ex.Message);
+                    return records;
+                }
+            }
+        }
+
         public List<CapexLookup> GetDepartmentCapexRecords(int dId)
         {
             //gets capex records for selected department
@@ -810,12 +988,129 @@ namespace DigiProc.Helpers
             }
         }
 
+        public bool FlagFinalApproval(LPOApproval item)
+        {
+            //changes the status for LPO final approval
+            bool bln = false;
+            int newstatusid = 0;
+
+            using (var context = new ProcurementDbEntities())
+            {
+                using (var trans = context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        var objLPO = context.LPOes.Where(x => x.LPOID == item.LPO_ID).FirstOrDefault();
+                        var objReq = context.Requisitions.Where(r => r.RequisitionNo == objLPO.RequisitionNo).FirstOrDefault();
+                        var objReqItem = context.RequisitionItems.Where(ri => ri.RequisitionID == objReq.RequisitionID).Where(x=>x.FinApprovalStatus == objLPO.LPOStatusID).ToList();
+
+                        newstatusid = (int)objLPO.LPOStatusID + 1;
+                        objLPO.LPOStatusID = newstatusid;
+                        context.SaveChanges();
+
+                        //requisition
+                        objReq.RequisitionStatusID = newstatusid;
+                        context.SaveChanges();
+
+                        //requisition items
+                        if (objReqItem.Count() > 0)
+                        {
+                            foreach(var o in objReqItem)
+                            {
+                                o.FinApprovalStatus = newstatusid;
+                                context.SaveChanges();
+                            }
+                        }
+
+                        trans.Commit();
+
+                        return true;
+                    }
+                    catch(Exception ex)
+                    {
+                        Debug.Print(ex.Message);
+                        trans.Rollback();
+                        return false;
+                    }
+                }
+            }
+        }
+        public bool DetermineLPOFinalApproval(LPOApproval item)
+        {
+            //method determines if status of record should be changed to final approval (5)
+            int procurement_type_Id = 0;
+            int process_flow_Id = 0;
+            string pflowstring = string.Empty;
+            var dict = new Dictionary<int, string>();
+            int approver_count = 0;
+            int total_approvers = 0;
+            bool bln = false;
+
+            try
+            {
+                using (var context = new ProcurementDbEntities())
+                {
+                    var data = context.LPOApprovals.Where(x => x.LPO_ID == item.LPO_ID).ToList();
+                    if (data.Count() > 0)
+                    {
+                        dict.Clear();
+                        foreach(var d in data)
+                        {
+                            dict.Add(d.ApprovalID, d.PersonTag);
+                        }
+
+                        procurement_type_Id = (int)context.LPOes.Where(x => x.LPOID == item.LPO_ID).FirstOrDefault().ProcurementTypeId;
+
+                        if (procurement_type_Id > 0)
+                        {
+                            process_flow_Id = context.ProcessFlows.Where(x => x.ProcurementTypeId == procurement_type_Id).FirstOrDefault().ProcessFlowID;
+                            if (process_flow_Id > 0)
+                            {
+                                pflowstring = context.ProcessFlowLists.Where(x => x.ProcessFlowID == process_flow_Id).FirstOrDefault().Flow;
+                                if (pflowstring.Length > 0)
+                                {
+                                    string[] arr = pflowstring.Split('|');
+                                    total_approvers = arr.Length;
+
+                                    //iteration
+                                    foreach(var a in arr)
+                                    {
+                                        if (dict.ContainsValue(a))
+                                        {
+                                            approver_count += 1;
+                                        }
+                                    }
+
+                                    if (total_approvers == approver_count)
+                                    {
+                                        bln = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                return bln;
+            }
+            catch(Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return false;
+            }
+        }
         public bool SaveLPOApproval(LPOApproval item)
         {
             try
             {
-                config.LPOApprovals.Add(item);
-                config.SaveChanges();
+                var obj = config.LPOApprovals.Where(x => x.LPO_ID == item.LPO_ID).Where(x => x.PersonTag == item.PersonTag).FirstOrDefault();
+                if (obj == null)
+                {
+                    config.LPOApprovals.Add(item);
+                    config.SaveChanges();
+
+                    return true;
+                }
 
                 return true;
             }
@@ -933,6 +1228,15 @@ namespace DigiProc.Helpers
         public string financialYear { get; set; }
 
         public string nameOfDepartment { get; set; }
+    }
+
+    public struct AlternateCapexLookup
+    {
+        public int Id { get; set; }
+        public string itemName { get; set; }
+        public string nameOfDepartment { get; set; }
+        public int Quantity { get; set; }
+        public string financialYear { get; set; }
     }
 
     public struct LocalPurchaseOrderLookup

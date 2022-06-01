@@ -15,7 +15,9 @@ namespace DigiProc
     public partial class Vendor
     {
         public int VendorID { get; set; }
+        public string VendorNo { get; set; }
         public string VendorName { get; set; }
+        public string VendorLocation { get; set; }
         public string ContactPerson { get; set; }
         public Nullable<int> VendorTypeID { get; set; }
         public string CompanyRegistrationNo { get; set; }
@@ -23,21 +25,19 @@ namespace DigiProc
         public string TIN { get; set; }
         public string NameOfOwner { get; set; }
         public string CompanyContact { get; set; }
+        public string CompanyHomeContact { get; set; }
         public string CompanyWebsite { get; set; }
+        public string CompanyFb { get; set; }
+        public string CompanyLinkedIn { get; set; }
         public string CompanyEmailAddress { get; set; }
+        public string CompanyGHPostAddress { get; set; }
+        public Nullable<int> CompanyBusinessTypeID { get; set; }
         public string CreatedBy { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public string LastUpdatedBy { get; set; }
         public Nullable<System.DateTime> LastUpdatedDate { get; set; }
-        public string VendorNo { get; set; }
-        public string VendorLocation { get; set; }
-        public string CompanyFb { get; set; }
-        public string CompanyLinkedIn { get; set; }
-        public string CompanyGHPostAddress { get; set; }
-        public string CompanyHomeContact { get; set; }
-        public Nullable<int> CompanyBusinessTypeID { get; set; }
     
-        public virtual VendorType VendorType { get; set; }
         public virtual BusinessType BusinessType { get; set; }
+        public virtual VendorType VendorType { get; set; }
     }
 }

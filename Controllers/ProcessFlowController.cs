@@ -198,6 +198,14 @@ namespace DigiProc.Controllers
                 bool bln = Cfg.SaveLPOApproval(obj);
                 if (bln)
                 {
+                    //check to see if final approval has been given
+                    if (Cfg.DetermineLPOFinalApproval(obj)) {
+                        Cfg.FlagFinalApproval(obj);
+
+                        //mail notification comes here
+
+                    }
+
                     return Json(new { status = bln, data = $"{obj.PersonTag} has voted to {_status} procurement." }, JsonRequestBehavior.AllowGet);
                 }
                 else { return Json(new { status = false, data = @"Approval could not be saved.Please contact the Administrator" },JsonRequestBehavior.AllowGet); }

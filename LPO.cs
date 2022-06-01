@@ -22,6 +22,7 @@ namespace DigiProc
     
         public int LPOID { get; set; }
         public string RequisitionNo { get; set; }
+        public Nullable<int> VendorID { get; set; }
         public Nullable<decimal> VAT { get; set; }
         public Nullable<System.DateTime> PurchaseOrderDate { get; set; }
         public Nullable<System.DateTime> ExpectedDeliveryDate { get; set; }
@@ -29,10 +30,9 @@ namespace DigiProc
         public string PaymentTerm { get; set; }
         public string OtherTermsAndConditions { get; set; }
         public Nullable<int> LPOStatusID { get; set; }
-        public Nullable<int> VendorID { get; set; }
         public Nullable<decimal> TotAmt { get; set; }
-        public string LPONo { get; set; }
         public Nullable<decimal> NetAmt { get; set; }
+        public string LPONo { get; set; }
         public Nullable<int> ProcurementTypeId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

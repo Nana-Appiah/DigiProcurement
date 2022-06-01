@@ -1,5 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="EProcurementDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="AlternativeCapex">
+    <Key>
+      <PropertyRef Name="AltCapexID" />
+    </Key>
+    <Property Name="AltCapexID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DId" Type="int" />
+    <Property Name="AltCapexItemID" Type="int" />
+    <Property Name="Qty" Type="int" />
+    <Property Name="FinYrID" Type="int" />
+    <Property Name="dte" Type="date" />
+  </EntityType>
   <EntityType Name="BusinessType">
     <Key>
       <PropertyRef Name="BusinessTypeID" />
@@ -603,6 +614,7 @@
     </ReferentialConstraint>
   </Association>
   <EntityContainer Name="EProcurementDbModelStoreContainer">
+    <EntitySet Name="AlternativeCapex" EntityType="Self.AlternativeCapex" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="BusinessType" EntityType="Self.BusinessType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Capex" EntityType="Self.Capex" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Cfg" EntityType="Self.Cfg" Schema="dbo" store:Type="Tables" />

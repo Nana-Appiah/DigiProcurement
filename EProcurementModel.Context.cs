@@ -25,40 +25,41 @@ namespace DigiProc
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<AlternativeCapex> AlternativeCapexes { get; set; }
+        public virtual DbSet<BusinessType> BusinessTypes { get; set; }
+        public virtual DbSet<Capex> Capexes { get; set; }
+        public virtual DbSet<Cfg> Cfgs { get; set; }
         public virtual DbSet<Committee> Committees { get; set; }
         public virtual DbSet<CommitteeMember> CommitteeMembers { get; set; }
+        public virtual DbSet<Company> Companies { get; set; }
         public virtual DbSet<Currency> Currencies { get; set; }
+        public virtual DbSet<Department> Departments { get; set; }
         public virtual DbSet<FinancialYear> FinancialYears { get; set; }
         public virtual DbSet<Item> Items { get; set; }
         public virtual DbSet<ItemCategory> ItemCategories { get; set; }
         public virtual DbSet<Logger> Loggers { get; set; }
         public virtual DbSet<LPO> LPOes { get; set; }
+        public virtual DbSet<LPOApproval> LPOApprovals { get; set; }
         public virtual DbSet<Module> Modules { get; set; }
+        public virtual DbSet<NotificationGroup> NotificationGroups { get; set; }
+        public virtual DbSet<NotificationList> NotificationLists { get; set; }
+        public virtual DbSet<PFNotificationList> PFNotificationLists { get; set; }
+        public virtual DbSet<Position> Positions { get; set; }
         public virtual DbSet<PriorityType> PriorityTypes { get; set; }
+        public virtual DbSet<ProcessFlow> ProcessFlows { get; set; }
+        public virtual DbSet<ProcessFlowList> ProcessFlowLists { get; set; }
+        public virtual DbSet<ProcurementType> ProcurementTypes { get; set; }
+        public virtual DbSet<Profile> Profiles { get; set; }
         public virtual DbSet<Requisition> Requisitions { get; set; }
+        public virtual DbSet<RequisitionFile> RequisitionFiles { get; set; }
         public virtual DbSet<RequisitionItem> RequisitionItems { get; set; }
         public virtual DbSet<RequisitionStatu> RequisitionStatus { get; set; }
         public virtual DbSet<RequisitionType> RequisitionTypes { get; set; }
         public virtual DbSet<SIUnit> SIUnits { get; set; }
+        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<UserModule> UserModules { get; set; }
+        public virtual DbSet<Usr> Usrs { get; set; }
         public virtual DbSet<Vendor> Vendors { get; set; }
         public virtual DbSet<VendorType> VendorTypes { get; set; }
-        public virtual DbSet<BusinessType> BusinessTypes { get; set; }
-        public virtual DbSet<NotificationList> NotificationLists { get; set; }
-        public virtual DbSet<Position> Positions { get; set; }
-        public virtual DbSet<Company> Companies { get; set; }
-        public virtual DbSet<Department> Departments { get; set; }
-        public virtual DbSet<NotificationGroup> NotificationGroups { get; set; }
-        public virtual DbSet<PFNotificationList> PFNotificationLists { get; set; }
-        public virtual DbSet<ProcessFlow> ProcessFlows { get; set; }
-        public virtual DbSet<ProcurementType> ProcurementTypes { get; set; }
-        public virtual DbSet<ProcessFlowList> ProcessFlowLists { get; set; }
-        public virtual DbSet<Capex> Capexes { get; set; }
-        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
-        public virtual DbSet<Profile> Profiles { get; set; }
-        public virtual DbSet<Usr> Usrs { get; set; }
-        public virtual DbSet<LPOApproval> LPOApprovals { get; set; }
-        public virtual DbSet<Cfg> Cfgs { get; set; }
-        public virtual DbSet<RequisitionFile> RequisitionFiles { get; set; }
     }
 }

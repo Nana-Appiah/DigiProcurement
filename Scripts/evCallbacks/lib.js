@@ -513,6 +513,21 @@ lib.returnRequistionDetails = function (_urlString, _ID, rno, req, d, p) {
     });
 }
 
+lib.returnRequisitionRecord = function (_urlString, _ID,_STAT, _widget) {
+    var dta = [];
+    $.getJSON(_urlString, { requisitionID: _ID, statusID: _STAT }, function (r) {
+        if (r.status.toString() == "true") {
+            
+            $.each(r.data.rLookups, function (i, d) {
+                dta[i] = [d.Id, d.RequisitionId, d.ProductCode, d.ProductName, d.Quantity, d.narration];
+            });
+
+            _widget.getStore().removeAll();
+            _widget.getStore().loadData(dta);
+        }
+    });
+}
+
 lib.returnRequistionDetails2 = function (_urlString, _ID, rno, req, d, p, _STAT, _widget) {
     var dta = [];
     $.getJSON(_urlString, { requisitionID: _ID, statusID: _STAT }, function (r) {
@@ -587,6 +602,20 @@ lib.getCapexItemGrid = function (_urlString,_ID, _widget) {
 
         _widget.getStore().removeAll();
         _widget.getStore().loadData(capex_data);
+    });
+}
+
+lib.getAlternateCapexItemGrid = function (_urlString, _ID, _widget) {
+    var alternate_capex_data = [];
+    $.getJSON(_urlString, { departmentID: _ID }, function (r) {
+        if (r.status.toString() == "true") {
+            $.each(r.data, function (i, d) {
+                alternate_capex_data[i] = [d.Id, d.itemName, d.Quantity, d.nameOfDepartment, d.financialYear];
+            });
+        }
+
+        _widget.getStore().removeAll();
+        _widget.getStore().loadData(alternate_capex_data);
     });
 }
 
