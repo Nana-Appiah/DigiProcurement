@@ -3,7 +3,7 @@
     var def_pic = "standard.jpg";
     var LPO_ID = 0;
     var REQUISITION_Number = '';
-    var pfx = '';
+    var pfx = '..';
 
     var approvalFrm = Ext.get('approval');
 
@@ -35,13 +35,15 @@
                                             {
                                                 columnWidth: .2, defaults: { xtype: 'form', frame: true, border: true }, layout: 'form',
                                                 items: [
-                                                    {
+                                                    /*
+													{
                                                         id: '', title: 'Search for Status',
                                                         defaults: { xtype: 'combo', forceSelection: true, typeAhead: true, allowBlank: false, mode: 'local' }, layout: 'fit',
                                                         items: [
                                                             {}
                                                         ]
                                                     },
+													*/
                                                     {
                                                         id: '', title: 'Procurements',
                                                         items: [
@@ -80,11 +82,11 @@
                                                                 stripeRows: true,
                                                                 listeners: {
                                                                     'render': function () {
-                                                                        lib.returnLocalPurchasingOrderApprovalGrid('/ProcessFlow/GetLPOsToApprove', Ext.getCmp('procGrid'));
+                                                                        lib.returnLocalPurchasingOrderApprovalGrid(pfx + '/ProcessFlow/GetLPOsToApprove', Ext.getCmp('procGrid'));
                                                                     },
                                                                     'afterrender': function () {
                                                                         setInterval(function () {
-                                                                            lib.returnLocalPurchasingOrderApprovalGrid('/ProcessFlow/GetLPOsToApprove', Ext.getCmp('procGrid'));
+                                                                            lib.returnLocalPurchasingOrderApprovalGrid(pfx + '/ProcessFlow/GetLPOsToApprove', Ext.getCmp('procGrid'));
                                                                         },30000);
                                                                     },
                                                                     'rowdblclick': function (e, t) {
@@ -102,7 +104,7 @@
                                                                         REQUISITION_Number = rec.get('requisitionNumber');
                                                                         $('#rq').val(REQUISITION_Number);
                                                                         //get approval history
-                                                                        lib.returnApprovalHistoryGrid('/ProcessFlow/GetLPOApprovalHistory', LPO_ID, Ext.getCmp('procApprovalGrid'));
+                                                                        lib.returnApprovalHistoryGrid(pfx + '/ProcessFlow/GetLPOApprovalHistory', LPO_ID, Ext.getCmp('procApprovalGrid'));
                                                                     }
                                                                 }
                                                             })
@@ -201,7 +203,7 @@
                                                                                 var commentsFrm = Ext.getCmp('frmcomments').getForm();
 
                                                                                 if (statusFrm.isValid() && (commentsFrm.isValid())) {
-                                                                                    $.post('/ProcessFlow/SaveApprovalActivity',
+                                                                                    $.post(pfx + '/ProcessFlow/SaveApprovalActivity',
                                                                                         {
                                                                                             _ID: LPO_ID, _status: Ext.fly('cboapprstatus').getValue(),
                                                                                             _comments: Ext.fly('current_comments').getValue()
@@ -253,7 +255,7 @@
                                                                         setInterval(function () {
                                                                             if (REQUISITION_Number.length > 0) {
                                                                                 //get images for last requisition clicked
-                                                                                lib.returnRequisitionDocsForREQNos('/Requisition/GetUploadsOfRequisitionNumber', REQUISITION_Number, Ext.getCmp('GrdAprUploads'));
+                                                                                lib.returnRequisitionDocsForREQNos(pfx + '/Requisition/GetUploadsOfRequisitionNumber', REQUISITION_Number, Ext.getCmp('GrdAprUploads'));
                                                                             }
                                                                         }, 2000);
                                                                     },

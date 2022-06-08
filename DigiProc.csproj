@@ -1312,6 +1312,7 @@
     <Content Include="Scripts\evCallbacks\ext.js" />
     <Content Include="Scripts\evCallbacks\master.js" />
     <Content Include="Scripts\evCallbacks\management.js" />
+    <Content Include="Scripts\evCallbacks\pwd_reset.js" />
     <Content Include="Scripts\evCallbacks\rq.js" />
     <Content Include="Scripts\evCallbacks\usr.js" />
     <Content Include="Scripts\evCallbacks\itm_receivable.js" />

@@ -5,7 +5,7 @@
     var APPROVED_REQUISITIONS = [];
 
     var CLOSED_CAPEX_STATUS_ID = 0;
-    var pfx = '';
+    var pfx = '..';
 
     var finC = Ext.get('finControl');
 
@@ -42,12 +42,12 @@
                                                         id: 'fnSearchFrm', title: 'Search', defaults: { xtype: 'combo', forceSelection: true, typeAhead: true, mode: 'local', allowBlank: false, anchor: '95%' }, layout: 'fit',
                                                         items: [
                                                             {
-                                                                id: 'fnDept', store: lib.returnDepartmentStore('/Utility/GetDepartments'), valueField: 'DepartmentID', displayField: 'Name',
+                                                                id: 'fnDept', store: lib.returnDepartmentStore(pfx + '/Utility/GetDepartments'), valueField: 'DepartmentID', displayField: 'Name',
                                                                 listeners: {
                                                                     'select': function () {
-                                                                        lib.returnRequisitionNumbersGrid('/Requisition/GetRequisitionNos', 1, Ext.getCmp('fnDept').getValue(), Ext.getCmp('fnReqGrid'));
-                                                                        lib.getCapexItemGrid('/Capex/GetCapexData', Ext.getCmp('fnDept').getValue(), Ext.getCmp('DeptCapexGrid'));
-                                                                        lib.getAlternateCapexItemGrid('/Capex/GetAlternateCapexData', Ext.getCmp('fnDept').getValue(), Ext.getCmp('AltCapexGrid'));
+                                                                        lib.returnRequisitionNumbersGrid(pfx + '/Requisition/GetRequisitionNos', 1, Ext.getCmp('fnDept').getValue(), Ext.getCmp('fnReqGrid'));
+                                                                        lib.getCapexItemGrid(pfx + '/Capex/GetCapexData', Ext.getCmp('fnDept').getValue(), Ext.getCmp('DeptCapexGrid'));
+                                                                        lib.getAlternateCapexItemGrid(pfx + '/Capex/GetAlternateCapexData', Ext.getCmp('fnDept').getValue(), Ext.getCmp('AltCapexGrid'));
                                                                     }
                                                                 }
                                                             }
@@ -78,7 +78,7 @@
                                                                     'rowdblclick': function (e, t) {
                                                                         var record = e.getStore().getAt(t);
                                                                         REQUISITION_ID = record.get('Id');
-                                                                        lib.returnRequistionDetails('/Requisition/GetRequisitionDetails', REQUISITION_ID, $('#rno'), $('#requestee'), $('#dept'), $('#priority'));
+                                                                        lib.returnRequistionDetails(pfx + '/Requisition/GetRequisitionDetails', REQUISITION_ID, $('#rno'), $('#requestee'), $('#dept'), $('#priority'));
                                                                         //lib.getItemGridGivenRequisitionID('Requisition/GetRequisitionItemList', REQUISITION_ID, 1, Ext.getCmp('fnReqItemsGrid'));
                                                                         
                                                                         //lib.returnRequistionDetails2('Requisition/GetRequisitionDetails2', REQUISITION_ID, $('#rno'), $('#requestee'), $('#dept'), $('#priority'), _STAT_ID, Ext.getCmp('fnReqItemsGrid'));
@@ -93,7 +93,7 @@
                                                                 listeners: {
                                                                     'click': function (btn) {
                                                                         var _STAT_ID = 1;
-                                                                        lib.getItemGridGivenRequisitionID('/Requisition/GetRequisitionItemList', REQUISITION_ID, _STAT_ID, Ext.getCmp('fnReqItemsGrid'));
+                                                                        lib.getItemGridGivenRequisitionID(pfx + '/Requisition/GetRequisitionItemList', REQUISITION_ID, _STAT_ID, Ext.getCmp('fnReqItemsGrid'));
                                                                     }
                                                                 }
                                                             }
@@ -192,7 +192,7 @@
 
                                                                         //console.log(APPROVED_REQUISITIONS);
                                                                         //APPROVED_REQUISITIONS = dta;
-                                                                        $.post('/Requisition/ApproveRequisition', { dta: APPROVED_REQUISITIONS })
+                                                                        $.post(pfx + '/Requisition/ApproveRequisition', { dta: APPROVED_REQUISITIONS })
                                                                             .done(function (r) {
                                                                                 if (r.status.toString() == "true") {
                                                                                     Ext.MessageBox.alert("Financial Approval", r.data, this);
@@ -324,10 +324,10 @@
                                                         defaults: { xtype: 'combo', forceSelection: true, typeAhead: true, mode: 'local', allowBlank: false }, layout: 'fit',
                                                         items: [
                                                             {
-                                                                id: 'capexdept', store: lib.returnDepartmentStore('/Utility/GetDepartments'), valueField: 'DepartmentID', displayField: 'Name',
+                                                                id: 'capexdept', store: lib.returnDepartmentStore(pfx + '/Utility/GetDepartments'), valueField: 'DepartmentID', displayField: 'Name',
                                                                 listeners: {
                                                                     'select': function () {
-                                                                        lib.getCapexItemGrid('/Capex/GetCapexData', Ext.getCmp('capexdept').getValue(), Ext.getCmp('capexGridAppr'));
+                                                                        lib.getCapexItemGrid(pfx + '/Capex/GetCapexData', Ext.getCmp('capexdept').getValue(), Ext.getCmp('capexGridAppr'));
                                                                     }
                                                                 }
                                                             }
@@ -388,7 +388,7 @@
                                                                     'click': function (btn) {
                                                                         //fetch all. dppartmentID parameter = 0
                                                                         var nDepartmentID = 0;
-                                                                        lib.getCapexItemGrid('/Capex/GetCapexData', nDepartmentID, Ext.getCmp('capexGridAppr'));
+                                                                        lib.getCapexItemGrid(pfx + '/Capex/GetCapexData', nDepartmentID, Ext.getCmp('capexGridAppr'));
                                                                     }
                                                                 }
                                                             },
@@ -431,7 +431,7 @@
                                                     'afterrender': function () {
                                                         //get status of CAPEX upon rendering
                                                        
-                                                        $.getJSON('/Capex/GetCapexStatus', {}, function (r) {
+                                                        $.getJSON(pfx + '/Capex/GetCapexStatus', {}, function (r) {
                                                             
                                                             if (r.status.toString() == "true") {
                                                                 $('#capexstatus').val(r.data.toString());
@@ -447,7 +447,7 @@
                                                         });
                                                     },
                                                     'click': function (btn) {
-                                                        $.post('/Capex/PostCapexStatus',
+                                                        $.post(pfx + '/Capex/PostCapexStatus',
                                                             { capexstatusId: CLOSED_CAPEX_STATUS_ID })
                                                             .done(function (r) {
                                                                 if (r.status.toString() == "true") {

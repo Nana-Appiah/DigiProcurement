@@ -125,6 +125,31 @@ namespace DigiProc.Helpers
             }
         }
 
+        public bool AmendUserPassword(Usr item)
+        {
+            //method is used to amend user password
+            bool bln = false;
+
+            try
+            {
+                var obj = config.Usrs.Where(x => x.usrname == item.usrname).FirstOrDefault();
+                if (obj != null)
+                {
+                    obj.usrpassword = item.usrpassword;
+                    config.SaveChanges();
+
+                    bln = true;
+                }
+
+                return bln;
+            }
+            catch(Exception x)
+            {
+                Debug.Print(x.Message);
+                return bln;
+            }
+        }
+
         #region Getters
 
         public List<ProfileManager> GetProfiles()
@@ -290,8 +315,10 @@ namespace DigiProc.Helpers
 
                     userManager.Id = obj.Id;
                     userManager.username = obj.usrname;
+                    userManager.userPassword = obj.usrpassword;
                     userManager.isActive = obj.isActive == 1 ? @"Yes" : @"No";
                     userManager.isLogged = obj.isLogged == 1 ? @"Yes" : @"No";
+                    userManager.isActiveDirectory = obj.isAD == 1 ? @"Yes" : @"No";
                     userManager.nameOfDepartment = new Utility() { }.getDepartment(obj.deptId).Name;
                     userManager.PrManager = new ProfileManager { nameOfProfile = obj.uProfile };
                     userManager.userTag = obj.tag;
@@ -353,6 +380,7 @@ namespace DigiProc.Helpers
     {
         public int Id { get; set; }
         public string username { get; set; }
+        public string userPassword { get; set; }
         public string nameOfDepartment { get; set; }
         public string isActive { get; set; }
         public string isLogged { get; set; }
@@ -362,6 +390,7 @@ namespace DigiProc.Helpers
         public string sname { get; set; }
         public string fname { get; set; }
         public string onames { get; set; }
+        public string isActiveDirectory { get; set; }
     }
 
 }

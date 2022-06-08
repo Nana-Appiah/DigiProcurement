@@ -6,10 +6,10 @@
     var currencyEditStatus = false;
     var ItemCategoryEditStatus = false;
     var ItemMasterEditStatus = false;
-    var pfx = '';
+    var pfx = '..';
 
     var currencyGrid = function (ktrl) {
-        $.getJSON('Utility/GetCurrencies', {}, function (rs) {
+        $.getJSON(pfx + 'Utility/GetCurrencies', {}, function (rs) {
             var ar = [];
             if (rs.status.toString() == "true") {
 
@@ -61,7 +61,7 @@
                                                                 style: { 'font-size': '20px', 'color': 'red', 'text-align': 'center' },
                                                                 listeners: {
                                                                     'render': function () {
-                                                                        $.getJSON('/Utility/GenerateVendorNo', {}, function (r) {
+                                                                        $.getJSON(pfx + '/Utility/GenerateVendorNo', {}, function (r) {
                                                                             $('#vdID').val(r.data.toString());
                                                                         });
                                                                         $('#vdID').attr('readonly', true);
@@ -73,7 +73,7 @@
                                                             },
                                                             {
                                                                 xtype: 'combo', id: 'vdtype', fieldLabel: 'Vendor Type', forceSelection: true, typeAhead: true, allowBlank: false, mode: 'local',
-                                                                store: lib.LoadVendorTypeStore('Utility/GetVendorTypes'),
+                                                                store: lib.LoadVendorTypeStore(pfx + '/Utility/GetVendorTypes'),
                                                                 valueField: 'Id', displayField: 'Description'
                                                             },
                                                             {
@@ -86,7 +86,7 @@
                                                             {
                                                                 xtype: 'combo', id: 'vbtype', fieldLabel: 'Business Type', emptyText: 'select business type',
                                                                 forceSelection: true, typeAhead: true, allowBlank: false, mode: 'local',
-                                                                store: lib.getBusinessTypeStore('Utility/GetCompanyTypes'),
+                                                                store: lib.getBusinessTypeStore(pfx + '/Utility/GetCompanyTypes'),
                                                                 valueField: 'BusinessTypeID', displayField: 'BusinessDescription'
                                                             },
                                                             //
@@ -107,7 +107,7 @@
                                                                         var vf = Ext.getCmp('vndbasicfrm').getForm();
                                                                         //var commfrm = Ext.getCmp('vndCommfrm').getForm();
                                                                         if (vf.isValid()) {
-                                                                            $.post('Master/SaveBasicVendorInformation',
+                                                                            $.post(pfx + '/Master/SaveBasicVendorInformation',
                                                                                 {
                                                                                     _id: Idx, vID: Ext.fly('vdID').getValue(), vName: Ext.fly('vdName').getValue(), vTypeID: Ext.getCmp('vdtype').getValue(),
                                                                                     location: Ext.fly('vdloc').getValue(), vTIN: Ext.fly('vdTIN').getValue(), regNo: Ext.fly('vdRNo').getValue(),
@@ -120,7 +120,7 @@
                                                                                 .done(function (r) {
                                                                                     if (r.status.toString() == "true") {
                                                                                         $('#btn-vndor-clear').trigger('click');
-                                                                                        lib.returnVendorGrid('Utility/GetVendors', Ext.getCmp('vListGrid'));
+                                                                                        lib.returnVendorGrid(pfx + '/Utility/GetVendors', Ext.getCmp('vListGrid'));
                                                                                         Idx = 0;
                                                                                     }
                                                                                 });
@@ -234,11 +234,11 @@
                                                                         stripeRows: true,
                                                                         listeners: {
                                                                             'render': function () {
-                                                                                lib.returnVendorGrid('Utility/GetVendors', Ext.getCmp('vListGrid'));
+                                                                                lib.returnVendorGrid(pfx + '/Utility/GetVendors', Ext.getCmp('vListGrid'));
                                                                             },
                                                                             'afterrender': function () {
                                                                                 setInterval(function () {
-                                                                                    lib.returnVendorGrid('Utility/GetVendors', Ext.getCmp('vListGrid'));
+                                                                                    lib.returnVendorGrid(pfx + '/Utility/GetVendors', Ext.getCmp('vListGrid'));
                                                                                 },20000);
                                                                             },
                                                                             'rowdblclick': function (e, t) {
@@ -288,20 +288,20 @@
                                                         var f = Ext.getCmp('fVndSave').getForm();
                                                         if (f.isValid()) {
                                                             if (vendorTypeEditStatus == false) {
-                                                                $.post('Master/SaveVendorType', { vendorDescription: Ext.fly('vndtype').getValue() }, function (response) {
+                                                                $.post(pfx + '/Master/SaveVendorType', { vendorDescription: Ext.fly('vndtype').getValue() }, function (response) {
                                                                     if (response.status.toString() == "true") {
-                                                                        lib.LoadVendorTypeGrid('Utility/GetVendorTypes', Ext.getCmp('xVnd'));
+                                                                        lib.LoadVendorTypeGrid(pfx + '/Utility/GetVendorTypes', Ext.getCmp('xVnd'));
                                                                         f.reset();
                                                                         $('#vndtype').focus();
                                                                     }
                                                                 }, "json")
                                                             }
                                                             else {
-                                                                $.post('Master/UpdateVendorType', { vId: Idx, vendorDescription: Ext.fly('vndtype').getValue() }).done(function (res) {
+                                                                $.post(pfx + '/Master/UpdateVendorType', { vId: Idx, vendorDescription: Ext.fly('vndtype').getValue() }).done(function (res) {
                                                                     if (res.status.toString()) {
                                                                         f.reset();
                                                                         $('#vndtype').focus();
-                                                                        lib.LoadVendorTypeGrid('Utility/GetVendorTypes', Ext.getCmp('xVnd'));
+                                                                        lib.LoadVendorTypeGrid(pfx + '/Utility/GetVendorTypes', Ext.getCmp('xVnd'));
                                                                         vendorTypeEditStatus = false;
                                                                     }
                                                                 });
@@ -339,11 +339,11 @@
                                                         listeners: {
                                                             'render': function () {
                                                                 //calls function when the grid is rendered to the screen
-                                                                lib.LoadVendorTypeGrid('Utility/GetVendorTypes', Ext.getCmp('xVnd'));
+                                                                lib.LoadVendorTypeGrid(pfx + '/Utility/GetVendorTypes', Ext.getCmp('xVnd'));
                                                             },
                                                             'afterrender': function () {
                                                                 setInterval(function () {
-                                                                    lib.LoadVendorTypeGrid('Utility/GetVendorTypes', Ext.getCmp('xVnd'));
+                                                                    lib.LoadVendorTypeGrid(pfx + '/Utility/GetVendorTypes', Ext.getCmp('xVnd'));
                                                                 }, 180000)
                                                             },
                                                             'rowdblclick': function (e, t) {
@@ -386,20 +386,20 @@
                                                                 var f = Ext.getCmp('fItmCat').getForm();
                                                                 if (f.isValid()) {
                                                                     if (ItemCategoryEditStatus == false) {
-                                                                        $.post('/Master/SaveItemCategory',
+                                                                        $.post(pfx + '/Master/SaveItemCategory',
                                                                             { name: Ext.fly('xitmcatname').getValue(), describ: Ext.fly('xitmcatdescrib').getValue() }, function (r) {
                                                                                 if (r.status.toString() == "true") {
-                                                                                    lib.LoadItemCategoryGrid('/Utility/GetItemCategories', Ext.getCmp('xItmCat'));
+                                                                                    lib.LoadItemCategoryGrid(pfx + '/Utility/GetItemCategories', Ext.getCmp('xItmCat'));
                                                                                     $('#btnitmclear').trigger('click');
                                                                                 }
                                                                             }, "json");
                                                                     }
                                                                     else {
-                                                                        $.post('/Master/UpdateItemCategory',
+                                                                        $.post(pfx + '/Master/UpdateItemCategory',
                                                                             { id: Idx, name: Ext.fly('xitmcatname').getValue(), describ: Ext.fly('xitmcatdescrib').getValue() })
                                                                             .done(function (res) {
                                                                                 if (res.status.toString() == "true") {
-                                                                                    lib.LoadItemCategoryGrid('/Utility/GetItemCategories', Ext.getCmp('xItmCat'));
+                                                                                    lib.LoadItemCategoryGrid(pfx + '/Utility/GetItemCategories', Ext.getCmp('xItmCat'));
                                                                                     $('#btnitmclear').trigger('click');
                                                                                     ItemCategoryEditStatus = false;
                                                                                 }
@@ -451,11 +451,11 @@
                                                         listeners: {
                                                             'render': function () {
                                                                 //calls function when the grid is rendered to the screen
-                                                                lib.LoadItemCategoryGrid('Utility/GetItemCategories', Ext.getCmp('xItmCat'));
+                                                                lib.LoadItemCategoryGrid(pfx + '/Utility/GetItemCategories', Ext.getCmp('xItmCat'));
                                                             },
                                                             'afterrender': function () {
                                                                 setInterval(function () {
-                                                                    lib.LoadItemCategoryGrid('Utility/GetItemCategories', Ext.getCmp('xItmCat'));
+                                                                    lib.LoadItemCategoryGrid(pfx + '/Utility/GetItemCategories', Ext.getCmp('xItmCat'));
                                                                 }, 180000)
                                                             },
                                                             'rowdblclick': function (e, t) {
@@ -497,10 +497,10 @@
                                                     {
                                                         id: 'cboCat', xtype: 'combo', forceSelection: true, typeAhead: true, mode: 'local',
                                                         fieldLabel: 'Item Category', emptyText: 'category', valueField: 'Id', displayField: 'nameOfCategory',
-                                                        store: lib.categoryStore('Utility/GetItemCategories'),
+                                                        store: lib.categoryStore(pfx + '/Utility/GetItemCategories'),
                                                         listeners: {
                                                             'select': function () {
-                                                                $.getJSON('Utility/GetItemCode', { category: Ext.fly('cboCat').getValue(), categoryID: Ext.getCmp('cboCat').getValue() },
+                                                                $.getJSON(pfx + '/Utility/GetItemCode', { category: Ext.fly('cboCat').getValue(), categoryID: Ext.getCmp('cboCat').getValue() },
                                                                     function (fxn) {
                                                                         if (fxn.status.toString() == "true") {
                                                                             $('#itmcode').val(fxn.data.toString());
@@ -518,7 +518,7 @@
                                                 items: [
                                                     {
                                                         id: 'cboitm_measure', fieldLabel: 'Measured In', emptyText: 'Unit of measurement',
-                                                        store: lib.getItemMetrics('Utility/GetSIUnits'),
+                                                        store: lib.getItemMetrics(pfx + '/Utility/GetSIUnits'),
                                                         valueField: 'Id', displayField: 'Measurement'
                                                     },
                                                     { id: 'itm_minstk', xtype: 'numberfield', fieldLabel: 'Min. Stock Level' },
@@ -541,7 +541,7 @@
 
                                                                 if (fseci.isValid() && fsecii.isValid()) {
                                                                     if (ItemMasterEditStatus == false) {
-                                                                        $.post('Master/SaveItem',
+                                                                        $.post(pfx + '/Master/SaveItem',
                                                                             {
                                                                                 cname: Ext.fly('itmname').getValue(), catID: Ext.getCmp('cboCat').getValue(),
                                                                                 code: Ext.fly('itmcode').getValue(), measured: Ext.fly('cboitm_measure').getValue(),
@@ -550,12 +550,12 @@
                                                                             }
                                                                         ).done(function (r) {
                                                                             Ext.getCmp('xItmMaster').getStore().removeAll();
-                                                                            lib.getItemGrid('Utility/GetItemList', Ext.getCmp('xItmMaster'));
+                                                                            lib.getItemGrid(pfx + '/Utility/GetItemList', Ext.getCmp('xItmMaster'));
                                                                             $('#btn-mas-clear').trigger('click');
                                                                         })
                                                                     }
                                                                     else {
-                                                                        $.post('Master/UpdateItem',
+                                                                        $.post(pfx + '/Master/UpdateItem',
                                                                             {
                                                                                 id: Idx, cname: Ext.fly('itmname').getValue(), catID: Ext.getCmp('cboCat').getValue(),
                                                                                 code: Ext.fly('itmcode').getValue(), measured: Ext.fly('cboitm_measure').getValue(),
@@ -565,7 +565,7 @@
                                                                             .done(function (res) {
                                                                                 if (res.status.toString() == "true") {
                                                                                     Ext.getCmp('xItmMaster').getStore().removeAll();
-                                                                                    lib.getItemGrid('Utility/GetItemList', Ext.getCmp('xItmMaster'));
+                                                                                    lib.getItemGrid(pfx + '/Utility/GetItemList', Ext.getCmp('xItmMaster'));
                                                                                     $('#btn-mas-clear').trigger('click');
                                                                                     ItemMasterEditStatus = false;
                                                                                 }
@@ -620,11 +620,11 @@
                                                         listeners: {
                                                             'render': function () {
                                                                 //calls function when the grid is rendered to the screen
-                                                                lib.getItemGrid('Utility/GetItemList', Ext.getCmp('xItmMaster'));
+                                                                lib.getItemGrid(pfx + '/Utility/GetItemList', Ext.getCmp('xItmMaster'));
                                                             },
                                                             'afterrender': function () {
                                                                 setInterval(function () {
-                                                                    lib.getItemGrid('Utility/GetItemList', Ext.getCmp('xItmMaster'));
+                                                                    lib.getItemGrid(pfx + '/Utility/GetItemList', Ext.getCmp('xItmMaster'));
                                                                 }, 5000)
                                                             },
                                                             'rowdblclick': function (e, t) {
@@ -671,7 +671,7 @@
                                                         listeners: {
                                                             'click': function (btn) {
                                                                 if (Ext.getCmp('frmFinYr').getForm().isValid()) {
-                                                                    if (lib.saveAccPeriod('/Master/SaveAccountingPeriod',
+                                                                    if (lib.saveAccPeriod(pfx + '/Master/SaveAccountingPeriod',
                                                                         Ext.fly('pfrom').getValue(), Ext.fly('pto').getValue(),
                                                                         Ext.fly('fncom').getValue()) == "true") {
                                                                         Ext.Msg.alert(lib.stat, 'It worked', this);
@@ -727,11 +727,11 @@
                                                         listeners: {
                                                             'render': function () {
                                                                 //calls function when the grid is rendered to the screen
-                                                                lib.getAccountingPeriod('Utility/getAccountPeriods', Ext.getCmp('xfin'));
+                                                                lib.getAccountingPeriod(pfx + '/Utility/getAccountPeriods', Ext.getCmp('xfin'));
                                                             },
                                                             'afterrender': function () {
                                                                 setInterval(function () {
-                                                                    lib.getAccountingPeriod('Utility/getAccountPeriods', Ext.getCmp('xfin'));
+                                                                    lib.getAccountingPeriod(pfx + '/Utility/getAccountPeriods', Ext.getCmp('xfin'));
                                                                 }, 60000)
                                                             }
                                                         }
@@ -765,21 +765,21 @@
                                                                 var curFrm = Ext.getCmp('frmCur').getForm();
                                                                 if (curFrm.isValid()) {
                                                                     if (currencyEditStatus == false) {
-                                                                        $.post('Master/SaveCurrency',
+                                                                        $.post(pfx + '/Master/SaveCurrency',
                                                                             { currency: Ext.fly('curname').getValue(), symbol: Ext.fly('cursymbol').getValue() },
                                                                             function (rs) {
                                                                                 if (rs.status.toString() == "true") {
                                                                                     //retrieve store from library and load the grid control
-                                                                                    lib.currencyGrid('Utility/GetCurrencies', Ext.getCmp('xcur'));
+                                                                                    lib.currencyGrid(pfx + '/Utility/GetCurrencies', Ext.getCmp('xcur'));
                                                                                 }
                                                                             }, "json");
                                                                     }
                                                                     else {
-                                                                        $.post('Master/UpdateCurrency', { id: Idx, currency: Ext.fly('curname').getValue(), symbol: Ext.fly('cursymbol').getValue() })
+                                                                        $.post(pfx + '/Master/UpdateCurrency', { id: Idx, currency: Ext.fly('curname').getValue(), symbol: Ext.fly('cursymbol').getValue() })
                                                                             .done(function (res) {
                                                                                 if (res.status.toString() == "true") {
                                                                                     curFrm.reset();
-                                                                                    lib.currencyGrid('Utility/GetCurrencies', Ext.getCmp('xcur'));
+                                                                                    lib.currencyGrid(pfx + '/Utility/GetCurrencies', Ext.getCmp('xcur'));
                                                                                     currencyEditStatus = false;
                                                                                 }
                                                                             });
@@ -829,11 +829,11 @@
                                                         stripeRows: true,
                                                         listeners: {
                                                             'render': function () {
-                                                                lib.currencyGrid('Utility/GetCurrencies', Ext.getCmp('xcur'));
+                                                                lib.currencyGrid(pfx + '/Utility/GetCurrencies', Ext.getCmp('xcur'));
                                                             },
                                                             'afterrender': function () {
                                                                 setInterval(function () {
-                                                                    lib.currencyGrid('Utility/GetCurrencies', Ext.getCmp('xcur'));
+                                                                    lib.currencyGrid(pfx + '/Utility/GetCurrencies', Ext.getCmp('xcur'));
                                                                 }, 60000)
                                                             },
                                                             'rowdblclick': function (e, t) {

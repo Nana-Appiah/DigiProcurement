@@ -2,7 +2,7 @@
 
     var editor = lib.returnEditorControl();
     var capexform = Ext.get('capex');
-    var pfx = '';
+    var pfx = '..';
 
     var CAPEX_LIST = [];
 
@@ -74,7 +74,7 @@
                                                         stripeRows: true,
                                                         listeners: {
                                                             'render': function () {
-                                                                lib.getItemGrid('/Utility/GetItemList', Ext.getCmp('capexGrid'));
+                                                                lib.getItemGrid(pfx + '/Utility/GetItemList', Ext.getCmp('capexGrid'));
                                                             }
                                                         }
                                                     })
@@ -108,9 +108,9 @@
                                                                     }
 
                                                                     //check if capex window is open
-                                                                    $.getJSON('/Capex/GetCapexStatus', {}, function (stat) {
+                                                                    $.getJSON(pfx + '/Capex/GetCapexStatus', {}, function (stat) {
                                                                         if (stat.data.toString() == "OPENED") {
-                                                                            $.post('/Capex/PostCapexData', { _data: CAPEX_LIST })
+                                                                            $.post(pfx + '/Capex/PostCapexData', { _data: CAPEX_LIST })
                                                                                 .done(function (r) {
                                                                                     if (r.status.toString() == "true") {
                                                                                         Ext.MessageBox.alert("CAPEX", r.data, this);
@@ -132,7 +132,7 @@
                                                         listeners: {
                                                             'click': function (btn) {
                                                                 //Ext.getCmp('capexGrid').getStore().removeAll();
-                                                                lib.getItemGrid('/Utility/GetItemList', Ext.getCmp('capexGrid'));
+                                                                lib.getItemGrid(pfx + '/Utility/GetItemList', Ext.getCmp('capexGrid'));
                                                             }
                                                         }
                                                     }
